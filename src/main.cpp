@@ -17,7 +17,7 @@ int main()
     bn::regular_bg_ptr bg = bn::regular_bg_items::testbg.create_bg(0,0);
     bn::bg_palettes::set_transparent_color(bn::color(25, 25, 25));
     bn::camera_ptr cam = bn::camera_ptr::create(0,0);    bg.set_camera(cam);
-    aru::player player(cam, 0, 0, 2, 0.5);
+    aru::player player(cam, 0, 0);
 
 
     while(true)
@@ -42,7 +42,7 @@ int main()
         
 
         // BN_LOG("camera offset ", cam_offset);
-        cam.set_position(player.x() + xoffset, player.y() - 30);
+        cam.set_position(player.x() + xoffset, -30);
         bn::core::update();
     }
 }
