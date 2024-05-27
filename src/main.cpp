@@ -29,6 +29,7 @@ int main()
     bn::camera_ptr cam = bn::camera_ptr::create(128,128);
     aru::level level(cam, bn::regular_bg_items::testmap);
     aru::player player(cam, 128, 128, level);
+    bg.set_camera(cam);
 
 
 
@@ -42,6 +43,8 @@ int main()
         bn::fixed target_xoffset = 50 * (player.facing_left() ? 1 : -1);
         bn::fixed camspeed = 4;
 
+        // BN_LOG("grounded? ", player.grounded());
+
         if(xoffset < target_xoffset){
             xoffset += camspeed;
         }else if(xoffset > target_xoffset){
@@ -53,8 +56,10 @@ int main()
         }
         
 
-        // BN_LOG("camera offset ", cam_offset);
-        cam.set_position(player.x() + xoffset, 128);
+        bn::fixed new_x = player.x() + xoffset;
+        if(new_x < 120) new_x = 120;
+        if(new_x > (level.width() - 120)) new_x = level.width() - 120;
+        cam.set_position(new_x, 128);
         bn::core::update();
     }
 }
