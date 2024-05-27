@@ -2,6 +2,7 @@
 
 #include <bn_sprite_ptr.h>
 #include <bn_sprite_animate_actions.h>
+#include <bn_fixed_rect.h>
 #include <bn_camera_ptr.h>
 
 
@@ -13,9 +14,10 @@ public:
     player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y);
     void update();
     void take_button_input();
-    bn::fixed_point position() const {return _body.position();}
-    bn::fixed x() const {return _body.x();}
-    bn::fixed y() const {return _body.y();}
+    bn::fixed_point position() const {return _hitbox.position();}
+    bn::fixed x() const {return _hitbox.x();}
+    bn::fixed y() const {return _hitbox.y();}
+    bn::fixed_rect hitbox() const {return _hitbox;}
     bool facing_left() const {return _body.horizontal_flip();}
     bool grounded() const;
 
@@ -28,6 +30,7 @@ private:
 
     const bn::fixed _max_xspeed, _max_yspeed, _accel, _g;
     bn::fixed _xspeed, _target_xspeed, _yspeed;
+    bn::fixed_rect _hitbox;
 
     uint8_t _jump_timer, _jbuf_timer;
 

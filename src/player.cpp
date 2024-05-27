@@ -17,6 +17,7 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y) :
     _max_yspeed(8),
     _accel(0.75),
     _g(1),
+    _hitbox(x, y, 20, 64),
     _jump_timer(0),
     _jbuf_timer(0)
 {
@@ -49,13 +50,21 @@ void player::update(){
         ++_jump_timer;
     }
 
-    _body.set_x(_body.x() + _xspeed);
-    _body.set_y(_body.y() + _yspeed);
+    //dont go off the edge of the map
+    if(_hitbox.left() + _xspeed <= 0){
+        _xspeed = 0;
+    }
+
+    _hitbox.set_x(_hitbox.x() + _xspeed);
+    _hitbox.set_y(_hitbox.y() + _yspeed);
 
     if(grounded()){
-        _body.set_y(0);
+        _hitbox.set_y(128 - bn::fixed(0.5)*_hitbox.height());
         _idle.update();
     }
+
+    _body.set_x(_hitbox.x());
+    _body.set_y(_hitbox.y());
 
     if(_jbuf_timer > 0){
         // BN_LOG("jump buffer: ", _jbuf_timer);
@@ -104,15 +113,15 @@ void player::take_button_input(){
 void player::jump(){
     _yspeed = -_max_yspeed;
     _jump_timer = 0;
-    _jumpcloud.set_x(_body.x());
-    _jumpcloud.set_y(_body.y() + 17);
+    _jumpcloud.set_x(_hitbox.x());
+    _jumpcloud.set_y(_hitbox.y() + 17);
     _jumpcloud_anim.reset();
     _jumpcloud.set_visible(true);
 }
 
 bool player::grounded() const{
     //for now: ground level is y=0
-    return _body.y() >= 0;
+    return _hitbox.bottom() >= 128;
 }
 
 bn::fixed player::get_new_xspeed(bn::fixed speed, bn::fixed max_xspeed, bn::fixed accel) const{
