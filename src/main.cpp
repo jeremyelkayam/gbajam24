@@ -40,7 +40,7 @@ int main()
 
         //todo: maybe add easing to this ?
         bn::fixed xoffset = cam.x() - player.x();
-        bn::fixed target_xoffset = 50 * (player.facing_left() ? 1 : -1);
+        bn::fixed target_xoffset = 50 * (player.facing_right() ? 1 : -1);
         bn::fixed camspeed = 4;
 
         // BN_LOG("grounded? ", player.grounded());

@@ -14,14 +14,16 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _jumpcloud(bn::sprite_items::arutest.create_sprite(x,y)),
     _idle(bn::create_sprite_animate_action_forever(_body, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),
     _jumpcloud_anim(bn::create_sprite_animate_action_once(_jumpcloud, 1, bn::sprite_items::jumpcloud.tiles_item(), 0, 1, 2, 3, 4, 5)),
-    _max_xspeed(2),
+    _walk_xspeed(2),
+    _sprint_xspeed(3.5),
     _max_yspeed(8),
     _accel(0.75),
     _g(1),
     _hitbox(x, y, 20, 64),
     _jump_timer(0),
     _jbuf_timer(0),
-    _coyote_timer(0)
+    _coyote_timer(0),
+    _doubletap_timer(0)
 {
     _body.set_camera(cam);
     _jumpcloud.set_camera(cam);
@@ -80,14 +82,19 @@ void player::update(){
     _body.set_y(_hitbox.y());
 
 
-    if(_jbuf_timer > 0){
+    if(_jbuf_timer){
         // BN_LOG("jump buffer: ", _jbuf_timer);
         --_jbuf_timer;
     }
 
-    if(_coyote_timer > 0){
+    if(_coyote_timer){
         BN_LOG("coyote time: ", _coyote_timer);
         --_coyote_timer;
+    }
+
+    if(_doubletap_timer){
+        --_doubletap_timer;
+        // BN_LOG("doubletap time: ", _doubletap_timer);
     }
 
     if(_jumpcloud_anim.done()){
@@ -99,17 +106,36 @@ void player::update(){
 }
 
 void player::take_button_input(){
-    if(bn::keypad::left_held()){
+    if(bn::keypad::left_pressed()){
+        BN_LOG("facing right? ", facing_right());
+        if(!facing_right() && _doubletap_timer){
+            BN_LOG("sprint left");
+            //sprint
+            _target_xspeed = -_sprint_xspeed;
+        }else{
+            BN_LOG("walk left");
+            //walk
+            _target_xspeed = -_walk_xspeed;
+            _body.set_horizontal_flip(false);
+            _doubletap_timer = 30;
+        }
+    }
 
-        _body.set_horizontal_flip(false);
-        _target_xspeed = -_max_xspeed;
-
-    }else if(bn::keypad::right_held()){
-
-        _body.set_horizontal_flip(true);
-        _target_xspeed = _max_xspeed;
-
-    }else{
+    if(bn::keypad::right_pressed()){
+        if(facing_right() && _doubletap_timer){
+            BN_LOG("sprint right");
+            //sprint
+            _target_xspeed = _sprint_xspeed;
+        }else{
+            BN_LOG("walk right");
+            //walk
+            _target_xspeed = _walk_xspeed;
+            _body.set_horizontal_flip(true);
+            _doubletap_timer = 30;
+        }
+    }
+    
+    if(!bn::keypad::left_held() && !bn::keypad::right_held()){
         _target_xspeed = 0;
     }
 
@@ -152,18 +178,5 @@ bool player::grounded() const{
     }
     return _level.is_ground(_hitbox.bottom_right()) || _level.is_ground(_hitbox.bottom_left());
 }
-
-bn::fixed player::get_new_xspeed(bn::fixed speed, bn::fixed max_xspeed, bn::fixed accel) const{
-    BN_ASSERT(speed >= 0);
-    bn::fixed result = speed + accel;
-    if(result > max_xspeed) { 
-        result = _max_xspeed;
-    }else if(result < 0){
-        result = 0;
-    }
-    return result;
-}
-
-
 
 }

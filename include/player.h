@@ -20,7 +20,7 @@ public:
     bn::fixed x() const {return _hitbox.x();}
     bn::fixed y() const {return _hitbox.y();}
     bn::fixed_rect hitbox() const {return _hitbox;}
-    bool facing_left() const {return _body.horizontal_flip();}
+    bool facing_right() const {return _body.horizontal_flip();}
     bool grounded() const;
 
 private:
@@ -31,13 +31,12 @@ private:
     //todo: perhaps refactor this into an effects class
     bn::sprite_animate_action<6> _jumpcloud_anim;
 
-    const bn::fixed _max_xspeed, _max_yspeed, _accel, _g;
+    const bn::fixed _walk_xspeed, _sprint_xspeed, _max_yspeed, _accel, _g;
     bn::fixed _xspeed, _target_xspeed, _yspeed;
     bn::fixed_rect _hitbox;
 
-    uint8_t _jump_timer, _jbuf_timer, _coyote_timer;
+    uint8_t _jump_timer, _jbuf_timer, _coyote_timer, _doubletap_timer;
 
-    bn::fixed get_new_xspeed(bn::fixed speed, bn::fixed max_xspeed, bn::fixed accel) const;
     void jump();
 };
 
