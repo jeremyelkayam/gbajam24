@@ -46,4 +46,9 @@ bool level::is_ground(const bn::fixed_point &coords) const{
     return cell_type == 1 || cell_type == 2;
 }
 
+bool level::is_thin_ground(const bn::fixed_point &coords) const{
+    bn::regular_bg_map_cell cell_type = cell_at(coords);
+    return cell_type == 2;
+}
+
 }

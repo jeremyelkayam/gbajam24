@@ -114,6 +114,7 @@ void player::take_button_input(){
     }
 
     if(grounded()){
+        
         if(bn::keypad::a_pressed() || _jbuf_timer){
             //jbuf_timer will trigger if you pressed A just before hitting the ground
             jump();
@@ -144,6 +145,11 @@ void player::jump(){
 }
 
 bool player::grounded() const{
+    if(bn::keypad::down_held() && 
+        (_level.is_thin_ground(_hitbox.bottom_right()) || 
+        _level.is_thin_ground(_hitbox.bottom_left()))){
+        return false;
+    }
     return _level.is_ground(_hitbox.bottom_right()) || _level.is_ground(_hitbox.bottom_left());
 }
 

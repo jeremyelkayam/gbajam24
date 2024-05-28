@@ -16,6 +16,7 @@ public:
     bn::fixed height() {return _bg_ptr.dimensions().height();}
 
     bool is_ground(const bn::fixed_point &coords) const;
+    bool is_thin_ground(const bn::fixed_point &coords) const;
 private:
     const bn::regular_bg_item &_bg;
     bn::regular_bg_ptr _bg_ptr;
