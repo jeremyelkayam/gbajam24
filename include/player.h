@@ -5,6 +5,7 @@
 #include <bn_fixed_rect.h>
 #include <bn_camera_ptr.h>
 #include "level.h"
+#include "effect.h"
 
 
 namespace aru
@@ -25,11 +26,11 @@ public:
 
 private:
     level &_level;
-    bn::sprite_ptr _body, _jumpcloud;
+    effect _jumpcloud, _sprintcloud;
+    bn::sprite_ptr _body;
     bn::sprite_animate_action<4> _idle;
 
     //todo: perhaps refactor this into an effects class
-    bn::sprite_animate_action<6> _jumpcloud_anim;
 
     const bn::fixed _walk_xspeed, _sprint_xspeed, _max_yspeed, _accel, _g;
     bn::fixed _xspeed, _target_xspeed, _yspeed;

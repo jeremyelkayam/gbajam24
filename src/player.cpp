@@ -5,29 +5,28 @@
 #include "player.h"
 #include "bn_sprite_items_arutest.h"
 #include "bn_sprite_items_jumpcloud.h"
+#include "bn_sprite_items_sprintcloud.h"
 
 namespace aru {
 
 player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) : 
     _level(level),
+    _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
+    _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
     _body(bn::sprite_items::arutest.create_sprite(x,y)),
-    _jumpcloud(bn::sprite_items::arutest.create_sprite(x,y)),
     _idle(bn::create_sprite_animate_action_forever(_body, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),
-    _jumpcloud_anim(bn::create_sprite_animate_action_once(_jumpcloud, 1, bn::sprite_items::jumpcloud.tiles_item(), 0, 1, 2, 3, 4, 5)),
     _walk_xspeed(2),
     _sprint_xspeed(3.5),
     _max_yspeed(8),
     _accel(0.75),
     _g(1),
-    _hitbox(x, y, 20, 64),
+    _hitbox(x, y, 20, 58),
     _jump_timer(0),
     _jbuf_timer(0),
     _coyote_timer(0),
     _doubletap_timer(0)
 {
     _body.set_camera(cam);
-    _jumpcloud.set_camera(cam);
-    _jumpcloud.set_visible(false);
 
 }
 
@@ -96,12 +95,8 @@ void player::update(){
         --_doubletap_timer;
         // BN_LOG("doubletap time: ", _doubletap_timer);
     }
-
-    if(_jumpcloud_anim.done()){
-        _jumpcloud.set_visible(false);
-    }else{
-        _jumpcloud_anim.update();
-    }
+    _jumpcloud.update();
+    _sprintcloud.update();
 
 }
 
@@ -109,11 +104,11 @@ void player::take_button_input(){
     if(bn::keypad::left_pressed()){
         BN_LOG("facing right? ", facing_right());
         if(!facing_right() && _doubletap_timer){
-            BN_LOG("sprint left");
             //sprint
             _target_xspeed = -_sprint_xspeed;
+            _sprintcloud.set_horizontal_flip(true);
+            _sprintcloud.start(_hitbox.x() + 20, _hitbox.y() + 17);
         }else{
-            BN_LOG("walk left");
             //walk
             _target_xspeed = -_walk_xspeed;
             _body.set_horizontal_flip(false);
@@ -123,11 +118,11 @@ void player::take_button_input(){
 
     if(bn::keypad::right_pressed()){
         if(facing_right() && _doubletap_timer){
-            BN_LOG("sprint right");
             //sprint
             _target_xspeed = _sprint_xspeed;
+            _sprintcloud.set_horizontal_flip(false);
+            _sprintcloud.start(_hitbox.x() - 20, _hitbox.y() + 17);
         }else{
-            BN_LOG("walk right");
             //walk
             _target_xspeed = _walk_xspeed;
             _body.set_horizontal_flip(true);
@@ -164,10 +159,7 @@ void player::take_button_input(){
 void player::jump(){
     _yspeed = -_max_yspeed;
     _jump_timer = 0;
-    _jumpcloud.set_x(_hitbox.x());
-    _jumpcloud.set_y(_hitbox.y() + 17);
-    _jumpcloud_anim.reset();
-    _jumpcloud.set_visible(true);
+    _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
 }
 
 bool player::grounded() const{
