@@ -19,13 +19,16 @@ public:
     bool is_thin_ground(const bn::fixed_point &coords) const;
     bool is_leftfacing_wall(const bn::fixed_point &coords) const;
     bool is_rightfacing_wall(const bn::fixed_point &coords) const;
+    bool is_up_slope(const bn::fixed_point &coords) const;
+    bool is_down_slope(const bn::fixed_point &coords) const;
 private:
     const bn::regular_bg_item &_bg;
     bn::regular_bg_ptr _bg_ptr;
     const int _COLUMNS;
     bn::span<const bn::regular_bg_map_cell> _cells;
     const bn::regular_bg_map_cell _THICK_GROUND,_THIN_GROUND, _RF_WALL, _LF_WALL, _CEILING,
-         _RFT_CORNER, _LFT_CORNER, _RFB_CORNER, _LFB_CORNER;
+         _RFT_CORNER, _LFT_CORNER, _RFB_CORNER, _LFB_CORNER,
+         _UP_SLOPE, _DOWN_SLOPE;// _UP_HALFSLOPE_1, _UP_HALFSLOPE_2;
     bn::regular_bg_map_cell cell_at(const bn::fixed_point &coords) const;
     bn::regular_bg_map_cell cell_at(const unsigned short &xtile, const unsigned short &ytile) const;
 };

@@ -24,7 +24,9 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
     _RFT_CORNER(cell_at(11,0)),
     _LFT_CORNER(cell_at(13,0)),
     _RFB_CORNER(cell_at(15,0)),
-    _LFB_CORNER(cell_at(17,0))
+    _LFB_CORNER(cell_at(17,0)),
+    _UP_SLOPE(cell_at(19,0)),
+    _DOWN_SLOPE(cell_at(21,0))
 {
     _bg_ptr.set_camera(cam);
     BN_LOG("width: ", _bg.map_item().dimensions().width(), " tiles");
@@ -75,6 +77,16 @@ bool level::is_rightfacing_wall(const bn::fixed_point &coords) const{
     return cell_type == _RF_WALL
         || cell_type == _RFT_CORNER 
         || cell_type == _RFB_CORNER;
+}
+
+bool level::is_up_slope(const bn::fixed_point &coords) const{
+    bn::regular_bg_map_cell cell_type = cell_at(coords);
+    return cell_type == _UP_SLOPE;
+}
+
+bool level::is_down_slope(const bn::fixed_point &coords) const{
+    bn::regular_bg_map_cell cell_type = cell_at(coords);
+    return cell_type == _DOWN_SLOPE;
 }
 
 

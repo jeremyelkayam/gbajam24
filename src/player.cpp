@@ -87,11 +87,27 @@ void player::update(){
     
 
     if(grounded()){
-        //put the bottom of the player at the top of the floor cell
-        _hitbox.set_y((_hitbox.bottom() / 8).floor_integer() * 8 - bn::fixed(0.5)*_hitbox.height());
         _idle.update();
         _coyote_timer = 0;
+
+        bn::fixed_point bottom_center(_hitbox.x(), _hitbox.bottom());
+        bn::fixed map_cell_bottom = (_hitbox.bottom() * bn::fixed(0.125)).floor_integer() * 8;
+        // if(_level.is_thick_ground(bottom_center) || _level.is_thin_ground(bottom_center)){
+            _hitbox.set_y(map_cell_bottom - bn::fixed(0.5)*_hitbox.height());
+        // }else if(_level.is_up_slope(bottom_center - bn::fixed_point(0,8))){
+        //     _hitbox.set_y(map_cell_bottom - (_hitbox.x().floor_integer() % 8) - bn::fixed(0.5)*_hitbox.height());
+        //     BN_LOG("bottom: ", _hitbox.bottom());
+        //     BN_LOG("xcor: ", _hitbox.x());
+        //     BN_LOG("xcor remainder: ", _hitbox.x().floor_integer() % 8);
+        // }
+
+        if(_yspeed > 0){
+            _yspeed = 0;
+            _jbuf_timer = 0;
+        }                    
     }
+
+    
 
     _body.set_x(_hitbox.x());
     _body.set_y(_hitbox.y());
@@ -155,9 +171,6 @@ void player::take_button_input(){
         if(bn::keypad::a_pressed() || _jbuf_timer){
             //jbuf_timer will trigger if you pressed A just before hitting the ground
             jump();
-        }else if(_yspeed > 0){
-            _yspeed = 0;
-            _jbuf_timer = 0;
         }
     }else{
         if(bn::keypad::a_pressed()){
@@ -185,7 +198,8 @@ bool player::grounded() const{
     for(bn::fixed xcor = _hitbox.left(); xcor <= _hitbox.right(); xcor += 8){
         bn::fixed_point pos(xcor, _hitbox.bottom());
         thin_ground = thin_ground || _level.is_thin_ground(pos);
-        thick_ground = thick_ground || _level.is_thick_ground(pos);
+        thick_ground = thick_ground || _level.is_thick_ground(pos) 
+        || _level.is_up_slope(pos) || _level.is_down_slope(pos);
     }
     if(thin_ground && !thick_ground && bn::keypad::down_held()){
         return false;
