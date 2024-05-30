@@ -51,10 +51,26 @@ void player::update(){
         ++_jump_timer;
     }
 
+    bn::fixed_rect hitbox_after_movement(_hitbox);
+    hitbox_after_movement.set_x(_hitbox.x() + _xspeed);
+    hitbox_after_movement.set_y(_hitbox.y() + _yspeed);
+
+    //todo: less copypasted code
+    if(bn::keypad::left_held()){
+        for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
+            if(_level.is_rightfacing_wall(bn::fixed_point(_hitbox.left(),ycor))) _xspeed = 0;
+        }
+    }else if(bn::keypad::right_held()){
+        for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
+            if(_level.is_leftfacing_wall(bn::fixed_point(_hitbox.right(),ycor))) _xspeed = 0;
+        }
+    }
+
+
     //dont go off the edge of the map
-    if(_hitbox.left() + _xspeed <= 0){
-        _xspeed = 0;
-    }else if(_hitbox.right() + _xspeed >= _level.width()){
+    if(_hitbox.left() + _xspeed <= 0 ||
+       _hitbox.right() + _xspeed >= _level.width()){
+
         _xspeed = 0;
     }
 
@@ -87,7 +103,7 @@ void player::update(){
     }
 
     if(_coyote_timer){
-        BN_LOG("coyote time: ", _coyote_timer);
+        // BN_LOG("coyote time: ", _coyote_timer);
         --_coyote_timer;
     }
 
@@ -102,7 +118,7 @@ void player::update(){
 
 void player::take_button_input(){
     if(bn::keypad::left_pressed()){
-        BN_LOG("facing right? ", facing_right());
+        // BN_LOG("facing right? ", facing_right());
         if(!facing_right() && _doubletap_timer){
             //sprint
             _target_xspeed = -_sprint_xspeed;
@@ -163,12 +179,19 @@ void player::jump(){
 }
 
 bool player::grounded() const{
-    if(bn::keypad::down_held() && 
-        (_level.is_thin_ground(_hitbox.bottom_right()) || 
-        _level.is_thin_ground(_hitbox.bottom_left()))){
+
+    bool thin_ground = false;
+    bool thick_ground = false;
+    for(bn::fixed xcor = _hitbox.left(); xcor <= _hitbox.right(); xcor += 8){
+        bn::fixed_point pos(xcor, _hitbox.bottom());
+        thin_ground = thin_ground || _level.is_thin_ground(pos);
+        thick_ground = thick_ground || _level.is_thick_ground(pos);
+    }
+    if(thin_ground && !thick_ground && bn::keypad::down_held()){
         return false;
     }
-    return _level.is_ground(_hitbox.bottom_right()) || _level.is_ground(_hitbox.bottom_left());
+
+    return thick_ground || thin_ground;
 }
 
 }

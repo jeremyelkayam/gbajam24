@@ -22,7 +22,6 @@ bn::span<uint16_t> effect::indices_span(const uint8_t &indices){
     //why does it only work if we log the result ? 
     for(uint16_t z : result){
         BN_LOG("index: ", z);
-
     }
 
     return result;

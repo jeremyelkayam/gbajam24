@@ -31,35 +31,72 @@ int main()
     aru::player player(cam, 128, 128, level);
     bg.set_camera(cam);
 
+    uint8_t direction_timer = 0;
+
 
 
     while(true)
     {
+        bool was_facing_right = player.facing_right();
         player.update();
+
+        if(was_facing_right != player.facing_right()){
+            //this means they changed direction
+            direction_timer = 120;
+        }
         // bn::fixed_point target_cam_offset(40 * (player.facing_left() ? 1 : -1), -30);
 
         //todo: maybe add easing to this ?
         bn::fixed xoffset = cam.x() - player.x();
         bn::fixed target_xoffset = 50 * (player.facing_right() ? 1 : -1);
-        bn::fixed camspeed = 4;
+        bn::fixed cam_xspeed = player.xspeed() * (player.facing_right() ? bn::fixed(1.5) : bn::fixed(-1.5));
 
-        // BN_LOG("grounded? ", player.grounded());
-
-        if(xoffset < target_xoffset){
-            xoffset += camspeed;
-        }else if(xoffset > target_xoffset){
-            xoffset -= camspeed;
+        // // BN_LOG("grounded? ", player.grounded());
+        if(direction_timer){
+            --direction_timer;
+        }
+        if(bn::keypad::left_held() || bn::keypad::right_held()){
+            if(xoffset < target_xoffset){
+                xoffset += cam_xspeed;
+            }else if(xoffset > target_xoffset){
+                xoffset -= cam_xspeed;
+            }
         }
 
-        if(target_xoffset - camspeed < xoffset && xoffset < target_xoffset + camspeed){
+
+
+        if(target_xoffset - cam_xspeed < xoffset && xoffset < target_xoffset + cam_xspeed){
             xoffset = target_xoffset;
         }
+
+        bn::fixed yoffset = cam.y() - player.y();
+        bn::fixed target_yoffset = cam.y() - player.y();
+        bn::fixed cam_yspeed = 2;
+        if(player.grounded()){
+            // BN_LOG(cam.y() - player.hitbox().bottom());
+            // yoffset = player.hitbox().bottom();
+            // target_yoffset = cam.y() - player.last_solid_ground();
+            // if(yoffset > target_yoffset){
+            //     yoffset += cam_yspeed;
+            // }else if(yoffset < target_yoffset){
+            //     yoffset -= cam_yspeed;
+            // }
+        }else{
+            if(yoffset > 60){
+                yoffset = 60;
+            }else if(yoffset < -40){
+                yoffset = -40;
+            }
+
+        }
+
         
 
         bn::fixed new_x = player.x() + xoffset;
+        bn::fixed new_y = player.y() + yoffset;
         if(new_x < 120) new_x = 120;
         if(new_x > (level.width() - 120)) new_x = level.width() - 120;
-        cam.set_position(new_x, 128);
+        cam.set_position(new_x, new_y);
         bn::core::update();
     }
 }

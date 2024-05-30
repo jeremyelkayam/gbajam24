@@ -24,6 +24,8 @@ public:
     bool facing_right() const {return _body.horizontal_flip();}
     bool grounded() const;
 
+    bn::fixed xspeed() const {return _xspeed;}
+
 private:
     level &_level;
     effect _jumpcloud, _sprintcloud;
