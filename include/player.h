@@ -22,7 +22,8 @@ public:
     bn::fixed y() const {return _hitbox.y();}
     bn::fixed_rect hitbox() const {return _hitbox;}
     bool facing_right() const {return _body.horizontal_flip();}
-    bool grounded() const;
+    bool on_flat_ground() const;
+    // bool on_sloped_ground() const;
 
     bn::fixed xspeed() const {return _xspeed;}
 
@@ -41,6 +42,7 @@ private:
     uint8_t _jump_timer, _jbuf_timer, _coyote_timer, _doubletap_timer;
 
     void jump();
+    void land();
 };
 
 }

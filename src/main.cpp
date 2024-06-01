@@ -72,7 +72,7 @@ int main()
         bn::fixed yoffset = cam.y() - player.y();
         bn::fixed target_yoffset = cam.y() - player.y();
         bn::fixed cam_yspeed = 2;
-        if(player.grounded()){
+        if(player.on_flat_ground()){
             // BN_LOG(cam.y() - player.hitbox().bottom());
             // yoffset = player.hitbox().bottom();
             // target_yoffset = cam.y() - player.last_solid_ground();

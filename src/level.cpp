@@ -33,24 +33,27 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
     BN_LOG("height: ", _bg.map_item().dimensions().height(), " tiles");
     // BN_LOG("cells: ", _cells.size());
 
-    for(unsigned short tiley = 0; tiley < 32 ; ++tiley){
-        bn::string<2048> logstr;
-        bn::ostringstream logstream(logstr);
-        for(unsigned short tilex = 0; tilex < (_COLUMNS / 2) ; ++tilex){
-            logstream << cell_at(tilex, tiley);
-            logstream << " ";
-        }
-        BN_LOG(logstr);
-    }
-    BN_LOG("thin ground: ", _THIN_GROUND);
+    // for(unsigned short tiley = 0; tiley < 32 ; ++tiley){
+    //     bn::string<2048> logstr;
+    //     bn::ostringstream logstream(logstr);
+    //     for(unsigned short tilex = 0; tilex < (_COLUMNS * bn::fixed(0.5)) ; ++tilex){
+    //         logstream << cell_at(tilex, tiley);
+    //         logstream << " ";
+    //     }
+    //     BN_LOG(logstr);
+    // }
+    // BN_LOG("thin ground: ", _THIN_GROUND);
 
 }
 
 bn::regular_bg_map_cell level::cell_at(const bn::fixed_point &coords) const{
-    return cell_at((coords.x() / 8).floor_integer(),(coords.y() / 8).floor_integer());
+    //FLOOR INTEGER IS NOT ADEQUATE FOR THIS. 
+    //NEEDS TO BE CEILING INTEGER FOR TOP LEFT, FLOOR INTEGER FOR BOTTOM RIGHT.
+    return cell_at((coords.x() * bn::fixed(0.125)).floor_integer(),(coords.y() * bn::fixed(0.125)).floor_integer());
 }
 
 bn::regular_bg_map_cell level::cell_at(const unsigned short &xtile, const unsigned short &ytile) const{
+    // BN_LOG("checking map cell at (",xtile,",",ytile,")");
     return _bg.map_item().cell(xtile, ytile);
 }
 
@@ -87,6 +90,21 @@ bool level::is_up_slope(const bn::fixed_point &coords) const{
 bool level::is_down_slope(const bn::fixed_point &coords) const{
     bn::regular_bg_map_cell cell_type = cell_at(coords);
     return cell_type == _DOWN_SLOPE;
+}
+
+void level::print_hitbox(const bn::fixed_rect &hitbox) const{
+    for(bn::fixed ycor = hitbox.top(); ycor <= hitbox.bottom(); ycor += 8){
+        bn::string<2048> logstr;
+        bn::ostringstream logstream(logstr);
+
+        for(bn::fixed xcor = hitbox.left(); xcor <= hitbox.right(); xcor += 8){
+            logstream << cell_at(bn::fixed_point(xcor, ycor));
+            logstream << " ";
+
+        }
+        BN_LOG(logstr);
+
+    }
 }
 
 

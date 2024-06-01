@@ -1,5 +1,6 @@
 #include <bn_keypad.h>
 #include <bn_log.h>
+#include <bn_math.h>
 
 
 #include "player.h"
@@ -32,6 +33,42 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
 
 void player::update(){
     take_button_input();
+
+
+    uint16_t sloped_ground_ytile = 0;
+    uint16_t sloped_ground_type = 0;
+    uint16_t center_xtile = (_hitbox.x() * bn::fixed(0.125)).floor_integer();
+    uint16_t foot_tile = (_hitbox.bottom() * bn::fixed(0.125)).ceil_integer();
+    
+
+    for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
+            ytile < foot_tile; ++ytile){
+        
+        bn::regular_bg_map_cell tile_type = _level.cell_at(center_xtile, ytile);
+
+        if(tile_type == _level._UP_SLOPE || 
+           tile_type == _level._DOWN_SLOPE){
+            // BN_LOG("ur on an up slope");
+            sloped_ground_ytile = ytile;
+            break;
+        }
+    }
+
+    bool ground_below_feet = false;
+    uint16_t right_tile = (_hitbox.left() * bn::fixed(0.125)).ceil_integer();
+    for(uint16_t xtile = (_hitbox.left() * bn::fixed(0.125)).floor_integer();
+            xtile < right_tile; ++xtile){
+
+        bn::regular_bg_map_cell tile_type = _level.cell_at(xtile, foot_tile);
+        if(tile_type == _level._THICK_GROUND){
+            ground_below_feet = true;
+            // BN_LOG("standing on ground");
+            break;
+        }
+    }
+
+
+
     if(_xspeed > _target_xspeed) {
         _xspeed -= _accel;
     }
@@ -44,16 +81,18 @@ void player::update(){
         _xspeed = _target_xspeed;
     }
 
-    if(!grounded()){
+    if(!ground_below_feet && !sloped_ground_ytile){
         if((!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _max_yspeed){
             _yspeed += _g;
         }
+        // BN_LOG("we are falling");
+        // BN_LOG("sloped ground ytile: ", sloped_ground_ytile);
         ++_jump_timer;
     }
 
-    bn::fixed_rect hitbox_after_movement(_hitbox);
-    hitbox_after_movement.set_x(_hitbox.x() + _xspeed);
-    hitbox_after_movement.set_y(_hitbox.y() + _yspeed);
+    // bn::fixed_rect hitbox_after_movement(_hitbox);
+    // hitbox_after_movement.set_x(_hitbox.x() + _xspeed);
+    // hitbox_after_movement.set_y(_hitbox.y() + _yspeed);
 
     //todo: less copypasted code
     if(bn::keypad::left_held()){
@@ -75,37 +114,45 @@ void player::update(){
     }
 
 
-    bool was_grounded = grounded();
+    bool was_grounded = on_flat_ground();
 
     _hitbox.set_x(_hitbox.x() + _xspeed);
     _hitbox.set_y(_hitbox.y() + _yspeed);
 
-    if(!grounded() && was_grounded && _yspeed >=0){
-        _coyote_timer = 6; // 6 frames is 0.1s
+    if(!on_flat_ground() && !sloped_ground_ytile && was_grounded && _yspeed >=0){
+        _coyote_timer = 12; // 6 frames is 0.1s
     }
 
     
+    if(sloped_ground_ytile){
+        // BN_LOG("sloped ground ytile: ", sloped_ground_ytile);
+        bn::fixed yoffset = (_hitbox.x() % 8) + 1;
+        _hitbox.set_y((sloped_ground_ytile + 1) * 8 - bn::fixed(0.5)*_hitbox.height() - yoffset);
+        if(_yspeed > 0){
+            // BN_LOG("why are we still falling?");
+            land();
+        }
 
-    if(grounded()){
+
+    }else if(on_flat_ground()){
         _idle.update();
         _coyote_timer = 0;
-
-        bn::fixed_point bottom_center(_hitbox.x(), _hitbox.bottom());
-        bn::fixed map_cell_bottom = (_hitbox.bottom() * bn::fixed(0.125)).floor_integer() * 8;
         // if(_level.is_thick_ground(bottom_center) || _level.is_thin_ground(bottom_center)){
-            _hitbox.set_y(map_cell_bottom - bn::fixed(0.5)*_hitbox.height());
+        bn::fixed map_cell_bottom = (_hitbox.bottom() * bn::fixed(0.125)).floor_integer() * 8;
+        _hitbox.set_y(map_cell_bottom - bn::fixed(0.5)*_hitbox.height());
         // }else if(_level.is_up_slope(bottom_center - bn::fixed_point(0,8))){
         //     _hitbox.set_y(map_cell_bottom - (_hitbox.x().floor_integer() % 8) - bn::fixed(0.5)*_hitbox.height());
-        //     BN_LOG("bottom: ", _hitbox.bottom());
+            // BN_LOG("bottom: ", _hitbox.bottom());
         //     BN_LOG("xcor: ", _hitbox.x());
         //     BN_LOG("xcor remainder: ", _hitbox.x().floor_integer() % 8);
         // }
 
         if(_yspeed > 0){
-            _yspeed = 0;
-            _jbuf_timer = 0;
+            land();
         }                    
     }
+
+    // _level.print_hitbox(_hitbox);
 
     
 
@@ -133,13 +180,15 @@ void player::update(){
 }
 
 void player::take_button_input(){
+    const bn::fixed _DUSTCLOUD_OFFSET = 40;
+
     if(bn::keypad::left_pressed()){
         // BN_LOG("facing right? ", facing_right());
         if(!facing_right() && _doubletap_timer){
             //sprint
             _target_xspeed = -_sprint_xspeed;
             _sprintcloud.set_horizontal_flip(true);
-            _sprintcloud.start(_hitbox.x() + 20, _hitbox.y() + 17);
+            _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 17);
         }else{
             //walk
             _target_xspeed = -_walk_xspeed;
@@ -153,7 +202,7 @@ void player::take_button_input(){
             //sprint
             _target_xspeed = _sprint_xspeed;
             _sprintcloud.set_horizontal_flip(false);
-            _sprintcloud.start(_hitbox.x() - 20, _hitbox.y() + 17);
+            _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 17);
         }else{
             //walk
             _target_xspeed = _walk_xspeed;
@@ -166,7 +215,7 @@ void player::take_button_input(){
         _target_xspeed = 0;
     }
 
-    if(grounded()){
+    if(on_flat_ground()){ //|| on_sloped_ground()){
         
         if(bn::keypad::a_pressed() || _jbuf_timer){
             //jbuf_timer will trigger if you pressed A just before hitting the ground
@@ -191,21 +240,36 @@ void player::jump(){
     _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
 }
 
-bool player::grounded() const{
-
+bool player::on_flat_ground() const{
     bool thin_ground = false;
     bool thick_ground = false;
     for(bn::fixed xcor = _hitbox.left(); xcor <= _hitbox.right(); xcor += 8){
         bn::fixed_point pos(xcor, _hitbox.bottom());
         thin_ground = thin_ground || _level.is_thin_ground(pos);
-        thick_ground = thick_ground || _level.is_thick_ground(pos) 
-        || _level.is_up_slope(pos) || _level.is_down_slope(pos);
+        thick_ground = thick_ground || _level.is_thick_ground(pos) ;
+        // || _level.is_up_slope(pos) || _level.is_down_slope(pos);
     }
     if(thin_ground && !thick_ground && bn::keypad::down_held()){
         return false;
     }
 
     return thick_ground || thin_ground;
+}
+
+
+// bool player::on_sloped_ground() const{
+//     bn::fixed_point bottom_center(_hitbox.x(), _hitbox.bottom() - 8);
+//     bn::fixed_point bottom_center_below(_hitbox.x(), _hitbox.bottom());
+//     //todo: all of these repeated conversions from coordinates to map indices are expensive
+//     return _level.is_down_slope(bottom_center) || _level.is_up_slope(bottom_center) 
+//      || _level.is_down_slope(bottom_center_below) || _level.is_up_slope(bottom_center_below) ;
+// }
+
+
+
+void player::land(){
+    _yspeed = 0;
+    _jbuf_timer = 0;
 }
 
 }
