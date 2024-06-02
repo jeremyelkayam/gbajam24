@@ -59,6 +59,24 @@ void player::update(){
         }
     }
 
+    if(on_flat_ground() || sloped_ground_ytile){ 
+        
+        if(bn::keypad::a_pressed() || _jbuf_timer){
+            //jbuf_timer will trigger if you pressed A just before hitting the ground
+            jump();
+        }
+    }else{
+        if(bn::keypad::a_pressed()){
+            if(_coyote_timer){
+                //in coyote time, we can still jump midair
+                jump();
+            }else{
+                //we are in the air. can't jump now, so buffer the input 
+                _jbuf_timer = 3; //3 frames = 0.05s
+            }
+        }
+    }
+
     bool ground_below_feet = false;
     uint16_t right_tile = (_hitbox.left() * bn::fixed(0.125)).ceil_integer();
     for(uint16_t xtile = (_hitbox.left() * bn::fixed(0.125)).floor_integer();
@@ -155,19 +173,14 @@ void player::update(){
             m =  0.5;
             b = ((sloped_ground_ytile - bn::fixed(center_xtile - 1)*bn::fixed(0.5)) * 8);
         }
-
-        BN_LOG("xtile: ", center_xtile);
-        BN_LOG("ytile: ", sloped_ground_ytile);
-
-        //for 2nd half of a half slope, we always subtract 1 from the xtile
-        BN_LOG("b = ", b);
         bn::fixed ycor = m * _hitbox.x() + b;
-        BN_LOG("y = ", ycor);
-        BN_LOG("on slope! xcor: ", _hitbox.x());
-        _hitbox.set_y(ycor - bn::fixed(0.5)*_hitbox.height());
         if(_yspeed > 0){
             land();
         }
+        if(_yspeed >=0){
+            _hitbox.set_y(ycor - bn::fixed(0.5)*_hitbox.height());
+        }
+        
 
 
     }else if(on_flat_ground()){
@@ -251,24 +264,6 @@ void player::take_button_input(){
     
     if(!bn::keypad::left_held() && !bn::keypad::right_held()){
         _target_xspeed = 0;
-    }
-
-    if(on_flat_ground()){ //|| on_sloped_ground()){
-        
-        if(bn::keypad::a_pressed() || _jbuf_timer){
-            //jbuf_timer will trigger if you pressed A just before hitting the ground
-            jump();
-        }
-    }else{
-        if(bn::keypad::a_pressed()){
-            if(_coyote_timer){
-                //in coyote time, we can still jump midair
-                jump();
-            }else{
-                //we are in the air. can't jump now, so buffer the input 
-                _jbuf_timer = 3; //3 frames = 0.05s
-            }
-        }
     }
 }
 
