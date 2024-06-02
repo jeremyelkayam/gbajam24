@@ -36,7 +36,7 @@ void player::update(){
 
 
     uint16_t sloped_ground_ytile = 0;
-    uint16_t sloped_ground_type = 0;
+    bn::regular_bg_map_cell sloped_ground_type = 0;
     uint16_t center_xtile = (_hitbox.x() * bn::fixed(0.125)).floor_integer();
     uint16_t foot_tile = (_hitbox.bottom() * bn::fixed(0.125)).ceil_integer();
     
@@ -50,6 +50,7 @@ void player::update(){
            tile_type == _level._DOWN_SLOPE){
             // BN_LOG("ur on an up slope");
             sloped_ground_ytile = ytile;
+            sloped_ground_type = tile_type;
             break;
         }
     }
@@ -81,7 +82,7 @@ void player::update(){
         _xspeed = _target_xspeed;
     }
 
-    if(!ground_below_feet && !sloped_ground_ytile){
+    if(!on_flat_ground() && !sloped_ground_ytile){
         if((!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _max_yspeed){
             _yspeed += _g;
         }
@@ -124,17 +125,28 @@ void player::update(){
     }
 
     
-    if(sloped_ground_ytile){
-        // BN_LOG("sloped ground ytile: ", sloped_ground_ytile);
-        bn::fixed yoffset = (_hitbox.x() % 8) + 1;
-        _hitbox.set_y((sloped_ground_ytile + 1) * 8 - bn::fixed(0.5)*_hitbox.height() - yoffset);
+    if(sloped_ground_ytile){;
+        //remember 7th grade algebra class? We're doing a slope equation today. 
+        //y=mx+b
+        bn::fixed b = ((center_xtile + sloped_ground_ytile + 1) * 8);
+        bn::fixed m;
+        if(sloped_ground_type == _level._UP_SLOPE){
+            m =  -1;
+        }else if(sloped_ground_type == _level._DOWN_SLOPE){
+            m =  1;
+        }
+        bn::fixed ycor = m * _hitbox.x() + b;
+        // BN_LOG("ycor: ", ycor);
+        // BN_LOG("xcor: ", _hitbox.x());
+        _hitbox.set_y(ycor - bn::fixed(0.5)*_hitbox.height());
         if(_yspeed > 0){
-            // BN_LOG("why are we still falling?");
             land();
         }
 
 
     }else if(on_flat_ground()){
+        BN_LOG("feet ycor: ", _hitbox.bottom());
+        BN_LOG("feet xcor: ", _hitbox.x());
         _idle.update();
         _coyote_timer = 0;
         // if(_level.is_thick_ground(bottom_center) || _level.is_thin_ground(bottom_center)){

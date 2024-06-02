@@ -26,7 +26,11 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
     _RFB_CORNER(cell_at(15,0)),
     _LFB_CORNER(cell_at(17,0)),
     _UP_SLOPE(cell_at(19,0)),
-    _DOWN_SLOPE(cell_at(21,0))
+    _DOWN_SLOPE(cell_at(21,0)),
+    _UP_HALFSLOPE_1(cell_at(23,0)),
+    _UP_HALFSLOPE_2(cell_at(25,0)),
+    _DOWN_HALFSLOPE_1(cell_at(27,0)),
+    _DOWN_HALFSLOPE_2(cell_at(29,0))
 {
     _bg_ptr.set_camera(cam);
     BN_LOG("width: ", _bg.map_item().dimensions().width(), " tiles");
