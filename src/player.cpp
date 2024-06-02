@@ -137,10 +137,29 @@ void player::update(){
         if(sloped_ground_type == _level._UP_SLOPE){
             m =  -1;
             b = ((center_xtile + sloped_ground_ytile + 1) * 8);
+        }else if(sloped_ground_type == _level._UP_HALFSLOPE_1){
+            m =  -0.5;
+            b = ((bn::fixed(center_xtile) * bn::fixed(0.5)).floor_integer()
+                 + sloped_ground_ytile + 1) * 8;
+        }else if(sloped_ground_type == _level._UP_HALFSLOPE_2){
+            m =  -0.5;
+            b = ((bn::fixed(center_xtile - 1) * bn::fixed(0.5)).floor_integer()
+                 + sloped_ground_ytile + 1) * 8;
         }else if(sloped_ground_type == _level._DOWN_SLOPE){
             m =  1;
-            b = ((center_xtile - sloped_ground_ytile) * -8);
+            b = -((center_xtile - sloped_ground_ytile) * 8);
+        }else if(sloped_ground_type == _level._DOWN_HALFSLOPE_1){
+            m =  0.5;
+            b = ((sloped_ground_ytile - bn::fixed(center_xtile)*bn::fixed(0.5)) * 8);
+        }else if(sloped_ground_type == _level._DOWN_HALFSLOPE_2){
+            m =  0.5;
+            b = ((sloped_ground_ytile - bn::fixed(center_xtile - 1)*bn::fixed(0.5)) * 8);
         }
+
+        BN_LOG("xtile: ", center_xtile);
+        BN_LOG("ytile: ", sloped_ground_ytile);
+
+        //for 2nd half of a half slope, we always subtract 1 from the xtile
         BN_LOG("b = ", b);
         bn::fixed ycor = m * _hitbox.x() + b;
         BN_LOG("y = ", ycor);
