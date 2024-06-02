@@ -108,8 +108,6 @@ void player::update(){
         if((!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _max_yspeed){
             _yspeed += _g;
         }
-        // BN_LOG("we are falling");
-        // BN_LOG("sloped ground ytile: ", sloped_ground_ytile);
         ++_jump_timer;
     }
 
@@ -126,6 +124,9 @@ void player::update(){
         for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
             if(_level.is_leftfacing_wall(bn::fixed_point(_hitbox.right(),ycor))) _xspeed = 0;
         }
+    }
+    if(_yspeed < 0 && _level.is_ceiling(bn::fixed_point(_hitbox.x(),_hitbox.top()))){
+        _yspeed = 0;
     }
 
 
@@ -184,46 +185,30 @@ void player::update(){
 
 
     }else if(on_flat_ground()){
-        BN_LOG("feet ycor: ", _hitbox.bottom());
-        BN_LOG("feet xcor: ", _hitbox.x());
         _idle.update();
         _coyote_timer = 0;
-        // if(_level.is_thick_ground(bottom_center) || _level.is_thin_ground(bottom_center)){
         bn::fixed map_cell_bottom = (_hitbox.bottom() * bn::fixed(0.125)).floor_integer() * 8;
         _hitbox.set_y(map_cell_bottom - bn::fixed(0.5)*_hitbox.height());
-        // }else if(_level.is_up_slope(bottom_center - bn::fixed_point(0,8))){
-        //     _hitbox.set_y(map_cell_bottom - (_hitbox.x().floor_integer() % 8) - bn::fixed(0.5)*_hitbox.height());
-            // BN_LOG("bottom: ", _hitbox.bottom());
-        //     BN_LOG("xcor: ", _hitbox.x());
-        //     BN_LOG("xcor remainder: ", _hitbox.x().floor_integer() % 8);
-        // }
-
         if(_yspeed > 0){
             land();
         }                    
-    }
-
-    // _level.print_hitbox(_hitbox);
-
-    
+    }    
 
     _body.set_x(_hitbox.x());
     _body.set_y(_hitbox.y());
 
 
     if(_jbuf_timer){
-        // BN_LOG("jump buffer: ", _jbuf_timer);
         --_jbuf_timer;
     }
 
     if(_coyote_timer){
-        // BN_LOG("coyote time: ", _coyote_timer);
         --_coyote_timer;
     }
 
+    //todo: reconsider whether a sprint is really necessary
     if(_doubletap_timer){
         --_doubletap_timer;
-        // BN_LOG("doubletap time: ", _doubletap_timer);
     }
     _jumpcloud.update();
     _sprintcloud.update();
@@ -234,7 +219,6 @@ void player::take_button_input(){
     const bn::fixed _DUSTCLOUD_OFFSET = 40;
 
     if(bn::keypad::left_pressed()){
-        // BN_LOG("facing right? ", facing_right());
         if(!facing_right() && _doubletap_timer){
             //sprint
             _target_xspeed = -_sprint_xspeed;
@@ -280,7 +264,6 @@ bool player::on_flat_ground() const{
         bn::fixed_point pos(xcor, _hitbox.bottom());
         thin_ground = thin_ground || _level.is_thin_ground(pos);
         thick_ground = thick_ground || _level.is_thick_ground(pos) ;
-        // || _level.is_up_slope(pos) || _level.is_down_slope(pos);
     }
     if(thin_ground && !thick_ground && bn::keypad::down_held()){
         return false;
@@ -288,17 +271,6 @@ bool player::on_flat_ground() const{
 
     return thick_ground || thin_ground;
 }
-
-
-// bool player::on_sloped_ground() const{
-//     bn::fixed_point bottom_center(_hitbox.x(), _hitbox.bottom() - 8);
-//     bn::fixed_point bottom_center_below(_hitbox.x(), _hitbox.bottom());
-//     //todo: all of these repeated conversions from coordinates to map indices are expensive
-//     return _level.is_down_slope(bottom_center) || _level.is_up_slope(bottom_center) 
-//      || _level.is_down_slope(bottom_center_below) || _level.is_up_slope(bottom_center_below) ;
-// }
-
-
 
 void player::land(){
     _yspeed = 0;

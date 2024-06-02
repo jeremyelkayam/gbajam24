@@ -22,6 +22,7 @@ public:
     bool is_rightfacing_wall(const bn::fixed_point &coords) const;
     bool is_up_slope(const bn::fixed_point &coords) const;
     bool is_down_slope(const bn::fixed_point &coords) const;
+    bool is_ceiling(const bn::fixed_point &coords) const;
     void print_hitbox(const bn::fixed_rect &hitbox) const;
 
 private:

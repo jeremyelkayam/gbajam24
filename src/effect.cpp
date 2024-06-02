@@ -19,7 +19,7 @@ bn::span<uint16_t> effect::indices_span(const uint8_t &indices){
 
     bn::span<uint16_t> result(gfxindices_arr, &gfxindices_arr[indices]);
 
-    //why does it only work if we log the result ? 
+    //todo: why does it only work if we log the result ? 
     for(uint16_t z : result){
         BN_LOG("index: ", z);
     }

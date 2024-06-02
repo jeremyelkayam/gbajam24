@@ -33,20 +33,6 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
     _DOWN_HALFSLOPE_2(cell_at(29,0))
 {
     _bg_ptr.set_camera(cam);
-    BN_LOG("width: ", _bg.map_item().dimensions().width(), " tiles");
-    BN_LOG("height: ", _bg.map_item().dimensions().height(), " tiles");
-    // BN_LOG("cells: ", _cells.size());
-
-    // for(unsigned short tiley = 0; tiley < 32 ; ++tiley){
-    //     bn::string<2048> logstr;
-    //     bn::ostringstream logstream(logstr);
-    //     for(unsigned short tilex = 0; tilex < (_COLUMNS * bn::fixed(0.5)) ; ++tilex){
-    //         logstream << cell_at(tilex, tiley);
-    //         logstream << " ";
-    //     }
-    //     BN_LOG(logstr);
-    // }
-    // BN_LOG("thin ground: ", _THIN_GROUND);
 
 }
 
@@ -57,7 +43,6 @@ bn::regular_bg_map_cell level::cell_at(const bn::fixed_point &coords) const{
 }
 
 bn::regular_bg_map_cell level::cell_at(const unsigned short &xtile, const unsigned short &ytile) const{
-    // BN_LOG("checking map cell at (",xtile,",",ytile,")");
     return _bg.map_item().cell(xtile, ytile);
 }
 
@@ -94,6 +79,11 @@ bool level::is_up_slope(const bn::fixed_point &coords) const{
 bool level::is_down_slope(const bn::fixed_point &coords) const{
     bn::regular_bg_map_cell cell_type = cell_at(coords);
     return cell_type == _DOWN_SLOPE;
+}
+
+bool level::is_ceiling(const bn::fixed_point &coords) const{
+    bn::regular_bg_map_cell cell_type = cell_at(coords);
+    return cell_type == _CEILING;
 }
 
 void level::print_hitbox(const bn::fixed_rect &hitbox) const{
