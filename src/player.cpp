@@ -42,12 +42,16 @@ void player::update(){
     
 
     for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
-            ytile < foot_tile; ++ytile){
+            ytile < foot_tile + 1; ++ytile){
         
         bn::regular_bg_map_cell tile_type = _level.cell_at(center_xtile, ytile);
 
         if(tile_type == _level._UP_SLOPE || 
-           tile_type == _level._DOWN_SLOPE){
+           tile_type == _level._DOWN_SLOPE ||
+           tile_type == _level._UP_HALFSLOPE_1 || 
+           tile_type == _level._DOWN_HALFSLOPE_1 ||
+           tile_type == _level._UP_HALFSLOPE_2 || 
+           tile_type == _level._DOWN_HALFSLOPE_2){
             // BN_LOG("ur on an up slope");
             sloped_ground_ytile = ytile;
             sloped_ground_type = tile_type;
@@ -128,16 +132,19 @@ void player::update(){
     if(sloped_ground_ytile){;
         //remember 7th grade algebra class? We're doing a slope equation today. 
         //y=mx+b
-        bn::fixed b = ((center_xtile + sloped_ground_ytile + 1) * 8);
+        bn::fixed b;
         bn::fixed m;
         if(sloped_ground_type == _level._UP_SLOPE){
             m =  -1;
+            b = ((center_xtile + sloped_ground_ytile + 1) * 8);
         }else if(sloped_ground_type == _level._DOWN_SLOPE){
             m =  1;
+            b = ((center_xtile - sloped_ground_ytile) * -8);
         }
+        BN_LOG("b = ", b);
         bn::fixed ycor = m * _hitbox.x() + b;
-        // BN_LOG("ycor: ", ycor);
-        // BN_LOG("xcor: ", _hitbox.x());
+        BN_LOG("y = ", ycor);
+        BN_LOG("on slope! xcor: ", _hitbox.x());
         _hitbox.set_y(ycor - bn::fixed(0.5)*_hitbox.height());
         if(_yspeed > 0){
             land();
