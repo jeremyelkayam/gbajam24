@@ -22,7 +22,6 @@ public:
     bn::fixed_rect hitbox() const {return _hitbox;}
     bool facing_right() const {return _body.horizontal_flip();}
     bool on_flat_ground() const;
-    // bool on_sloped_ground() const;
 
     bn::fixed xspeed() const {return _xspeed;}
 
@@ -34,7 +33,7 @@ private:
 
     //todo: perhaps refactor this into an effects class
 
-    const bn::fixed _sprint_xspeed, _max_yspeed, _accel, _g;
+    const bn::fixed _SPRINT_XSPEED, _MAX_YSPEED, _ACCEL, _G, _DUSTCLOUD_OFFSET;
     bn::fixed _xspeed, _target_xspeed, _yspeed;
     bn::fixed_rect _hitbox;
 
@@ -42,7 +41,6 @@ private:
 
     void jump();
     void land();
-    void take_button_input();
     
 };
 

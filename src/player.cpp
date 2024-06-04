@@ -16,10 +16,11 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
     _body(bn::sprite_items::arutest.create_sprite(x,y)),
     _idle(bn::create_sprite_animate_action_forever(_body, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),
-    _sprint_xspeed(3),
-    _max_yspeed(8),
-    _accel(0.75),
-    _g(1),
+    _SPRINT_XSPEED(3),
+    _MAX_YSPEED(8),
+    _ACCEL(0.75),
+    _G(1),
+    _DUSTCLOUD_OFFSET(40),
     _hitbox(x, y, 20, 54),
     _jump_timer(0),
     _jbuf_timer(0),
@@ -30,7 +31,27 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
 }
 
 void player::update(){
-    take_button_input();
+    
+
+
+    if(bn::keypad::left_pressed()){
+        _target_xspeed = -_SPRINT_XSPEED;
+        _sprintcloud.set_horizontal_flip(true);
+        _body.set_horizontal_flip(false);
+        _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
+    }
+
+    if(bn::keypad::right_pressed()){
+        _target_xspeed = _SPRINT_XSPEED;
+        _sprintcloud.set_horizontal_flip(false);
+        _body.set_horizontal_flip(true);
+        _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
+        
+    }
+    
+    if(!bn::keypad::left_held() && !bn::keypad::right_held()){
+        _target_xspeed = 0;
+    }
 
 
     uint16_t sloped_ground_ytile = 0;
@@ -70,7 +91,7 @@ void player::update(){
                 jump();
             }else{
                 //we are in the air. can't jump now, so buffer the input 
-                _jbuf_timer = 3; //3 frames = 0.05s
+                _jbuf_timer = 6; //6 frames = 0.1s
             }
         }
     }
@@ -91,20 +112,20 @@ void player::update(){
 
 
     if(_xspeed > _target_xspeed) {
-        _xspeed -= _accel;
+        _xspeed -= _ACCEL;
     }
     if(_xspeed < _target_xspeed) {
-        _xspeed += _accel;
+        _xspeed += _ACCEL;
     }
 
-    if(_target_xspeed - _accel < _xspeed && _xspeed < _target_xspeed + _accel){
+    if(_target_xspeed - _ACCEL < _xspeed && _xspeed < _target_xspeed + _ACCEL){
         // our speed will jitter so we need to set it to the target
         _xspeed = _target_xspeed;
     }
 
     if(!on_flat_ground() && !sloped_ground_ytile){
-        if((!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _max_yspeed){
-            _yspeed += _g;
+        if((!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED){
+            _yspeed += _G;
         }
         ++_jump_timer;
     }
@@ -211,31 +232,8 @@ void player::update(){
 
 }
 
-void player::take_button_input(){
-    const bn::fixed _DUSTCLOUD_OFFSET = 40;
-
-    if(bn::keypad::left_pressed()){
-        _target_xspeed = -_sprint_xspeed;
-        _sprintcloud.set_horizontal_flip(true);
-        _body.set_horizontal_flip(false);
-        _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 17);
-    }
-
-    if(bn::keypad::right_pressed()){
-        _target_xspeed = _sprint_xspeed;
-        _sprintcloud.set_horizontal_flip(false);
-        _body.set_horizontal_flip(true);
-        _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 17);
-        
-    }
-    
-    if(!bn::keypad::left_held() && !bn::keypad::right_held()){
-        _target_xspeed = 0;
-    }
-}
-
 void player::jump(){
-    _yspeed = -_max_yspeed;
+    _yspeed = -_MAX_YSPEED;
     _jump_timer = 0;
     _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
 }

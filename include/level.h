@@ -27,8 +27,8 @@ public:
 
 private:
     const bn::regular_bg_item &_bg;
+    const uint16_t _ROWS, _COLUMNS;
     bn::regular_bg_ptr _bg_ptr;
-    const int _COLUMNS;
     bn::span<const bn::regular_bg_map_cell> _cells;
 
 public: //temp. later we will do flags

@@ -12,9 +12,10 @@ namespace aru {
 
 level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) : 
     _bg(bg),
-    _bg_ptr(_bg.create_bg(bg.map_item().dimensions().width() * 4,
-        _bg.map_item().dimensions().height() * 4)),
+    _ROWS(_bg.map_item().dimensions().height()),
     _COLUMNS(_bg.map_item().dimensions().width()),
+    _bg_ptr(_bg.create_bg(_COLUMNS * 4,
+        _ROWS * 4)),
     _cells(_bg_ptr.map().cells_ref().value()),
     _THICK_GROUND(cell_at(1,0)),
     _THIN_GROUND(cell_at(3,0)),
@@ -43,7 +44,9 @@ bn::regular_bg_map_cell level::cell_at(const bn::fixed_point &coords) const{
 }
 
 bn::regular_bg_map_cell level::cell_at(const unsigned short &xtile, const unsigned short &ytile) const{
-    return _bg.map_item().cell(xtile, ytile);
+    if(xtile <= _COLUMNS && ytile <= _ROWS){
+        return _bg.map_item().cell(xtile, ytile);
+    } else return _bg.map_item().cell(0,0);
 }
 
 bool level::is_thick_ground(const bn::fixed_point &coords) const{
