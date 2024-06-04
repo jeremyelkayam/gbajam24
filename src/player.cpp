@@ -16,16 +16,14 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
     _body(bn::sprite_items::arutest.create_sprite(x,y)),
     _idle(bn::create_sprite_animate_action_forever(_body, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),
-    _walk_xspeed(2),
-    _sprint_xspeed(3.5),
+    _sprint_xspeed(3),
     _max_yspeed(8),
     _accel(0.75),
     _g(1),
-    _hitbox(x, y, 20, 58),
+    _hitbox(x, y, 20, 54),
     _jump_timer(0),
     _jbuf_timer(0),
-    _coyote_timer(0),
-    _doubletap_timer(0)
+    _coyote_timer(0)
 {
     _body.set_camera(cam);
 
@@ -195,7 +193,9 @@ void player::update(){
     }    
 
     _body.set_x(_hitbox.x());
-    _body.set_y(_hitbox.y());
+
+    //slight hitbox adjustment to make the antennae not part of the box
+    _body.set_y(_hitbox.y() - 2);
 
 
     if(_jbuf_timer){
@@ -206,10 +206,6 @@ void player::update(){
         --_coyote_timer;
     }
 
-    //todo: reconsider whether a sprint is really necessary
-    if(_doubletap_timer){
-        --_doubletap_timer;
-    }
     _jumpcloud.update();
     _sprintcloud.update();
 
@@ -219,31 +215,18 @@ void player::take_button_input(){
     const bn::fixed _DUSTCLOUD_OFFSET = 40;
 
     if(bn::keypad::left_pressed()){
-        if(!facing_right() && _doubletap_timer){
-            //sprint
-            _target_xspeed = -_sprint_xspeed;
-            _sprintcloud.set_horizontal_flip(true);
-            _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 17);
-        }else{
-            //walk
-            _target_xspeed = -_walk_xspeed;
-            _body.set_horizontal_flip(false);
-            _doubletap_timer = 30;
-        }
+        _target_xspeed = -_sprint_xspeed;
+        _sprintcloud.set_horizontal_flip(true);
+        _body.set_horizontal_flip(false);
+        _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 17);
     }
 
     if(bn::keypad::right_pressed()){
-        if(facing_right() && _doubletap_timer){
-            //sprint
-            _target_xspeed = _sprint_xspeed;
-            _sprintcloud.set_horizontal_flip(false);
-            _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 17);
-        }else{
-            //walk
-            _target_xspeed = _walk_xspeed;
-            _body.set_horizontal_flip(true);
-            _doubletap_timer = 30;
-        }
+        _target_xspeed = _sprint_xspeed;
+        _sprintcloud.set_horizontal_flip(false);
+        _body.set_horizontal_flip(true);
+        _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 17);
+        
     }
     
     if(!bn::keypad::left_held() && !bn::keypad::right_held()){

@@ -16,7 +16,6 @@ public:
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference
     player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level);
     void update();
-    void take_button_input();
     bn::fixed_point position() const {return _hitbox.position();}
     bn::fixed x() const {return _hitbox.x();}
     bn::fixed y() const {return _hitbox.y();}
@@ -35,14 +34,16 @@ private:
 
     //todo: perhaps refactor this into an effects class
 
-    const bn::fixed _walk_xspeed, _sprint_xspeed, _max_yspeed, _accel, _g;
+    const bn::fixed _sprint_xspeed, _max_yspeed, _accel, _g;
     bn::fixed _xspeed, _target_xspeed, _yspeed;
     bn::fixed_rect _hitbox;
 
-    uint8_t _jump_timer, _jbuf_timer, _coyote_timer, _doubletap_timer;
+    uint8_t _jump_timer, _jbuf_timer, _coyote_timer;
 
     void jump();
     void land();
+    void take_button_input();
+    
 };
 
 }
