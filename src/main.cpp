@@ -96,6 +96,8 @@ int main()
         bn::fixed new_y = player.y() + yoffset;
         if(new_x < 120) new_x = 120;
         if(new_x > (level.width() - 120)) new_x = level.width() - 120;
+        if(new_y < 88) new_y = 88;
+        if(new_y > (level.height() - 80)) new_y = level.height() - 80;
         cam.set_position(new_x, new_y);
         bn::core::update();
     }
