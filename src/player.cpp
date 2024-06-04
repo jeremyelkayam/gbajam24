@@ -97,14 +97,13 @@ void player::update(){
     }
 
     bool ground_below_feet = false;
-    uint16_t right_tile = (_hitbox.left() * bn::fixed(0.125)).ceil_integer();
+    uint16_t right_tile = (_hitbox.right() * bn::fixed(0.125)).ceil_integer();
     for(uint16_t xtile = (_hitbox.left() * bn::fixed(0.125)).floor_integer();
             xtile < right_tile; ++xtile){
 
         bn::regular_bg_map_cell tile_type = _level.cell_at(xtile, foot_tile);
         if(tile_type == _level._THICK_GROUND){
             ground_below_feet = true;
-            // BN_LOG("standing on ground");
             break;
         }
     }
@@ -200,8 +199,6 @@ void player::update(){
         if(_yspeed >=0){
             _hitbox.set_y(ycor - bn::fixed(0.5)*_hitbox.height());
         }
-        
-
 
     }else if(on_flat_ground()){
         _idle.update();
