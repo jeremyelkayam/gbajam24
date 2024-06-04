@@ -15,6 +15,7 @@ public:
     void update();
     void start(const bn::fixed &x, const bn::fixed &y);
     void set_horizontal_flip(const bool &flip) {_sprite.set_horizontal_flip(flip);}
+    bool visible(){return _sprite.visible();}
 private:
     uint16_t gfxindices_arr[10];
     bn::sprite_ptr _sprite;

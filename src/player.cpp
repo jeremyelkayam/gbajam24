@@ -33,27 +33,6 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
 void player::update(){
     
 
-
-    if(bn::keypad::left_pressed()){
-        _target_xspeed = -_SPRINT_XSPEED;
-        _sprintcloud.set_horizontal_flip(true);
-        _body.set_horizontal_flip(false);
-        _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
-    }
-
-    if(bn::keypad::right_pressed()){
-        _target_xspeed = _SPRINT_XSPEED;
-        _sprintcloud.set_horizontal_flip(false);
-        _body.set_horizontal_flip(true);
-        _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
-        
-    }
-    
-    if(!bn::keypad::left_held() && !bn::keypad::right_held()){
-        _target_xspeed = 0;
-    }
-
-
     uint16_t sloped_ground_ytile = 0;
     bn::regular_bg_map_cell sloped_ground_type = 0;
     uint16_t center_xtile = (_hitbox.x() * bn::fixed(0.125)).floor_integer();
@@ -78,7 +57,33 @@ void player::update(){
         }
     }
 
-    if(on_flat_ground() || sloped_ground_ytile){ 
+    bool fgrounded = on_flat_ground();
+
+
+    if(bn::keypad::left_pressed()){
+        _target_xspeed = -_SPRINT_XSPEED;
+        _sprintcloud.set_horizontal_flip(true);
+        _body.set_horizontal_flip(false);
+        if(!_sprintcloud.visible() && (fgrounded || sloped_ground_ytile)){
+            _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
+        }
+    }
+
+    if(bn::keypad::right_pressed()){
+        _target_xspeed = _SPRINT_XSPEED;
+        _sprintcloud.set_horizontal_flip(false);
+        _body.set_horizontal_flip(true);
+        if(!_sprintcloud.visible() && (fgrounded || sloped_ground_ytile)){
+            _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
+        }
+        
+    }
+    
+    if(!bn::keypad::left_held() && !bn::keypad::right_held()){
+        _target_xspeed = 0;
+    }
+
+    if(fgrounded || sloped_ground_ytile){ 
         
         if(bn::keypad::a_pressed() || _jbuf_timer){
             //jbuf_timer will trigger if you pressed A just before hitting the ground
@@ -87,20 +92,17 @@ void player::update(){
     }else{
         if(bn::keypad::a_pressed()){
             if(_coyote_timer){
-                //in coyote time, we can still jump midair
                 jump();
             }else{
-                //we are in the air. can't jump now, so buffer the input 
                 _jbuf_timer = 6; //6 frames = 0.1s
             }
         }
     }
 
-    bool ground_below_feet = on_flat_ground();
 
 
 
-
+    //Accelerate if necessary to reach target speed.
     if(_xspeed > _target_xspeed) {
         _xspeed -= _ACCEL;
     }
@@ -108,21 +110,26 @@ void player::update(){
         _xspeed += _ACCEL;
     }
 
+    //set X speed to target if it's too fast.
     if(_target_xspeed - _ACCEL < _xspeed && _xspeed < _target_xspeed + _ACCEL){
-        // our speed will jitter so we need to set it to the target
         _xspeed = _target_xspeed;
     }
 
-    if(!ground_below_feet && !sloped_ground_ytile){
+
+    //effects of gravity
+    if(!fgrounded && !sloped_ground_ytile){
         if((!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED){
             _yspeed += _G;
         }
         ++_jump_timer;
     }
 
+    //collide with walls
     if(facing_wall() && (bn::keypad::right_held() || bn::keypad::left_held())){
         _xspeed = 0;
     }
+
+    //collide with ceilings
     if(_yspeed < 0 && _level.is_ceiling(bn::fixed_point(_hitbox.x(),_hitbox.top()))){
         _yspeed = 0;
     }
@@ -136,13 +143,15 @@ void player::update(){
     }
 
 
-    bool was_grounded = on_flat_ground();
+    bool was_grounded = fgrounded;
 
     _hitbox.set_x(_hitbox.x() + _xspeed);
     _hitbox.set_y(_hitbox.y() + _yspeed);
 
-    if(!on_flat_ground() && !sloped_ground_ytile && was_grounded && _yspeed >=0){
-        _coyote_timer = 12; // 6 frames is 0.1s
+    fgrounded = on_flat_ground();
+
+    if(!fgrounded && !sloped_ground_ytile && was_grounded && _yspeed >=0){
+        _coyote_timer = 12; // 12 frames is 0.2s
     }
 
     
@@ -180,7 +189,7 @@ void player::update(){
             _hitbox.set_y(ycor - bn::fixed(0.5)*_hitbox.height());
         }
 
-    }else if(on_flat_ground()){
+    }else if(fgrounded){
         _idle.update();
         _coyote_timer = 0;
         bn::fixed map_cell_bottom = (_hitbox.bottom() * bn::fixed(0.125)).floor_integer() * 8;
@@ -188,10 +197,9 @@ void player::update(){
         if(_yspeed > 0){
             land();
         }                    
-    }    
+    }
 
     _body.set_x(_hitbox.x());
-
     //slight hitbox adjustment to make the antennae not part of the box
     _body.set_y(_hitbox.y() - 2);
 
@@ -206,7 +214,6 @@ void player::update(){
 
     _jumpcloud.update();
     _sprintcloud.update();
-
 }
 
 void player::jump(){
@@ -230,7 +237,7 @@ bool player::on_flat_ground() const{
             thick_ground = true;
         }
         if(tile_type == _level._THIN_GROUND){
-            thick_ground = true;
+            thin_ground = true;
         }
     }
 
