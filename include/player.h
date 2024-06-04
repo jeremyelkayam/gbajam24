@@ -22,6 +22,11 @@ public:
     bn::fixed_rect hitbox() const {return _hitbox;}
     bool facing_right() const {return _body.horizontal_flip();}
     bool on_flat_ground() const;
+    bool facing_wall() const;
+    int left_tile() const {return (_hitbox.left() * bn::fixed(0.125)).floor_integer();}
+    int right_tile() const {return (_hitbox.right() * bn::fixed(0.125)).floor_integer();}
+    int top_tile() const {return (_hitbox.top() * bn::fixed(0.125)).floor_integer();}
+    int bottom_tile() const {return (_hitbox.bottom() * bn::fixed(0.125)).floor_integer();}
 
     bn::fixed xspeed() const {return _xspeed;}
 

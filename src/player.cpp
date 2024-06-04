@@ -57,11 +57,11 @@ void player::update(){
     uint16_t sloped_ground_ytile = 0;
     bn::regular_bg_map_cell sloped_ground_type = 0;
     uint16_t center_xtile = (_hitbox.x() * bn::fixed(0.125)).floor_integer();
-    uint16_t foot_tile = (_hitbox.bottom() * bn::fixed(0.125)).ceil_integer();
+    uint16_t current_foot_tile = bottom_tile();
     
 
     for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
-            ytile < foot_tile + 1; ++ytile){
+            ytile < current_foot_tile + 1; ++ytile){
         
         bn::regular_bg_map_cell tile_type = _level.cell_at(center_xtile, ytile);
 
@@ -96,17 +96,8 @@ void player::update(){
         }
     }
 
-    bool ground_below_feet = false;
-    uint16_t right_tile = (_hitbox.right() * bn::fixed(0.125)).ceil_integer();
-    for(uint16_t xtile = (_hitbox.left() * bn::fixed(0.125)).floor_integer();
-            xtile < right_tile; ++xtile){
+    bool ground_below_feet = on_flat_ground();
 
-        bn::regular_bg_map_cell tile_type = _level.cell_at(xtile, foot_tile);
-        if(tile_type == _level._THICK_GROUND){
-            ground_below_feet = true;
-            break;
-        }
-    }
 
 
 
@@ -122,26 +113,15 @@ void player::update(){
         _xspeed = _target_xspeed;
     }
 
-    if(!on_flat_ground() && !sloped_ground_ytile){
+    if(!ground_below_feet && !sloped_ground_ytile){
         if((!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED){
             _yspeed += _G;
         }
         ++_jump_timer;
     }
 
-    // bn::fixed_rect hitbox_after_movement(_hitbox);
-    // hitbox_after_movement.set_x(_hitbox.x() + _xspeed);
-    // hitbox_after_movement.set_y(_hitbox.y() + _yspeed);
-
-    //todo: less copypasted code
-    if(bn::keypad::left_held()){
-        for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
-            if(_level.is_rightfacing_wall(bn::fixed_point(_hitbox.left(),ycor))) _xspeed = 0;
-        }
-    }else if(bn::keypad::right_held()){
-        for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
-            if(_level.is_leftfacing_wall(bn::fixed_point(_hitbox.right(),ycor))) _xspeed = 0;
-        }
+    if(facing_wall() && (bn::keypad::right_held() || bn::keypad::left_held())){
+        _xspeed = 0;
     }
     if(_yspeed < 0 && _level.is_ceiling(bn::fixed_point(_hitbox.x(),_hitbox.top()))){
         _yspeed = 0;
@@ -238,11 +218,22 @@ void player::jump(){
 bool player::on_flat_ground() const{
     bool thin_ground = false;
     bool thick_ground = false;
-    for(bn::fixed xcor = _hitbox.left(); xcor <= _hitbox.right(); xcor += 8){
-        bn::fixed_point pos(xcor, _hitbox.bottom());
-        thin_ground = thin_ground || _level.is_thin_ground(pos);
-        thick_ground = thick_ground || _level.is_thick_ground(pos) ;
+    uint16_t current_foot_tile = bottom_tile();
+    uint16_t current_right_tile = right_tile();
+    for(uint16_t xtile = left_tile();
+            xtile < current_right_tile; ++xtile){
+
+        bn::regular_bg_map_cell tile_type = _level.cell_at(xtile, current_foot_tile);
+        if(tile_type == _level._THICK_GROUND 
+        || tile_type == _level._LFT_CORNER 
+        || tile_type == _level._RFT_CORNER){
+            thick_ground = true;
+        }
+        if(tile_type == _level._THIN_GROUND){
+            thick_ground = true;
+        }
     }
+
     if(thin_ground && !thick_ground && bn::keypad::down_held()){
         return false;
     }
@@ -253,6 +244,15 @@ bool player::on_flat_ground() const{
 void player::land(){
     _yspeed = 0;
     _jbuf_timer = 0;
+}
+
+bool player::facing_wall() const{
+    //todo: refactor into 
+    for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
+        if(facing_right() && _level.is_leftfacing_wall(bn::fixed_point(_hitbox.right(),ycor))) return true;
+        else if(_level.is_rightfacing_wall(bn::fixed_point(_hitbox.left(),ycor))) return true;
+    }  
+    return false;  
 }
 
 }
