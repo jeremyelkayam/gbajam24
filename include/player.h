@@ -1,51 +1,26 @@
 #pragma once
-
-#include <bn_sprite_ptr.h>
 #include <bn_sprite_animate_actions.h>
-#include <bn_fixed_rect.h>
-#include <bn_camera_ptr.h>
-#include "level.h"
 #include "effect.h"
+#include "entity.h"
 
 
 namespace aru
 {
-class player 
+class player : public entity
 {
 public: 
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference
     player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level);
-    void update();
-    bn::fixed_point position() const {return _hitbox.position();}
-    bn::fixed x() const {return _hitbox.x();}
-    bn::fixed y() const {return _hitbox.y();}
-    bn::fixed_rect hitbox() const {return _hitbox;}
-    bool facing_right() const {return _body.horizontal_flip();}
-    bool on_flat_ground() const;
-    bool facing_wall() const;
-    int left_tile() const {return (_hitbox.left() * bn::fixed(0.125)).floor_integer();}
-    int right_tile() const {return (_hitbox.right() * bn::fixed(0.125)).floor_integer();}
-    int top_tile() const {return (_hitbox.top() * bn::fixed(0.125)).floor_integer();}
-    int bottom_tile() const {return (_hitbox.bottom() * bn::fixed(0.125)).floor_integer();}
-
-    bn::fixed xspeed() const {return _xspeed;}
+    // virtual ~player() override {return;}
+    virtual void update() override;
 
 private:
-    level &_level;
     effect _jumpcloud, _sprintcloud;
-    bn::sprite_ptr _body;
     bn::sprite_animate_action<4> _idle;
 
-    //todo: perhaps refactor this into an effects class
-
-    const bn::fixed _SPRINT_XSPEED, _MAX_YSPEED, _ACCEL, _G, _DUSTCLOUD_OFFSET;
-    bn::fixed _xspeed, _target_xspeed, _yspeed;
-    bn::fixed_rect _hitbox;
+    const bn::fixed _DUSTCLOUD_OFFSET;
 
     uint8_t _jump_timer, _jbuf_timer, _coyote_timer;
-
-    void jump();
-    void land();
     
 };
 
