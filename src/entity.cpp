@@ -9,7 +9,9 @@ entity::entity(bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, cons
     _MAX_YSPEED(8),
     _ACCEL(0.75),
     _G(1),
-    _hitbox(x, y, width, height)
+    _hitbox(x, y, width, height),
+    _grounded(false),
+    _jump_timer(0)
 {
     _sprite.set_camera(cam);
 
@@ -61,10 +63,10 @@ void entity::update(){
     if(!fgrounded && !sloped_ground_ytile){
         //todo
         //REMOVE A BUTTON CLAUSE FOR OTHER ENTITIES...
-        if(/*(!bn::keypad::a_held() || _jump_timer > 4) &&|*/ _yspeed < _MAX_YSPEED){
+        if((/*!bn::keypad::a_held() ||*/ _jump_timer > 4) && _yspeed < _MAX_YSPEED){
             _yspeed += _G;
         }
-        // ++_jump_timer;
+        ++_jump_timer;
     }
 
     //collide with walls
@@ -85,12 +87,6 @@ void entity::update(){
         _xspeed = 0;
     }
 
-
-    // bool was_grounded = fgrounded;
-
-    _hitbox.set_x(_hitbox.x() + _xspeed);
-    _hitbox.set_y(_hitbox.y() + _yspeed);
-
     fgrounded = on_flat_ground();
 
         
@@ -102,14 +98,17 @@ void entity::update(){
         if(sloped_ground_type == _level._UP_SLOPE){
             m =  -1;
             b = ((center_xtile + sloped_ground_ytile + 1) * 8);
+            _xspeed *= INVSQRT2;
         }else if(sloped_ground_type == _level._UP_HALFSLOPE_1){
             m =  -0.5;
             b = ((bn::fixed(center_xtile) * bn::fixed(0.5)).floor_integer()
                  + sloped_ground_ytile + 1) * 8;
+            _xspeed *= INVSQRT54THS;
         }else if(sloped_ground_type == _level._UP_HALFSLOPE_2){
             m =  -0.5;
             b = ((bn::fixed(center_xtile - 1) * bn::fixed(0.5)).floor_integer()
                  + sloped_ground_ytile + 1) * 8;
+            _xspeed *= INVSQRT54THS;
         }else if(sloped_ground_type == _level._DOWN_SLOPE){
             m =  1;
             b = -((center_xtile - sloped_ground_ytile) * 8);
@@ -129,20 +128,24 @@ void entity::update(){
         }
 
     }else if(fgrounded){
+        //todo: it jitters when you go from flat to downward sloped ground
         // _idle.update();
         // _coyote_timer = 0;
         bn::fixed map_cell_bottom = (_hitbox.bottom() * bn::fixed(0.125)).floor_integer() * 8;
         _hitbox.set_y(map_cell_bottom - bn::fixed(0.5)*_hitbox.height());
         if(_yspeed > 0){
             land();
-        }                    
+        }  
     }
 
-    grounded = fgrounded || sloped_ground_ytile;
+    _grounded = fgrounded || sloped_ground_ytile;
+
+    _hitbox.set_x(_hitbox.x() + _xspeed);
+    _hitbox.set_y(_hitbox.y() + _yspeed);
 }
 
 bool entity::facing_wall() const{
-    //todo: refactor into 
+    //todo: refactor into level maybe?
     for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
         if(facing_right() && _level.is_leftfacing_wall(bn::fixed_point(_hitbox.right(),ycor))) return true;
         else if(_level.is_rightfacing_wall(bn::fixed_point(_hitbox.left(),ycor))) return true;
@@ -153,8 +156,7 @@ bool entity::facing_wall() const{
 void entity::jump(){
     _yspeed = -_MAX_YSPEED;
     //todo move to player
-    // _jump_timer = 0;
-    // _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
+    _jump_timer = 0;
 }
 
 bool entity::on_flat_ground() const{

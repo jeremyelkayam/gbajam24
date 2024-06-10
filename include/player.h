@@ -13,6 +13,7 @@ public:
     player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level);
     // virtual ~player() override {return;}
     virtual void update() override;
+    virtual void jump() override;
 
 private:
     effect _jumpcloud, _sprintcloud;
@@ -20,7 +21,7 @@ private:
 
     const bn::fixed _DUSTCLOUD_OFFSET;
 
-    uint8_t _jump_timer, _jbuf_timer, _coyote_timer;
+    uint8_t _jbuf_timer, _coyote_timer;
     
 };
 

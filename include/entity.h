@@ -3,6 +3,7 @@
 #include <bn_sprite_ptr.h>
 #include <bn_fixed_rect.h>
 #include <bn_camera_ptr.h>
+#include "constants.h"
 #include "level.h"
 
 namespace aru
@@ -36,9 +37,10 @@ protected:
     bn::fixed _xspeed, _target_xspeed, _yspeed;
     bn::fixed_rect _hitbox;
 
-    bool grounded;
+    bool _grounded;
+    uint8_t _jump_timer;
 
-    void jump();
+    virtual void jump();
     void land();
 
 };

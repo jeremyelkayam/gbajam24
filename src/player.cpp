@@ -15,7 +15,6 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
     _idle(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),
     _DUSTCLOUD_OFFSET(40),
-    _jump_timer(0),
     _jbuf_timer(0),
     _coyote_timer(0)
 {
@@ -28,16 +27,18 @@ void player::update(){
         _target_xspeed = -_MAX_XSPEED;
         _sprintcloud.set_horizontal_flip(true);
         _sprite.set_horizontal_flip(false);
-        if(!_sprintcloud.visible() && grounded){
+        if(!_sprintcloud.visible() && _grounded){
             _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
         }
     }
+
+
 
     if(bn::keypad::right_pressed()){
         _target_xspeed = _MAX_XSPEED;
         _sprintcloud.set_horizontal_flip(false);
         _sprite.set_horizontal_flip(true);
-        if(!_sprintcloud.visible() && grounded){
+        if(!_sprintcloud.visible() && _grounded){
             _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
         }
         
@@ -48,7 +49,7 @@ void player::update(){
     }
     
 
-    if(grounded){ 
+    if(_grounded){ 
         
         if(bn::keypad::a_pressed() || _jbuf_timer){
             //jbuf_timer will trigger if you pressed A just before hitting the ground
@@ -90,5 +91,9 @@ void player::update(){
     entity::update();
 }
 
+void player::jump(){
+    entity::jump();
+    _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
+}
 
 }
