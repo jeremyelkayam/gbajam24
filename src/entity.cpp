@@ -63,7 +63,7 @@ void entity::update(){
     if(!fgrounded && !sloped_ground_ytile){
         //todo
         //REMOVE A BUTTON CLAUSE FOR OTHER ENTITIES...
-        if((/*!bn::keypad::a_held() ||*/ _jump_timer > 4) && _yspeed < _MAX_YSPEED){
+        if(apply_gravity()){
             _yspeed += _G;
         }
         ++_jump_timer;
@@ -155,13 +155,16 @@ bool entity::facing_wall() const{
 
 void entity::jump(){
     _yspeed = -_MAX_YSPEED;
-    //todo move to player
     _jump_timer = 0;
 }
 
 bool entity::on_flat_ground() const{
-    bool thin_ground = false;
-    bool thick_ground = false;
+    return on_thick_ground() || on_thin_ground();
+}
+
+//todo: Less copy/pasted code here
+// refactor it into a check on all tiles below your feet
+bool entity::on_thick_ground() const{
     uint16_t current_foot_tile = bottom_tile();
     uint16_t current_right_tile = right_tile();
     for(uint16_t xtile = left_tile();
@@ -171,25 +174,32 @@ bool entity::on_flat_ground() const{
         if(tile_type == _level._THICK_GROUND 
         || tile_type == _level._LFT_CORNER 
         || tile_type == _level._RFT_CORNER){
-            thick_ground = true;
-        }
-        if(tile_type == _level._THIN_GROUND){
-            thin_ground = true;
+            return true;
         }
     }
+    return false;
+}
 
-    //todo move to player
-    // if(thin_ground && !thick_ground && bn::keypad::down_held()){
-    //     return false;
-    // }
+bool entity::on_thin_ground() const{
+    uint16_t current_foot_tile = bottom_tile();
+    uint16_t current_right_tile = right_tile();
+    for(uint16_t xtile = left_tile();
+            xtile < current_right_tile; ++xtile){
 
-    return thick_ground || thin_ground;
+        bn::regular_bg_map_cell tile_type = _level.cell_at(xtile, current_foot_tile);
+        if(tile_type == _level._THIN_GROUND){
+            return true;
+        }
+    }
+    return false;
 }
 
 void entity::land(){
     _yspeed = 0;
-    //todo move to player
-    // _jbuf_timer = 0;
+}
+
+bool entity::apply_gravity() const{
+   return  (_jump_timer > 4) && _yspeed < _MAX_YSPEED;
 }
 
 

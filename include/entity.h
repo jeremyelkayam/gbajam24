@@ -43,6 +43,10 @@ protected:
     virtual void jump();
     void land();
 
+    virtual bool on_thin_ground() const;
+    bool on_thick_ground() const;
+    virtual bool apply_gravity() const;
+
 };
 
 }

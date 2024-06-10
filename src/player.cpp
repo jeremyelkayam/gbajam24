@@ -88,12 +88,28 @@ void player::update(){
 
     _jumpcloud.update();
     _sprintcloud.update();
+    
+
+    //todo: there is a bit of jank where you fall in the tile for a frame... let's fix that  
     entity::update();
 }
 
 void player::jump(){
     entity::jump();
+    _jbuf_timer = 0;
     _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
+}
+
+bool player::on_thin_ground() const{
+    if (bn::keypad::down_held())
+    {
+        return false;
+    }
+    return entity::on_thin_ground();   
+}
+
+bool player::apply_gravity() const{
+   return  (!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED;
 }
 
 }
