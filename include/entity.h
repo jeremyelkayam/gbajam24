@@ -30,6 +30,7 @@ public:
     int bottom_tile() const {return (_hitbox.bottom() * bn::fixed(0.125)).floor_integer();}
     void hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push);
     uint8_t contact_damage() const {return _contact_damage;}
+    uint8_t hp() const {return _hp;}
 
 
 protected:

@@ -16,6 +16,7 @@
 #include "bn_regular_bg_items_testmap.h"
 #include "player.h"
 #include "level.h"
+#include "hud.h"
 #include "enemy.h"
 
 
@@ -30,7 +31,8 @@ int main()
     bn::camera_ptr cam = bn::camera_ptr::create(128,128);
     aru::level level(cam, bn::regular_bg_items::testmap);
     aru::player player(cam, 128, 128, level);
-    aru::enemy enemy(cam, 428, 128, level);
+    aru::enemy enemy(cam, 328, 128, level);
+    aru::hud hud;
     bg.set_camera(cam);
 
     uint8_t direction_timer = 0;
@@ -49,8 +51,14 @@ int main()
             bn::fixed hori_kb = 6 * (player.facing_right() ? -1 : 1); 
             player.hit(enemy.contact_damage(),hori_kb,-3);
         }
+        hud.update_player_hp(player.hp());
+        if(player.hp() == 0){
+            //you died
+            bn::core::reset();
+        }
         player.update();
         enemy.update();
+        hud.update();
         
 
         if(was_facing_right != player.facing_right()){
@@ -113,5 +121,10 @@ int main()
         if(new_y > (level.height() - 80)) new_y = level.height() - 80;
         cam.set_position(new_x, new_y);
         bn::core::update();
+
+        if(bn::keypad::start_held() && bn::keypad::select_held() &&
+            bn::keypad::a_held() && bn::keypad::b_held()){
+            bn::core::reset();
+        }
     }
 }
