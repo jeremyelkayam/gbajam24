@@ -16,6 +16,7 @@
 #include "bn_regular_bg_items_testmap.h"
 #include "player.h"
 #include "level.h"
+#include "enemy.h"
 
 
 int main()
@@ -29,6 +30,7 @@ int main()
     bn::camera_ptr cam = bn::camera_ptr::create(128,128);
     aru::level level(cam, bn::regular_bg_items::testmap);
     aru::player player(cam, 128, 128, level);
+    aru::enemy enemy(cam, 428, 128, level);
     bg.set_camera(cam);
 
     uint8_t direction_timer = 0;
@@ -39,6 +41,8 @@ int main()
     {
         bool was_facing_right = player.facing_right();
         player.update();
+        enemy.update();
+        
 
         if(was_facing_right != player.facing_right()){
             //this means they changed direction

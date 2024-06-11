@@ -70,12 +70,9 @@ void player::update(){
     // if(!grounded && was_grounded && _yspeed >=0){
     //     _coyote_timer = 12; // 12 frames is 0.2s
     // }
+    
+    //todo : adjust the player sprite up 2
 
-
-
-    _sprite.set_x(_hitbox.x());
-    //slight hitbox adjustment to make the antennae not part of the box
-    _sprite.set_y(_hitbox.y() - 2);
 
 
     if(_jbuf_timer){

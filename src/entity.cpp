@@ -148,6 +148,9 @@ void entity::update(){
 
     _hitbox.set_x(_hitbox.x() + _xspeed);
     _hitbox.set_y(_hitbox.y() + _yspeed);
+    _sprite.set_x(_hitbox.x());
+    _sprite.set_y(_hitbox.y());
+
 }
 
 bool entity::facing_wall() const{
@@ -165,6 +168,7 @@ bool entity::facing_wall() const{
 }
 
 void entity::jump(){
+    BN_LOG("jump!");
     _yspeed = -_MAX_YSPEED;
     _jump_timer = 0;
 }
