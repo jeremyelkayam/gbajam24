@@ -1,8 +1,9 @@
 #include "entity.h"
+#include <bn_log.h>
 
 namespace aru 
 {
-entity::entity(bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, level &level, const bn::sprite_item &spritem) : 
+entity::entity(bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const uint8_t &hp, const uint8_t &contact_damage, level &level, const bn::sprite_item &spritem) : 
     _level(level),
     _sprite(spritem.create_sprite(x,y)),
     _MAX_XSPEED(3),
@@ -11,7 +12,10 @@ entity::entity(bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, cons
     _G(1),
     _hitbox(x, y, width, height),
     _grounded(false),
-    _jump_timer(0)
+    _max_hp(hp),
+    _jump_timer(0),
+    _hp(hp),
+    _contact_damage(contact_damage)
 {
     _sprite.set_camera(cam);
 
@@ -72,6 +76,8 @@ void entity::update(){
     //collide with walls
     if((_xspeed != 0) && facing_wall()){
         _xspeed = 0;
+        BN_LOG("HIT WALL!");
+        BN_LOG("facing right: ", facing_right());
     }
 
     //collide with ceilings
@@ -147,8 +153,13 @@ void entity::update(){
 bool entity::facing_wall() const{
     //todo: refactor into level maybe?
     for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
-        if(facing_right() && _level.is_leftfacing_wall(bn::fixed_point(_hitbox.right(),ycor))) return true;
-        else if(_level.is_rightfacing_wall(bn::fixed_point(_hitbox.left(),ycor))) return true;
+
+        if(facing_right() && _level.is_leftfacing_wall(bn::fixed_point(_hitbox.right(),ycor))){
+            return true;
+        }
+        else if(!facing_right() && _level.is_rightfacing_wall(bn::fixed_point(_hitbox.left(),ycor))){
+            return true;
+        }
     }  
     return false;  
 }
@@ -200,6 +211,15 @@ void entity::land(){
 
 bool entity::apply_gravity() const{
    return  (_jump_timer > 4) && _yspeed < _MAX_YSPEED;
+}
+
+void entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
+    _xspeed += x_push;
+    _yspeed += y_push;
+    //TODO: death check
+    _hp -= damage;
+
+    //TODO ALSO: maybe add a bit of punchiness to the attack like freeze frames or shake.
 }
 
 
