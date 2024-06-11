@@ -23,7 +23,7 @@ class hud {
         hud();
         void update();
         void update_player_hp(const uint8_t &hp);
-        void update_enemy_hp(bn::string<16> enemy_name, const uint8_t &hp);
+        void update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, const uint8_t &current_hp);
 
         void set_all_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
         void int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y);

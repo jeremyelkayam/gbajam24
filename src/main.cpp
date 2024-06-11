@@ -26,12 +26,13 @@ int main()
     bn::regular_bg_ptr bg = bn::regular_bg_items::testbg.create_bg(0,0);
 
     //multiply by 4 b/c we want the center of the map.
-    // the dimensions are measured in 8x8 tiles, so 8*tiles = pixels. 8/2 = 4 
+    // the dimensions are measurecd in 8x8 tiles, so 8*tiles = pixels. 8/2 = 4 
     bn::bg_palettes::set_transparent_color(bn::color(25, 25, 25));
     bn::camera_ptr cam = bn::camera_ptr::create(128,128);
     aru::level level(cam, bn::regular_bg_items::testmap);
     aru::player player(cam, 128, 128, level);
-    aru::enemy enemy(cam, 328, 128, level);
+    bn::optional<aru::enemy> enemy;
+    enemy.emplace(cam, 328, 128, level);
     aru::hud hud;
     bg.set_camera(cam);
 
@@ -43,21 +44,29 @@ int main()
     {
         bool was_facing_right = player.facing_right();
 
-        if(player.hitbox().intersects(enemy.hitbox())){
-            bn::fixed hori_kb = 6 * (player.facing_right() ? 1 : -1); 
-            enemy.hit(player.contact_damage(),hori_kb,-3);
+        if(enemy){
+            if(!player.in_iframes() && player.hitbox().intersects(enemy->hitbox())){
+                bn::fixed hori_kb = 6 * (player.facing_right() ? 1 : -1); 
+                uint8_t old_hp = enemy->hp();
+                enemy->hit(player.contact_damage(),hori_kb,-3);
+                hud.update_enemy_hp("GLOBLIN", old_hp, enemy->hp());
+            }
+            if(enemy->hitbox().intersects(player.hitbox())){
+                bn::fixed hori_kb = 6 * (player.facing_right() ? -1 : 1); 
+                player.hit(enemy->contact_damage(),hori_kb,-3);
+            }
+            enemy->update();
+            if(enemy->hp() == 0){
+                enemy.reset();
+            }
         }
-        if(enemy.hitbox().intersects(player.hitbox())){
-            bn::fixed hori_kb = 6 * (player.facing_right() ? -1 : 1); 
-            player.hit(enemy.contact_damage(),hori_kb,-3);
-        }
+
         hud.update_player_hp(player.hp());
         if(player.hp() == 0){
             //you died
             bn::core::reset();
         }
         player.update();
-        enemy.update();
         hud.update();
         
 
