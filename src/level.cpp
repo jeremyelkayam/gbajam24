@@ -35,6 +35,18 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
 {
     _bg_ptr.set_camera(cam);
 
+    bn::regular_bg_map_cell spawn_tile = cell_at(31,0);
+
+    for(uint16_t xtile = 0; xtile < _COLUMNS; ++xtile){
+        for(uint16_t ytile = 1; ytile < _ROWS; ++ytile){
+            if(cell_at(xtile, ytile) == spawn_tile){
+                BN_LOG("Spawnpoint found at ", xtile, ",", ytile);
+                BN_LOG("tile type: ",spawn_tile);
+                BN_LOG("tile type: ", _bg.map_item().cells_ref()[xtile * _COLUMNS + ytile]);
+            }
+        }
+    }
+
 }
 
 bn::regular_bg_map_cell level::cell_at(const bn::fixed_point &coords) const{

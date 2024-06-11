@@ -30,6 +30,7 @@ private:
     const uint16_t _ROWS, _COLUMNS;
     bn::regular_bg_ptr _bg_ptr;
     bn::span<const bn::regular_bg_map_cell> _cells;
+    bn::point _spawnpoint;
 
 public: //temp. later we will do flags
     const bn::regular_bg_map_cell _THICK_GROUND,_THIN_GROUND, _RF_WALL, _LF_WALL, _CEILING,

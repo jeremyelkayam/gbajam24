@@ -11,7 +11,6 @@ class player : public entity
 public: 
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference
     player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level);
-    // virtual ~player() override {return;}
     virtual void update() override;
     virtual void jump() override;
 
