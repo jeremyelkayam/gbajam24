@@ -26,7 +26,21 @@ void entity::update(){
     bn::regular_bg_map_cell sloped_ground_type = 0;
     uint16_t center_xtile = (_hitbox.x() * bn::fixed(0.125)).floor_integer();
     uint16_t current_foot_tile = bottom_tile();
-    
+
+    //speed cap
+    if(_xspeed > _MAX_XSPEED){
+        _xspeed = _MAX_XSPEED;
+    }
+    if(_xspeed < -_MAX_XSPEED){
+        _xspeed = -_MAX_XSPEED;
+    }
+
+    if(_yspeed > _MAX_YSPEED){
+        _yspeed = _MAX_YSPEED;
+    }
+    if(_yspeed < -_MAX_YSPEED){
+        _yspeed = -_MAX_YSPEED;
+    }
 
     for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
             ytile < current_foot_tile + 1; ++ytile){
@@ -218,7 +232,9 @@ bool entity::apply_gravity() const{
 }
 
 void entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
+    
     _xspeed += x_push;
+
     _yspeed += y_push;
     //TODO: death check
     _hp -= damage;

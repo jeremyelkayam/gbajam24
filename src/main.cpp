@@ -40,8 +40,6 @@ int main()
     while(true)
     {
         bool was_facing_right = player.facing_right();
-        player.update();
-        enemy.update();
 
         if(player.hitbox().intersects(enemy.hitbox())){
             bn::fixed hori_kb = 6 * (player.facing_right() ? 1 : -1); 
@@ -51,6 +49,8 @@ int main()
             bn::fixed hori_kb = 6 * (player.facing_right() ? -1 : 1); 
             player.hit(enemy.contact_damage(),hori_kb,-3);
         }
+        player.update();
+        enemy.update();
         
 
         if(was_facing_right != player.facing_right()){
