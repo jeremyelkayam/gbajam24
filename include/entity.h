@@ -12,7 +12,7 @@ namespace aru
 class entity
 {
 public:
-    entity(bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const uint8_t &hp, const uint8_t &contact_damage, level &level, const bn::sprite_item &spritem);
+    entity(bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem);
     virtual ~entity() {return;}
     virtual void update();
     bn::fixed_point position() const {return _hitbox.position();}
@@ -36,12 +36,13 @@ protected:
     level &_level;
     bn::sprite_ptr _sprite;
     const bn::fixed _MAX_XSPEED, _MAX_YSPEED, _ACCEL, _G;
+    const uint8_t _HIT_IFRAMES;
     bn::fixed _xspeed, _target_xspeed, _yspeed;
     bn::fixed_rect _hitbox;
 
     bool _grounded;
     const uint8_t _max_hp;
-    uint8_t _jump_timer, _hp, _contact_damage;
+    uint8_t _jump_timer, _hp, _contact_damage,_iframes;
 
     virtual void jump();
     void land();

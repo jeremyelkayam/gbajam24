@@ -10,7 +10,7 @@
 namespace aru {
 
 player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) : 
-    entity(cam, x,y,20,54,50,10,level,bn::sprite_items::arutest),
+    entity(cam, x,y,20,54,50,10,120,level,bn::sprite_items::arutest),
     _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
     _idle(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),

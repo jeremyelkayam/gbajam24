@@ -3,19 +3,21 @@
 
 namespace aru 
 {
-entity::entity(bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const uint8_t &hp, const uint8_t &contact_damage, level &level, const bn::sprite_item &spritem) : 
+entity::entity(bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem) : 
     _level(level),
     _sprite(spritem.create_sprite(x,y)),
     _MAX_XSPEED(3),
     _MAX_YSPEED(8),
     _ACCEL(0.75),
     _G(1),
+    _HIT_IFRAMES(iframes),
     _hitbox(x, y, width, height),
     _grounded(false),
     _max_hp(hp),
     _jump_timer(0),
     _hp(hp),
-    _contact_damage(contact_damage)
+    _contact_damage(contact_damage),
+    _iframes(0)
 {
     _sprite.set_camera(cam);
 
@@ -160,6 +162,11 @@ void entity::update(){
 
     _grounded = fgrounded || sloped_ground_ytile;
 
+    if(_iframes){
+        _sprite.set_visible(_iframes % 2);
+        --_iframes;
+    }
+
     _hitbox.set_x(_hitbox.x() + _xspeed);
     _hitbox.set_y(_hitbox.y() + _yspeed);
     _sprite.set_x(_hitbox.x());
@@ -233,11 +240,18 @@ bool entity::apply_gravity() const{
 
 void entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
     
-    _xspeed += x_push;
+    if(!_iframes){
+        _xspeed += x_push;
 
-    _yspeed += y_push;
-    //TODO: death check
-    _hp -= damage;
+        _yspeed += y_push;
+        //TODO: death check
+        if(_hp > damage){
+            _hp -= damage;
+        }else{
+            _hp = 0;
+        }
+        _iframes = _HIT_IFRAMES;
+    }
 
     //TODO ALSO: maybe add a bit of punchiness to the attack like freeze frames or shake.
 }
