@@ -16,7 +16,8 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _idle(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),
     _DUSTCLOUD_OFFSET(40),
     _jbuf_timer(0),
-    _coyote_timer(0)
+    _coyote_timer(0),
+    _shoot_timer(0)
 {
 
 }
@@ -65,6 +66,10 @@ void player::update(){
         }
     }
 
+    if(bn::keypad::b_pressed()){
+        shoot();
+    }
+
 
     
     // if(!grounded && was_grounded && _yspeed >=0){
@@ -82,10 +87,17 @@ void player::update(){
     if(_coyote_timer){
         --_coyote_timer;
     }
+    if(_shoot_timer){
+        --_shoot_timer;
+    }
 
     _jumpcloud.update();
     _sprintcloud.update();
     
+    for(bullet &bullet : _bullets){
+        bullet.update();
+    }
+    _bullets.remove_if(bullet_deletable);
 
     //todo: there is a bit of jank where you fall in the tile for a frame... let's fix that  
     entity::update();
@@ -107,6 +119,26 @@ bool player::on_thin_ground() const{
 
 bool player::apply_gravity() const{
    return  (!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED;
+}
+
+void player::shoot(){
+    if(_shoot_timer == 0){
+        _shoot_timer = 12;
+        _bullets.emplace_front(*_sprite.camera().get(), x(), y(), _level, facing_right());
+    }
+}
+
+bool player::check_bullet_collision(enemy &enemy){
+    bool result = false;
+    for(bullet &bullet : _bullets){
+        if(enemy.hitbox().intersects(bullet.hitbox())){
+            bn::fixed hori_kb = 6 * (bullet.facing_right() ? 1 : -1); 
+            enemy.hit(bullet.contact_damage(),hori_kb,-3);
+            bullet.hit(enemy.contact_damage(),hori_kb,-3);
+            result = true;
+        }
+    }
+    return result;
 }
 
 }
