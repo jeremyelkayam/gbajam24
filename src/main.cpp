@@ -49,14 +49,14 @@ int main()
             if(!player.in_iframes() && player.hitbox().intersects(enemy->hitbox())){
                 bn::fixed hori_kb = 6 * (player.facing_right() ? 1 : -1); 
                 enemy->hit(player.contact_damage(),hori_kb,-3);
-                hud.update_enemy_hp("GLOBLIN", old_hp, enemy->hp());
+                hud.update_enemy_hp("GLOBLIN", old_hp, enemy->hp(), enemy->max_hp());
             }
             if(enemy->hitbox().intersects(player.hitbox())){
                 bn::fixed hori_kb = 6 * (player.facing_right() ? -1 : 1); 
                 player.hit(enemy->contact_damage(),hori_kb,-3);
             }
             if(player.check_bullet_collision(*enemy.get())){
-                hud.update_enemy_hp("GLOBLIN", old_hp, enemy->hp());
+                hud.update_enemy_hp("GLOBLIN", old_hp, enemy->hp(), enemy->max_hp());
             }
             enemy->update();
             if(enemy->hp() == 0){
