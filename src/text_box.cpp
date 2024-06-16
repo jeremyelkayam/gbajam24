@@ -29,7 +29,7 @@ void text_box::setup_text_sprites(){
     _text_generator.set_left_alignment();
     _text_generator.set_one_sprite_per_character(true);
     for(uint8_t i = _current_line; (i < _current_line+3) && (i < _text.size()); i++ ){    
-        _text_generator.generate(-115, 38 + (i - _current_line)*14, _text.at(i), _text_sprites);
+        _text_generator.generate(-112, 38 + (i - _current_line)*14, _text.at(i), _text_sprites);
     }
     for(bn::sprite_ptr &sprite : _text_sprites){
         sprite.set_visible(false);

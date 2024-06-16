@@ -3,11 +3,11 @@
 
 namespace aru 
 {
-entity::entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem) : 
+entity::entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, const bn::fixed &max_yspeed, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem): 
     _level(level),
     _sprite(spritem.create_sprite(x,y)),
-    _MAX_XSPEED(3),
-    _MAX_YSPEED(8),
+    _MAX_XSPEED(max_xspeed),
+    _MAX_YSPEED(max_yspeed),
     _ACCEL(0.75),
     _G(1),
     _HIT_IFRAMES(iframes),

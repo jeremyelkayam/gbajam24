@@ -3,7 +3,7 @@
 namespace aru { 
 
 enemy::enemy(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) : 
-    entity(cam, x,y,42,36,20,5,10,level,bn::sprite_items::globtest),
+    entity(cam, x,y,42,36,3,8,20,5,10,level,bn::sprite_items::globtest),
     _idle(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::globtest.tiles_item(), 0, 1, 2, 3, 4, 5)),
     _jump_again_timer(0)
 {
