@@ -12,6 +12,8 @@ namespace aru
     constexpr uint8_t PLAYER_HP = 50;
     constexpr uint8_t PLAYER_CONTACT_DAMAGE = 2;
     constexpr uint8_t PLAYER_IFRAMES = 120;
+    constexpr uint8_t PLAYER_HOVER_TIME = 180;
+    
 
     
     constexpr bn::fixed BULLET_WIDTH = 6;

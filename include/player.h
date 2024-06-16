@@ -27,7 +27,10 @@ private:
 
     const bn::fixed _DUSTCLOUD_OFFSET;
 
-    uint8_t _jbuf_timer, _coyote_timer, _shoot_timer;
+    uint8_t _jbuf_timer, _coyote_timer, _shoot_timer, _hover_timer;
+
+    //todo: replace with state? 
+    bool _hovering;
 
     virtual bool on_thin_ground() const override;
     virtual bool apply_gravity() const override;

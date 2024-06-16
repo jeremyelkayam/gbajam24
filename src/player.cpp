@@ -18,7 +18,9 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _DUSTCLOUD_OFFSET(40),
     _jbuf_timer(0),
     _coyote_timer(0),
-    _shoot_timer(0)
+    _shoot_timer(0),
+    _hover_timer(0),
+    _hovering(false)
 {
 
 }
@@ -52,6 +54,8 @@ void player::update(){
     
 
     if(_grounded){ 
+        _hover_timer = PLAYER_HOVER_TIME;
+        _hovering = false;
         
         if(bn::keypad::a_pressed() || _jbuf_timer){
             //jbuf_timer will trigger if you pressed A just before hitting the ground
@@ -62,14 +66,28 @@ void player::update(){
             if(_coyote_timer){
                 jump();
             }else{
+                if(_hover_timer){
+                    _hovering = true;
+                }
                 _jbuf_timer = 6; //6 frames = 0.1s
             }
+        }
+        if(_hovering){
+            --_hover_timer;
+            _yspeed -= 0.1;
+            if(_yspeed < -1){
+                _yspeed = -1;
+            }
+
+            if(_hover_timer == 0 || bn::keypad::a_released())
+               _hovering = false;
         }
     }
 
     if(bn::keypad::b_pressed()){
         shoot();
     }
+
 
 
     
@@ -119,7 +137,7 @@ bool player::on_thin_ground() const{
 }
 
 bool player::apply_gravity() const{
-   return  (!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED;
+   return  !_hovering && (!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED;
 }
 
 void player::shoot(){
