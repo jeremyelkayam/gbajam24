@@ -3,30 +3,36 @@
 #include "common_variable_8x16_sprite_font.h"
 #include <bn_log.h>
 #include "bn_regular_bg_items_textbox.h"
+#include "bn_sprite_items_bullet.h"
 
 namespace aru { 
 
 text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, const bn::sprite_item &portrait) : 
     _text_generator(text_generator),
     _portrait(portrait.create_sprite(-80,0)),
-    _box(bn::regular_bg_items::textbox.create_bg(0, 0)) {
+    _next_prompt(bn::sprite_items::bullet.create_sprite(110,68)),
+    _next_prompt_anim(_next_prompt, 20, 110, 70),
+    _box(bn::regular_bg_items::textbox.create_bg(0, 0)),
+    _done(false),
+    _current_line(0) {
     _box.set_priority(2);
     _portrait.set_bg_priority(0);
-    _text_generator.set_one_sprite_per_character(true);
-    set_text(text);
-    for(bn::sprite_ptr &sprite : _text_sprites){
-        sprite.set_visible(false);
-    }
+    _next_prompt.set_bg_priority(0);
+    _next_prompt.set_visible(false);
+    _text = split_into_lines(text);
+    setup_text_sprites();
 }
 
-void text_box::set_text(const char *text){
+void text_box::setup_text_sprites(){
     _text_sprites.clear();
-    bn::vector<bn::string<64>, 3> lines = split_into_lines(text);
     _text_generator.set_bg_priority(0);
     _text_generator.set_left_alignment();
-    // text_generator.set_palette_item(WHITE_PALETTE);
-    for(uint8_t i = 0; i < lines.size(); i++ ){    
-        _text_generator.generate(-115, 38 + i*14, lines.at(i), _text_sprites);
+    _text_generator.set_one_sprite_per_character(true);
+    for(uint8_t i = _current_line; (i < _current_line+3) && (i < _text.size()); i++ ){    
+        _text_generator.generate(-115, 38 + (i - _current_line)*14, _text.at(i), _text_sprites);
+    }
+    for(bn::sprite_ptr &sprite : _text_sprites){
+        sprite.set_visible(false);
     }
 }
 
@@ -34,16 +40,33 @@ void text_box::update(){
     for(bn::sprite_ptr &sprite : _text_sprites){
         if(!sprite.visible()){
             sprite.set_visible(true);
-            break;
+            return;
         }
-    }    
+    }
+    if(_text_sprites.at(_text_sprites.size()-1).visible()){
+        _next_prompt.set_visible(true);
+        _next_prompt_anim.update();
+    }
+}
+
+void text_box::advance(){
+    if(!_next_prompt.visible()){
+        for(bn::sprite_ptr &sprite : _text_sprites){
+            sprite.set_visible(true);
+        }
+    }else if(!(_current_line + 3 >= _text.size())){
+        _current_line += 3;
+        _next_prompt.set_visible(false);
+        setup_text_sprites();
+    }else{
+        _done = true;
+    }
 }
 
 
-
-bn::vector<bn::string<64>, 3> text_box::split_into_lines(const char *text){
+bn::vector<bn::string<64>, 24> text_box::split_into_lines(const char *text){
     const uint8_t max_line_width = 218;
-    bn::vector<bn::string<64>, 3>result;
+    bn::vector<bn::string<64>, 24>result;
     
     uint8_t line_width = 0;
     uint8_t line_num = 0;

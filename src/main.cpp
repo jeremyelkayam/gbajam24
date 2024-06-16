@@ -103,7 +103,7 @@ int main()
             }
 
             if(bn::keypad::start_pressed()){
-                box.emplace(boxgen, "This is a text box test. Yub nub yub nub yub nub yub nub jub jub glub shrub pub club.", bn::sprite_items::portrait);
+                box.emplace(boxgen, "This is a text box test. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", bn::sprite_items::portrait);
             }
 
 
@@ -142,8 +142,11 @@ int main()
             cam.set_position(new_x, new_y);
         }else{
             box->update();
-            if(bn::keypad::any_pressed()){
+            if(box->done()){
                 box.reset();
+            }
+            if(bn::keypad::a_pressed()){
+                box->advance();
             }
         }
 
