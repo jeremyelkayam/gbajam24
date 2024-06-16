@@ -19,7 +19,6 @@ hud::hud() :
     _displayed_currency(10),
     _target_currency(10) 
 {
-    _player_hp.set_rotation_angle(90);
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();
     _text_generator.generate(-110, -72, "HP", _player_hp_label_text_sprites);  
@@ -69,7 +68,7 @@ void hud::update(){
             ++_displayed_player_hp;
         } 
         bn::fixed scale_factor = bn::fixed(_displayed_player_hp) / bn::fixed(_max_player_hp);
-        _player_hp.set_horizontal_scale(scale_factor);
+        _player_hp.set_vertical_scale(scale_factor);
         _player_hp.set_y(4 + (bn::fixed(-32)*scale_factor).floor_integer());
         // int_to_text(_player_hp_text_sprites, _displayed_player_hp, -110, -64);
     }
