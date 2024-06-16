@@ -12,7 +12,11 @@ text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, 
     _box(bn::regular_bg_items::textbox.create_bg(0, 0)) {
     _box.set_priority(2);
     _portrait.set_bg_priority(0);
+    _text_generator.set_one_sprite_per_character(true);
     set_text(text);
+    for(bn::sprite_ptr &sprite : _text_sprites){
+        sprite.set_visible(false);
+    }
 }
 
 void text_box::set_text(const char *text){
@@ -22,17 +26,23 @@ void text_box::set_text(const char *text){
     _text_generator.set_left_alignment();
     // text_generator.set_palette_item(WHITE_PALETTE);
     for(uint8_t i = 0; i < lines.size(); i++ ){    
-        _text_generator.generate(-115, 38 + i*17, lines.at(i), _text_sprites);
+        _text_generator.generate(-115, 38 + i*14, lines.at(i), _text_sprites);
     }
 }
 
 void text_box::update(){
+    for(bn::sprite_ptr &sprite : _text_sprites){
+        if(!sprite.visible()){
+            sprite.set_visible(true);
+            break;
+        }
+    }    
 }
 
 
 
 bn::vector<bn::string<64>, 3> text_box::split_into_lines(const char *text){
-    const uint8_t max_line_width = 220;
+    const uint8_t max_line_width = 218;
     bn::vector<bn::string<64>, 3>result;
     
     uint8_t line_width = 0;

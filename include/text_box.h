@@ -10,7 +10,7 @@ namespace aru {
         private:
             bn::sprite_text_generator &_text_generator;
             bn::sprite_ptr _portrait;
-            bn::vector<bn::sprite_ptr, 32> _text_sprites;
+            bn::vector<bn::sprite_ptr, 256> _text_sprites;
             bn::regular_bg_ptr _box;
 
             /*

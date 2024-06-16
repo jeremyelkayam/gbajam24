@@ -103,7 +103,7 @@ int main()
             }
 
             if(bn::keypad::start_pressed()){
-                box.emplace(boxgen, "This is a text box test", bn::sprite_items::portrait);
+                box.emplace(boxgen, "This is a text box test. Yub nub yub nub yub nub yub nub jub jub glub shrub pub club.", bn::sprite_items::portrait);
             }
 
 
@@ -141,6 +141,7 @@ int main()
             if(new_y > (level.height() - 80)) new_y = level.height() - 80;
             cam.set_position(new_x, new_y);
         }else{
+            box->update();
             if(bn::keypad::any_pressed()){
                 box.reset();
             }
