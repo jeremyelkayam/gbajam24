@@ -74,13 +74,14 @@ void player::update(){
         }
         if(_hovering){
             --_hover_timer;
-            _yspeed -= 0.1;
+            _yspeed -= 0.5;
             if(_yspeed < -1){
                 _yspeed = -1;
             }
 
-            if(_hover_timer == 0 || bn::keypad::a_released())
+            if(_hover_timer == 0 || bn::keypad::a_released()){
                _hovering = false;
+            }
         }
     }
 

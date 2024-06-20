@@ -6,7 +6,8 @@
 #include "enemy.h"
 #include "bullet.h"
 
-
+//states:
+//jump, fall, stand, run, hover, shoot, slash
 namespace aru
 {
 class player : public entity
