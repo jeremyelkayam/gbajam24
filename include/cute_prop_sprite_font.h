@@ -11,10 +11,10 @@
 namespace aru
 {
 
-constexpr bn::utf8_character variable_8x16_sprite_font_utf8_characters[] = {
-};
+// constexpr bn::utf8_character cute_prop_sprite_font_utf8_characters[] = {
+// ?};
 
-constexpr int8_t variable_8x16_sprite_font_character_widths[] = {
+constexpr int8_t cute_prop_sprite_font_character_widths[] = {
     6,  // 32
     2,  // 33 !
     4,  // 34 "
@@ -75,7 +75,7 @@ constexpr int8_t variable_8x16_sprite_font_character_widths[] = {
     6,  // 89 Y
     6,  // 90 Z
     4,  // 91 [
-    6,  // 92 \ 
+    6,  // 92 backslash
     4,  // 93 ]
     6,  // 94 ^
     6,  // 95 _
@@ -112,14 +112,13 @@ constexpr int8_t variable_8x16_sprite_font_character_widths[] = {
     6,  // 126 ~
 };
 
-constexpr bn::span<const bn::utf8_character> variable_8x16_sprite_font_utf8_characters_span(
-        variable_8x16_sprite_font_utf8_characters);
+constexpr bn::span<const bn::utf8_character> cute_prop_sprite_font_utf8_characters_span;
 
-constexpr auto variable_8x16_sprite_font_utf8_characters_map =
-        bn::utf8_characters_map<variable_8x16_sprite_font_utf8_characters_span>();
+constexpr auto cute_prop_sprite_font_utf8_characters_map =
+        bn::utf8_characters_map<cute_prop_sprite_font_utf8_characters_span>();
 
-constexpr bn::sprite_font variable_8x16_sprite_font(
-        bn::sprite_items::common_variable_8x16_font, variable_8x16_sprite_font_utf8_characters_map.reference(),
-        variable_8x16_sprite_font_character_widths);
+constexpr bn::sprite_font cute_prop_sprite_font(
+        bn::sprite_items::cute_prop_font, cute_prop_sprite_font_utf8_characters_map.reference(),
+        cute_prop_sprite_font_character_widths);
 
 }

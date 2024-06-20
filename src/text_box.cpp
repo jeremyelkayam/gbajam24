@@ -1,6 +1,6 @@
 #include "text_box.h"
 #include "constants.h"
-#include "common_variable_8x16_sprite_font.h"
+#include "cute_prop_sprite_font.h"
 #include <bn_log.h>
 #include "bn_regular_bg_items_textbox.h"
 #include "bn_sprite_items_bullet.h"
@@ -74,7 +74,7 @@ bn::vector<bn::string<64>, 24> text_box::split_into_lines(const char *text){
     uint16_t line_end = 0;
     for(uint16_t pos = 0; text[pos] != '\0'; ++pos){
         char c = text[pos];
-        line_width += variable_8x16_sprite_font_character_widths[c - ' '];
+        line_width += cute_prop_sprite_font_character_widths[c - ' '];
         if(line_width > max_line_width){
             uint16_t last_space = pos;
             while(text[last_space] != ' '){

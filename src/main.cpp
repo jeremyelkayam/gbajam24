@@ -20,14 +20,14 @@
 #include "text_box.h"
 #include "hud.h"
 #include "enemy.h"
-#include "common_variable_8x16_sprite_font.h"
+#include "cute_prop_sprite_font.h"
 
 
 int main()
 {
     bn::core::init();
     bn::regular_bg_ptr bg = bn::regular_bg_items::testbg.create_bg(0,0);
-    bn::sprite_text_generator boxgen(aru::variable_8x16_sprite_font);
+    bn::sprite_text_generator boxgen(aru::cute_prop_sprite_font);
 
     //multiply by 4 b/c we want the center of the map.
     // the dimensions are measurecd in 8x8 tiles, so 8*tiles = pixels. 8/2 = 4 
