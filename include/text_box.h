@@ -12,11 +12,10 @@ namespace aru {
             bn::sprite_text_generator &_text_generator;
             bn::sprite_ptr _portrait, _next_prompt;
             bn::vector<bn::sprite_ptr, 256> _text_sprites;
-            bn::sprite_move_toggle_action _next_prompt_anim;
             bn::regular_bg_ptr _box;
             bn::vector<bn::string<64>, 24> _text;
             bool _done;
-            uint8_t _current_line;
+            uint8_t _current_line,_arrowtimer;
             void setup_text_sprites();
 
             /*

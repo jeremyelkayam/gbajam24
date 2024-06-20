@@ -3,18 +3,18 @@
 #include "cute_prop_sprite_font.h"
 #include <bn_log.h>
 #include "bn_regular_bg_items_textbox.h"
-#include "bn_sprite_items_bullet.h"
+#include "bn_sprite_items_downarrow.h"
 
 namespace aru { 
 
 text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, const bn::sprite_item &portrait) : 
     _text_generator(text_generator),
     _portrait(portrait.create_sprite(-80,0)),
-    _next_prompt(bn::sprite_items::bullet.create_sprite(110,68)),
-    _next_prompt_anim(_next_prompt, 20, 110, 70),
+    _next_prompt(bn::sprite_items::downarrow.create_sprite(TB_ARROW_X,TB_ARROW_Y)),
     _box(bn::regular_bg_items::textbox.create_bg(0, 0)),
     _done(false),
-    _current_line(0) {
+    _current_line(0),
+    _arrowtimer(0) {
     _box.set_priority(2);
     _portrait.set_bg_priority(0);
     _next_prompt.set_bg_priority(0);
@@ -44,8 +44,19 @@ void text_box::update(){
         }
     }
     if(_text_sprites.at(_text_sprites.size()-1).visible()){
+        if(_arrowtimer >= TB_ARROW_OTIME || !_next_prompt.visible()){
+            _arrowtimer = 0;
+        }
         _next_prompt.set_visible(true);
-        _next_prompt_anim.update();
+        ++_arrowtimer;
+        bn::fixed increment(0.25);
+
+        uint8_t multiplier = _arrowtimer;
+        if(_arrowtimer >= TB_ARROW_OTIME * bn::fixed(0.5)){
+            multiplier = TB_ARROW_OTIME - _arrowtimer;
+        }
+
+        _next_prompt.set_y(TB_ARROW_Y + increment * multiplier);     
     }
 }
 

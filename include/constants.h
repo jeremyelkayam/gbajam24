@@ -23,4 +23,8 @@ namespace aru
     constexpr uint8_t BULLET_HP = 1;
     constexpr uint8_t BULLET_CONTACT_DAMAGE = 5;
     constexpr uint8_t BULLET_IFRAMES = 0;
+
+    constexpr bn::fixed TB_ARROW_X = 110;
+    constexpr bn::fixed TB_ARROW_Y = 68;
+    constexpr uint8_t TB_ARROW_OTIME = 25;
 }
