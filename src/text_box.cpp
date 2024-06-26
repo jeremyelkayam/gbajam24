@@ -49,14 +49,13 @@ void text_box::update(){
         }
         _next_prompt.set_visible(true);
         ++_arrowtimer;
-        bn::fixed increment(0.25);
 
         uint8_t multiplier = _arrowtimer;
         if(_arrowtimer >= TB_ARROW_OTIME * bn::fixed(0.5)){
             multiplier = TB_ARROW_OTIME - _arrowtimer;
         }
 
-        _next_prompt.set_y(TB_ARROW_Y + increment * multiplier);     
+        _next_prompt.set_y(TB_ARROW_Y + TB_ARROW_INC_PER_FRAME * multiplier);     
     }
 }
 

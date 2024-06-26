@@ -24,9 +24,10 @@ public:
     bool is_down_slope(const bn::fixed_point &coords) const;
     bool is_ceiling(const bn::fixed_point &coords) const;
     void print_hitbox(const bn::fixed_rect &hitbox) const;
+    //make individual header files for each level with object positioning as const or constexpr or w/e
 
 private:
-    const bn::regular_bg_item &_bg;
+    bn::regular_bg_item _bg;
     const uint16_t _ROWS, _COLUMNS;
     bn::regular_bg_ptr _bg_ptr;
     bn::span<const bn::regular_bg_map_cell> _cells;
