@@ -6,10 +6,19 @@
 #include "enemy.h"
 #include "bullet.h"
 
-//states:
-//jump, fall, stand, run, hover, shoot, slash
 namespace aru
 {
+
+    enum class PSTATE {
+        JUMP,
+        FALL,
+        STAND,
+        RUN,
+        HOVER
+        // SHOOT,
+        // SLASH
+    };
+
 class player : public entity
 {
 public: 
@@ -21,7 +30,12 @@ public:
 
 private:
     effect _jumpcloud, _sprintcloud;
+    PSTATE _current_state;
     bn::sprite_animate_action<4> _idle;
+    // bn::sprite_animate_action<2> _jump;
+    // bn::sprite_animate_action<2> _fall;
+    // bn::sprite_animate_action<2> _hover;
+    // bn::sprite_animate_action<2> _run;
     bn::forward_list<bullet, 8> _bullets;
 
     static bool bullet_deletable(bullet &b) {return b.should_be_deleted();}
@@ -30,12 +44,10 @@ private:
 
     uint8_t _jbuf_timer, _coyote_timer, _shoot_timer, _hover_timer;
 
-    //todo: replace with state? 
-    bool _hovering;
-
     virtual bool on_thin_ground() const override;
     virtual bool apply_gravity() const override;
     void shoot();
+    virtual void land();
     
 };
 

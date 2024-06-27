@@ -14,25 +14,53 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
         PLAYER_HP, PLAYER_CONTACT_DAMAGE, PLAYER_IFRAMES,level,bn::sprite_items::arutest),
     _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
+    _current_state(PSTATE::STAND),
     _idle(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),
+    // _jump(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 4, 4)),
+    // _fall(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 5, 5)),
+    // _hover(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 6, 6)),
+    // _run(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 3, 3)),
     _DUSTCLOUD_OFFSET(40),
     _jbuf_timer(0),
     _coyote_timer(0),
     _shoot_timer(0),
-    _hover_timer(0),
-    _hovering(false)
+    _hover_timer(0)
 {
 
 }
 
 void player::update(){
 
+    switch(_current_state){
+        case PSTATE::HOVER:
+            _sprite.set_tiles(bn::sprite_items::arutest.tiles_item(), 6);
+            break;
+        case PSTATE::JUMP:
+            _sprite.set_tiles(bn::sprite_items::arutest.tiles_item(), 4);
+            break;
+        case PSTATE::FALL:
+            _sprite.set_tiles(bn::sprite_items::arutest.tiles_item(), 5);
+            break;
+        case PSTATE::STAND:
+            _idle.update();
+            break;
+        case PSTATE::RUN:
+            _sprite.set_tiles(bn::sprite_items::arutest.tiles_item(), 3);
+            break;
+    }
+
+    if((bn::keypad::left_held() || bn::keypad::right_held()) && _current_state == PSTATE::STAND){
+        _current_state = PSTATE::RUN;
+    }
+
     if(bn::keypad::left_pressed()){
         _target_xspeed = -_MAX_XSPEED;
         _sprintcloud.set_horizontal_flip(true);
         _sprite.set_horizontal_flip(false);
-        if(!_sprintcloud.visible() && _grounded){
-            _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
+        if(_grounded){
+            if(!_sprintcloud.visible()){
+                _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
+            }
         }
     }
 
@@ -50,29 +78,29 @@ void player::update(){
     
     if(!bn::keypad::left_held() && !bn::keypad::right_held()){
         _target_xspeed = 0;
+        if(_current_state == PSTATE::RUN){
+            _current_state = PSTATE::STAND;
+        }
     }
     
 
     if(_grounded){ 
         _hover_timer = PLAYER_HOVER_TIME;
-        _hovering = false;
         
         if(bn::keypad::a_pressed() || _jbuf_timer){
-            //jbuf_timer will trigger if you pressed A just before hitting the ground
             jump();
         }
     }else{
         if(bn::keypad::a_pressed()){
             if(_coyote_timer){
                 jump();
-            }else{
-                if(_hover_timer){
-                    _hovering = true;
-                }
-                _jbuf_timer = 6; //6 frames = 0.1s
             }
         }
-        if(_hovering){
+        if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
+            _current_state = PSTATE::HOVER;
+        }
+
+        if(_current_state == PSTATE::HOVER){
             --_hover_timer;
             _yspeed -= 0.5;
             if(_yspeed < -1){
@@ -80,8 +108,12 @@ void player::update(){
             }
 
             if(_hover_timer == 0 || bn::keypad::a_released()){
-               _hovering = false;
+               _current_state = PSTATE::JUMP;
             }
+        }
+
+        if(_current_state != PSTATE::HOVER && _yspeed > 0){ 
+            _current_state = PSTATE::FALL;
         }
     }
 
@@ -127,6 +159,7 @@ void player::jump(){
     entity::jump();
     _jbuf_timer = 0;
     _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
+    _current_state = PSTATE::JUMP;
 }
 
 bool player::on_thin_ground() const{
@@ -138,7 +171,7 @@ bool player::on_thin_ground() const{
 }
 
 bool player::apply_gravity() const{
-   return  !_hovering && (!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED;
+   return _current_state != PSTATE::HOVER && (!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED;
 }
 
 void player::shoot(){
@@ -159,6 +192,11 @@ bool player::check_bullet_collision(enemy &enemy){
         }
     }
     return result;
+}
+
+void player::land(){
+    entity::land();
+    _current_state = PSTATE::STAND;
 }
 
 }

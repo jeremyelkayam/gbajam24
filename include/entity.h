@@ -48,7 +48,7 @@ protected:
     uint8_t _jump_timer, _hp, _contact_damage,_iframes;
 
     virtual void jump();
-    void land();
+    virtual void land();
 
     virtual bool on_thin_ground() const;
     bool on_thick_ground() const;
