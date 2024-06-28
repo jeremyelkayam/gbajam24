@@ -1,4 +1,5 @@
 #include "entity.h"
+#include "bn_sprite_items_explosion.h"
 #include <bn_log.h>
 
 namespace aru 
@@ -20,7 +21,6 @@ entity::entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y
     _iframes(0)
 {
     _sprite.set_camera(cam);
-
 }
 
 void entity::update(){
@@ -171,6 +171,8 @@ void entity::update(){
     _sprite.set_x(_hitbox.x());
     _sprite.set_y(_hitbox.y());
 
+    if(_explosion_anim) _explosion_anim->update();
+
 }
 
 bool entity::facing_wall() const{
@@ -240,28 +242,34 @@ bool entity::apply_gravity() const{
 void entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
     if(!_iframes){
 
-
-        bn::fixed new_angle = _sprite.rotation_angle() - 2*x_push;
-        if(new_angle < 0){
-            new_angle += 360;
-        }else if(360 <= new_angle){
-            new_angle -= 360;
-        }
-        _sprite.set_rotation_angle(new_angle);
-
-        _xspeed += x_push;
-
-        _yspeed += y_push;
-        //TODO: death check
         if(_hp > damage){
             _hp -= damage;
+
+            bn::fixed new_angle = _sprite.rotation_angle() - 2*x_push;
+            if(new_angle < 0){
+                new_angle += 360;
+            }else if(360 <= new_angle){
+                new_angle -= 360;
+            }
+            _sprite.set_rotation_angle(new_angle);
+
+            _xspeed += x_push;
+
+            _yspeed += y_push;
         }else{
             _hp = 0;
+            die();
         }
         _iframes = _HIT_IFRAMES;
     }
 
     //TODO ALSO: maybe add a bit of punchiness to the attack like freeze frames or shake.
+}
+
+void entity::die(){
+    _sprite.set_item(bn::sprite_items::explosion);
+    _sprite.set_scale(2);
+    _explosion_anim.emplace(bn::create_sprite_animate_action_once(_sprite, 4, bn::sprite_items::explosion.tiles_item(), 0, 1, 2, 3, 4, 5));
 }
 
 

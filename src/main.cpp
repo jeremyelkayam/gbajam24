@@ -65,7 +65,7 @@ int main()
                     hud.update_enemy_hp("GLOBLIN", old_hp, enemy->hp(), enemy->max_hp());
                 }
                 enemy->update();
-                if(enemy->hp() == 0){
+                if(enemy->delete_me()){
                     enemy.reset();
                 }
             }

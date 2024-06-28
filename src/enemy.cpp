@@ -11,13 +11,15 @@ enemy::enemy(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
 }
 
 void enemy::update(){
-    _idle.update();
-
-    if(_jump_again_timer > 240){
-        jump();
-        _jump_again_timer = 0;
+    if(!_explosion_anim){
+        _idle.update();
+        if(_jump_again_timer > 240){
+            jump();
+            _jump_again_timer = 0;
+        }
+        ++_jump_again_timer;
     }
-    ++_jump_again_timer;
+
     entity::update();
 }
 

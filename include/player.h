@@ -1,5 +1,4 @@
 #pragma once
-#include <bn_sprite_animate_actions.h>
 #include <bn_forward_list.h>
 #include "effect.h"
 #include "entity.h"

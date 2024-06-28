@@ -1,4 +1,5 @@
 #pragma once
+#include <bn_sprite_animate_actions.h>
 #include <bn_sprite_item.h>
 #include <bn_sprite_ptr.h>
 #include <bn_fixed_rect.h>
@@ -33,11 +34,13 @@ public:
     uint8_t hp() const {return _hp;}
     uint8_t max_hp() const {return _max_hp;}
     bool in_iframes() const {return _iframes;}
+    bool delete_me() const {return _explosion_anim && _explosion_anim->done();}
 
 
 protected:
     level &_level;
     bn::sprite_ptr _sprite;
+    bn::optional<bn::sprite_animate_action<6>> _explosion_anim;
     const bn::fixed _MAX_XSPEED, _MAX_YSPEED, _ACCEL, _G;
     const uint8_t _HIT_IFRAMES;
     bn::fixed _xspeed, _target_xspeed, _yspeed;
@@ -53,6 +56,7 @@ protected:
     virtual bool on_thin_ground() const;
     bool on_thick_ground() const;
     virtual bool apply_gravity() const;
+    void die();
 
 };
 
