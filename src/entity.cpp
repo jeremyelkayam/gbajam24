@@ -61,7 +61,6 @@ void entity::update(){
             break;
         }
     }
-
     bool fgrounded = on_flat_ground();    
     
     //Accelerate if necessary to reach target speed.
@@ -189,7 +188,6 @@ bool entity::facing_wall() const{
 }
 
 void entity::jump(){
-    BN_LOG("jump!");
     _yspeed = -_MAX_YSPEED;
     _jump_timer = 0;
 }
@@ -232,6 +230,7 @@ bool entity::on_thin_ground() const{
 
 void entity::land(){
     _yspeed = 0;
+    _sprite.set_rotation_angle(0);
 }
 
 bool entity::apply_gravity() const{
@@ -239,8 +238,17 @@ bool entity::apply_gravity() const{
 }
 
 void entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
-    
     if(!_iframes){
+
+
+        bn::fixed new_angle = _sprite.rotation_angle() - 2*x_push;
+        if(new_angle < 0){
+            new_angle += 360;
+        }else if(360 <= new_angle){
+            new_angle -= 360;
+        }
+        _sprite.set_rotation_angle(new_angle);
+
         _xspeed += x_push;
 
         _yspeed += y_push;
