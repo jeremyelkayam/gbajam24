@@ -7,11 +7,13 @@
 #include "level.h"
 #include "text_box.h"
 #include "interactable_entity.h"
+#include "common_stuff.h"
 
 namespace aru{
 
 class lab_scene : public scene{ 
 private:
+    common_stuff &_cstuff;
     bn::camera_ptr _cam;
     level _level;
     player _player;
@@ -22,7 +24,7 @@ private:
     bn::optional<text_box> _text_box;
 
 public:
-    lab_scene();
+    lab_scene(common_stuff &cstuff);
     [[nodiscard]] virtual bn::optional<scene_type> update() final;
 };
 

@@ -10,7 +10,7 @@ common_stuff::common_stuff() :
     bn::array<char, 8> default_format_tag;
     bn::istring_base default_format_tag_istring(default_format_tag._data);
     bn::ostringstream default_format_tag_stream(default_format_tag_istring);
-    default_format_tag_stream.append("ARUSAVE0");
+    default_format_tag_stream.append("ARUSAV0");
 
     bn::sram::read(savefile);
     //if the format tag is invalid, then we have to set it up.

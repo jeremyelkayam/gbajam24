@@ -16,8 +16,8 @@
 #include "bn_regular_bg_items_testmap.h"
 #include "bn_sprite_items_portrait.h"
 #include "hud.h"
-#include "enemy.h"
 #include "lab_scene.h"
+#include "common_stuff.h"
 #include "cute_prop_sprite_font.h"
 
 
@@ -33,13 +33,9 @@ int main()
     bn::unique_ptr<aru::scene> scene;
     bn::optional<aru::scene_type> next_scene = aru::scene_type::LAB;
 
-    // bn::optional<aru::enemy> enemy;
-
-    // aru::level level(cam, bn::regular_bg_items::testmap);
-    // aru::player player(cam, 128, 128, level);
-    // enemy.emplace(cam, 328, 128, level);
-
-   while(true)
+    aru::common_stuff cstuff;
+    
+    while(true)
     {
         if(scene){
             next_scene = scene->update();
@@ -47,7 +43,7 @@ int main()
         if(next_scene){
             switch(*next_scene){
                 case aru::scene_type::LAB: { 
-                    scene.reset(new aru::lab_scene());
+                    scene.reset(new aru::lab_scene(cstuff));
                     break;
                 }
                 default: { 

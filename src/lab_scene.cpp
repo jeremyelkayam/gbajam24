@@ -6,12 +6,14 @@
 #include "bn_regular_bg_items_testbg.h"
 #include "bn_sprite_items_dummy_sprite.h"
 #include "bn_sprite_items_a_button_prompt.h"
+#include "bn_sprite_items_portrait.h"
 
 #include "lab_scene.h"
 
 namespace aru {
 
-lab_scene::lab_scene() :
+lab_scene::lab_scene(common_stuff &cstuff) :
+    _cstuff(cstuff),
     _cam(bn::camera_ptr::create(128,128)),
     _level(_cam, bn::regular_bg_items::lab),
     _player(_cam,128,128,_level),
@@ -38,13 +40,14 @@ bn::optional<scene_type> lab_scene::update(){
             _text_box->advance();
         }
     }else{
-        _player.update();
-        _slung.update();
 
         _interact_icon.set_visible(_player.hitbox().intersects(_slung.hitbox()));
         _interact_icon_anim.update();
         if(_interact_icon.visible() && bn::keypad::a_pressed()){
-            // _text_box.emplace(, "Dummy text", bn::sprite_items::portrait);
+            _text_box.emplace(_cstuff.text_generator, "Dummy text", bn::sprite_items::portrait);
+        }else{
+            _player.update();
+            _slung.update();
         }
     }
 
