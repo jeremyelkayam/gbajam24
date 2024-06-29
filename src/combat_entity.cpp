@@ -4,7 +4,7 @@
 
 namespace aru 
 {
-entity::entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, const bn::fixed &max_yspeed, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem): 
+combat_entity::combat_entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, const bn::fixed &max_yspeed, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem): 
     _level(level),
     _sprite(spritem.create_sprite(x,y)),
     _MAX_XSPEED(max_xspeed),
@@ -23,7 +23,7 @@ entity::entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y
     _sprite.set_camera(cam);
 }
 
-void entity::update(){
+void combat_entity::update(){
     uint16_t sloped_ground_ytile = 0;
     bn::regular_bg_map_cell sloped_ground_type = 0;
     uint16_t center_xtile = (_hitbox.x() * bn::fixed(0.125)).floor_integer();
@@ -175,7 +175,7 @@ void entity::update(){
 
 }
 
-bool entity::facing_wall() const{
+bool combat_entity::facing_wall() const{
     //todo: refactor into level maybe?
     for(bn::fixed ycor = _hitbox.top(); ycor <= _hitbox.bottom(); ycor += 8){
 
@@ -189,18 +189,18 @@ bool entity::facing_wall() const{
     return false;  
 }
 
-void entity::jump(){
+void combat_entity::jump(){
     _yspeed = -_MAX_YSPEED;
     _jump_timer = 0;
 }
 
-bool entity::on_flat_ground() const{
+bool combat_entity::on_flat_ground() const{
     return on_thick_ground() || on_thin_ground();
 }
 
 //todo: Less copy/pasted code here
 // refactor it into a check on all tiles below your feet
-bool entity::on_thick_ground() const{
+bool combat_entity::on_thick_ground() const{
     uint16_t current_foot_tile = bottom_tile();
     uint16_t current_right_tile = right_tile();
     for(uint16_t xtile = left_tile();
@@ -216,7 +216,7 @@ bool entity::on_thick_ground() const{
     return false;
 }
 
-bool entity::on_thin_ground() const{
+bool combat_entity::on_thin_ground() const{
     uint16_t current_foot_tile = bottom_tile();
     uint16_t current_right_tile = right_tile();
     for(uint16_t xtile = left_tile();
@@ -230,16 +230,16 @@ bool entity::on_thin_ground() const{
     return false;
 }
 
-void entity::land(){
+void combat_entity::land(){
     _yspeed = 0;
     _sprite.set_rotation_angle(0);
 }
 
-bool entity::apply_gravity() const{
+bool combat_entity::apply_gravity() const{
    return  (_jump_timer > 4) && _yspeed < _MAX_YSPEED;
 }
 
-void entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
+void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
     if(!_iframes){
 
         if(_hp > damage){
@@ -266,7 +266,7 @@ void entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
     //TODO ALSO: maybe add a bit of punchiness to the attack like freeze frames or shake.
 }
 
-void entity::die(){
+void combat_entity::die(){
     _sprite.set_item(bn::sprite_items::explosion);
     _sprite.set_scale(2);
     _explosion_anim.emplace(bn::create_sprite_animate_action_once(_sprite, 4, bn::sprite_items::explosion.tiles_item(), 0, 1, 2, 3, 4, 5));

@@ -5,7 +5,7 @@
 
 namespace aru
 {
-class enemy : public entity
+class enemy : public combat_entity
 {
 public: 
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference

@@ -10,11 +10,11 @@
 namespace aru
 {
 
-class entity
+class combat_entity
 {
 public:
-    entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, const bn::fixed &max_yspeed, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem);
-    virtual ~entity() {return;}
+    combat_entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, const bn::fixed &max_yspeed, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem);
+    virtual ~combat_entity() {return;}
     virtual void update();
     bn::fixed_point position() const {return _hitbox.position();}
     bn::fixed x() const {return _hitbox.x();}

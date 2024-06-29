@@ -10,7 +10,7 @@
 namespace aru {
 
 player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) : 
-    entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, PLAYER_MAX_YSPEED,
+    combat_entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, PLAYER_MAX_YSPEED,
         PLAYER_HP, PLAYER_CONTACT_DAMAGE, PLAYER_IFRAMES,level,bn::sprite_items::arutest),
     _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
@@ -152,11 +152,11 @@ void player::update(){
     _bullets.remove_if(bullet_deletable);
 
     //todo: there is a bit of jank where you fall in the tile for a frame... let's fix that  
-    entity::update();
+    combat_entity::update();
 }
 
 void player::jump(){
-    entity::jump();
+    combat_entity::jump();
     _jbuf_timer = 0;
     _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
     _current_state = PSTATE::JUMP;
@@ -167,7 +167,7 @@ bool player::on_thin_ground() const{
     {
         return false;
     }
-    return entity::on_thin_ground();   
+    return combat_entity::on_thin_ground();   
 }
 
 bool player::apply_gravity() const{
@@ -195,7 +195,7 @@ bool player::check_bullet_collision(enemy &enemy){
 }
 
 void player::land(){
-    entity::land();
+    combat_entity::land();
     _current_state = PSTATE::STAND;
 }
 

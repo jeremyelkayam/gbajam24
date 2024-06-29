@@ -3,7 +3,7 @@
 namespace aru { 
 
 bullet::bullet(const bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, bool facing_right) : 
-    entity(cam, x, y, BULLET_WIDTH, BULLET_HEIGHT, BULLET_MAX_XSPEED, BULLET_MAX_YSPEED,
+    combat_entity(cam, x, y, BULLET_WIDTH, BULLET_HEIGHT, BULLET_MAX_XSPEED, BULLET_MAX_YSPEED,
         BULLET_HP, BULLET_CONTACT_DAMAGE, BULLET_IFRAMES, level,bn::sprite_items::bullet)
 {
     //todo: probably refactor this b/c it's not necessary for bullet to have a target xspeed or really any gravity logic
@@ -14,7 +14,7 @@ bullet::bullet(const bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level
 }
 
 void bullet::update(){
-    entity::update();
+    combat_entity::update();
 }
 
 bool bullet::should_be_deleted() const{

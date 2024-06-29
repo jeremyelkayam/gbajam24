@@ -15,9 +15,6 @@
 #include "bn_regular_bg_items_testbg.h"
 #include "bn_regular_bg_items_testmap.h"
 #include "bn_sprite_items_portrait.h"
-#include "player.h"
-#include "level.h"
-#include "text_box.h"
 #include "hud.h"
 #include "enemy.h"
 #include "lab_scene.h"
@@ -27,22 +24,20 @@
 int main()
 {
     bn::core::init();
-    bn::regular_bg_ptr bg = bn::regular_bg_items::testbg.create_bg(0,0);
+    // bn::regular_bg_ptr bg = bn::regular_bg_items::testbg.create_bg(0,0);
     // bn::sprite_text_generator boxgen(aru::cute_prop_sprite_font);
 
     bn::bg_palettes::set_transparent_color(bn::color(25, 25, 25));
-    bn::camera_ptr cam = bn::camera_ptr::create(128,128);
+    // bn::camera_ptr cam = bn::camera_ptr::create(128,128);
 
     bn::unique_ptr<aru::scene> scene;
     bn::optional<aru::scene_type> next_scene = aru::scene_type::LAB;
 
     // bn::optional<aru::enemy> enemy;
-    // bn::optional<aru::text_box> box;
 
     // aru::level level(cam, bn::regular_bg_items::testmap);
     // aru::player player(cam, 128, 128, level);
     // enemy.emplace(cam, 328, 128, level);
-    // bg.set_camera(cam);
 
    while(true)
     {
