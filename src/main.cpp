@@ -116,7 +116,6 @@ int main()
     //         }
 
     //         if(bn::keypad::start_pressed()){
-    //             box.emplace(boxgen, "This is a text box test. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", bn::sprite_items::portrait);
     //         }
 
 
@@ -153,14 +152,7 @@ int main()
     //         if(new_y < 88) new_y = 88;
     //         if(new_y > (level.height() - 80)) new_y = level.height() - 80;
     //         cam.set_position(new_x, new_y);
-    //     }else{
-    //         box->update();
-    //         if(box->done()){
-    //             box.reset();
-    //         }
-    //         if(bn::keypad::a_pressed()){
-    //             box->advance();
-    //         }
+    //     }
     //     }
 
         bn::core::update();

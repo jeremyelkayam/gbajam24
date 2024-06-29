@@ -1,4 +1,5 @@
 #include <bn_fixed.h>
+#include <bn_string.h>
 
 namespace aru 
 {
