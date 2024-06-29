@@ -1,6 +1,6 @@
 #pragma once
 #include <bn_sprite_animate_actions.h>
-#include "entity.h"
+#include "combat_entity.h"
 
 
 namespace aru

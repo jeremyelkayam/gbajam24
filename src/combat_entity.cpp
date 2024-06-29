@@ -1,4 +1,4 @@
-#include "entity.h"
+#include "combat_entity.h"
 #include "bn_sprite_items_explosion.h"
 #include <bn_log.h>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <bn_forward_list.h>
 #include "effect.h"
-#include "entity.h"
+#include "combat_entity.h"
 #include "enemy.h"
 #include "bullet.h"
 

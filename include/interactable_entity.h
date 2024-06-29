@@ -22,11 +22,11 @@ public:
     bn::fixed_rect hitbox() const {return _hitbox;}
 
     bool facing_right() const {return _sprite.horizontal_flip();}
-    
+
 protected:
     level &_level;
-    bn::sprite_ptr _sprite;
     bn::fixed_rect _hitbox;
+    bn::sprite_ptr _sprite, _interact_icon;
 
 };
 
