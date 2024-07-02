@@ -37,6 +37,7 @@ int main()
     
     while(true)
     {
+        cstuff.rand.update();
         if(scene){
             next_scene = scene->update();
         }

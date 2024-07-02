@@ -12,6 +12,7 @@ namespace aru {
     struct saved_data {
         bn::array<char, 8> format_tag;
         uint16_t ultramatter;
+        uint8_t hover_upgrade_lvl, shoot_upgrade_lvl, sword_upgrade_lvl;
     };
 
     class common_stuff { 

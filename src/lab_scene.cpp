@@ -40,14 +40,16 @@ bn::optional<scene_type> lab_scene::update(){
             _text_box->advance();
         }
     }else{
+        _slung.update();
 
         _interact_icon.set_visible(_player.hitbox().intersects(_slung.hitbox()));
         _interact_icon_anim.update();
-        if(_interact_icon.visible() && bn::keypad::a_pressed()){
+        if(_player.hitbox().intersects(_slung.hitbox()) && bn::keypad::a_pressed()){
+            
             _text_box.emplace(_cstuff.text_generator, "Dummy text", bn::sprite_items::portrait);
         }else{
+            //have to put this here otherwise you jump when coming out of menus
             _player.update();
-            _slung.update();
         }
     }
 
