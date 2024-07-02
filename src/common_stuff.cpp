@@ -13,9 +13,13 @@ common_stuff::common_stuff() :
     default_format_tag_stream.append("ARUSAV0");
 
     bn::sram::read(savefile);
-    //if the format tag is invalid, then we have to set it up.
+    //if the format tag is invalid, then we have to set up our default save file.
     if(savefile.format_tag != default_format_tag){
         savefile.format_tag = default_format_tag;
+        savefile.ultramatter = 10000;
+        savefile.hover_upgrade_lvl = 0;
+        savefile.shoot_upgrade_lvl = 0;
+        savefile.sword_upgrade_lvl = 0;
     }
 }
 

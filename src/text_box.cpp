@@ -7,12 +7,13 @@
 
 namespace aru { 
 
-text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, const bn::sprite_item &portrait) : 
+text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, const bn::sprite_item &portrait, bool top_box, bool rf_portrait) : 
     _text_generator(text_generator),
-    _portrait(portrait.create_sprite(-80,0)),
+    _portrait(portrait.create_sprite(-76,0)),
     _next_prompt(bn::sprite_items::downarrow.create_sprite(TB_ARROW_X,TB_ARROW_Y)),
     _box(bn::regular_bg_items::textbox.create_bg(0, 0)),
     _done(false),
+    _top_box(top_box),
     _current_line(0),
     _arrowtimer(0) {
     _box.set_priority(2);
@@ -20,6 +21,15 @@ text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, 
     _next_prompt.set_bg_priority(0);
     _next_prompt.set_visible(false);
     _text = split_into_lines(text);
+
+    if(top_box){
+        _box.set_y(-104);
+    }
+    if(rf_portrait){
+        _portrait.set_horizontal_flip(true);
+        _portrait.set_x(-_portrait.x());
+    }
+
     setup_text_sprites();
 }
 
@@ -29,7 +39,7 @@ void text_box::setup_text_sprites(){
     _text_generator.set_left_alignment();
     _text_generator.set_one_sprite_per_character(true);
     for(uint8_t i = _current_line; (i < _current_line+3) && (i < _text.size()); i++ ){    
-        _text_generator.generate(-112, 38 + (i - _current_line)*14, _text.at(i), _text_sprites);
+        _text_generator.generate(_box.x() - 112,_box.y() + 38 + (i - _current_line)*14 - (_top_box ? 3 : 0), _text.at(i), _text_sprites);
     }
     for(bn::sprite_ptr &sprite : _text_sprites){
         sprite.set_visible(false);
@@ -55,7 +65,7 @@ void text_box::update(){
             multiplier = TB_ARROW_OTIME - _arrowtimer;
         }
 
-        _next_prompt.set_y(TB_ARROW_Y + TB_ARROW_INC_PER_FRAME * multiplier);     
+        _next_prompt.set_y(_box.y() + TB_ARROW_Y + TB_ARROW_INC_PER_FRAME * multiplier);     
     }
 }
 

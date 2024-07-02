@@ -24,7 +24,7 @@ private:
     bn::sprite_animate_action<2> _interact_icon_anim;
     bn::regular_bg_ptr _bg;
     bn::optional<text_box> _text_box;
-    selection_box _menu;
+    // selection_box _menu;
 
 public:
     lab_scene(common_stuff &cstuff);

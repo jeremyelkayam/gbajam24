@@ -20,8 +20,8 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _slung(_cam, 188,170,80,50,bn::sprite_items::dummy_sprite),
     _interact_icon(bn::sprite_items::a_button_prompt.create_sprite(_slung.x(), _slung.hitbox().top() - 16)),
     _interact_icon_anim(bn::create_sprite_animate_action_forever(_interact_icon, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1)),
-    _bg(bn::regular_bg_items::testbg.create_bg(0,0)), 
-    _menu(_cstuff.text_generator, "Test"){
+    _bg(bn::regular_bg_items::testbg.create_bg(0,0))/*, 
+    _menu(_cstuff.text_generator, "Test")*/{
     _bg.set_z_order(1);
     _interact_icon.set_visible(false);
     _interact_icon.set_camera(_cam);
@@ -30,7 +30,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 
 bn::optional<scene_type> lab_scene::update(){
     bn::optional<scene_type> result;
-    _menu.update();
+    // _menu.update();
     if(_text_box){
         _interact_icon.set_visible(false);
         _text_box->update();
@@ -48,7 +48,8 @@ bn::optional<scene_type> lab_scene::update(){
         _interact_icon_anim.update();
         if(_player.hitbox().intersects(_slung.hitbox()) && bn::keypad::a_pressed()){
             
-            _text_box.emplace(_cstuff.text_generator, "Dummy text", bn::sprite_items::portrait);
+            _text_box.emplace(_cstuff.text_generator, "My name is Jardiniero (you've probably heard of me and if you haven't then you should have). I am the best gardener on Pinata Island, even after all this time there's no one as good as I was. The land that you are messing about with used to be my garden. I could make any plant grow and have any pinata stay in the garden... well, apart from one pinata. Let's face it, if I couldn't get one, no-one else could. Now forget about all that, you've got a long way to go before you can even call this a garden. Not long after I started the garden I met my wonderful wife. She worked on the ships which traded pinatas and other goods.", 
+            bn::sprite_items::portrait, false, true);
         }else{
             //have to put this here otherwise you jump when coming out of menus
             _player.update();

@@ -14,7 +14,7 @@ namespace aru {
             bn::vector<bn::sprite_ptr, 256> _text_sprites;
             bn::regular_bg_ptr _box;
             bn::vector<bn::string<64>, 24> _text;
-            bool _done;
+            bool _done, _top_box;
             uint8_t _current_line,_arrowtimer;
             void setup_text_sprites();
 
@@ -27,7 +27,7 @@ namespace aru {
             bn::vector<bn::string<64>, 24> split_into_lines(const char *text);
 
         public:
-            text_box(bn::sprite_text_generator &text_generator, const char *text, const bn::sprite_item &portrait);
+            text_box(bn::sprite_text_generator &text_generator, const char *text, const bn::sprite_item &portrait, bool top_box, bool rf_portrait);
             bool done() {return _done;}
             void update();
             void advance();
