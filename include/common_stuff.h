@@ -24,7 +24,9 @@ namespace aru {
             void save() {bn::sram::write(savefile);}
 
             common_stuff();
-            void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
+            static void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
+
+            static void bound(uint16_t &num, const uint16_t &min, const uint16_t &max);
 
         private:
 

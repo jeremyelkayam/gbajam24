@@ -30,4 +30,14 @@ void common_stuff::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, 
     }
 }
 
+void common_stuff::bound(uint16_t &num, const uint16_t &min, const uint16_t &max){
+    BN_ASSERT(min < max);
+    if(num < min){
+        num = min;
+    }
+    if(max < num){
+        num = max;
+    }
+}
+
 }

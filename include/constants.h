@@ -1,3 +1,4 @@
+#pragma once
 #include <bn_fixed.h>
 #include <bn_string.h>
 
@@ -29,4 +30,6 @@ namespace aru
     constexpr bn::fixed TB_ARROW_Y = 68;
     constexpr bn::fixed TB_ARROW_INC_PER_FRAME = 0.25;
     constexpr uint8_t TB_ARROW_OTIME = 25;
+
+    constexpr uint16_t UM_MAX = 65535;
 }
