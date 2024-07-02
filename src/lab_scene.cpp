@@ -20,7 +20,8 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _slung(_cam, 188,170,80,50,bn::sprite_items::dummy_sprite),
     _interact_icon(bn::sprite_items::a_button_prompt.create_sprite(_slung.x(), _slung.hitbox().top() - 16)),
     _interact_icon_anim(bn::create_sprite_animate_action_forever(_interact_icon, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1)),
-    _bg(bn::regular_bg_items::testbg.create_bg(0,0)){
+    _bg(bn::regular_bg_items::testbg.create_bg(0,0)), 
+    _menu(_cstuff.text_generator, "Test"){
     _bg.set_z_order(1);
     _interact_icon.set_visible(false);
     _interact_icon.set_camera(_cam);
@@ -29,6 +30,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 
 bn::optional<scene_type> lab_scene::update(){
     bn::optional<scene_type> result;
+    _menu.update();
     if(_text_box){
         _interact_icon.set_visible(false);
         _text_box->update();

@@ -19,10 +19,10 @@ namespace aru {
             void setup_text_sprites();
 
             /*
-             * Formats a longer string troginto up to 3 separate strings, separated
+             * Formats a longer string into up to 24 separate strings, separated
              * automatically based on width.
              * 
-             * Throws an error if the string is too big to fit into 3 lines (1 text box).
+             * Throws an error if the string is too big to fit into 24 lines (8 text boxes).
              */
             bn::vector<bn::string<64>, 24> split_into_lines(const char *text);
 
