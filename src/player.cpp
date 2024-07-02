@@ -26,7 +26,7 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _shoot_timer(0),
     _hover_timer(0)
 {
-
+    _sprite.set_z_order(0);
 }
 
 void player::update(){

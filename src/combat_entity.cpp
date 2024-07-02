@@ -5,14 +5,13 @@
 namespace aru 
 {
 combat_entity::combat_entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, const bn::fixed &max_yspeed, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem): 
+    entity(cam, x, y, width, height, spritem),
     _level(level),
-    _sprite(spritem.create_sprite(x,y)),
     _MAX_XSPEED(max_xspeed),
     _MAX_YSPEED(max_yspeed),
     _ACCEL(0.75),
     _G(1),
     _HIT_IFRAMES(iframes),
-    _hitbox(x, y, width, height),
     _grounded(false),
     _max_hp(hp),
     _jump_timer(0),
@@ -20,7 +19,7 @@ combat_entity::combat_entity(const bn::camera_ptr &cam, const bn::fixed &x, cons
     _contact_damage(contact_damage),
     _iframes(0)
 {
-    _sprite.set_camera(cam);
+
 }
 
 void combat_entity::update(){
