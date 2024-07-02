@@ -12,6 +12,8 @@ donation_box::donation_box(bn::sprite_text_generator &text_generator, const uint
     _text_generator(text_generator),
     _box(bn::regular_bg_items::textbox.create_bg(0, -104)),
     _place(0),
+    _hold_timer(0),
+    _blink_timer(0),
     _donation_amount(0),
     _ultramatter(ultramatter) {
     _box.set_priority(2);
@@ -21,33 +23,70 @@ donation_box::donation_box(bn::sprite_text_generator &text_generator, const uint
     _text_generator.set_one_sprite_per_character(false);
 
 
-    _text_generator.generate(0, _box.y() + 38, "Donate how much?", _text_sprites);
+    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box.y() + 46,61)),
+    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box.y() + 55,61)),
+    _selectors.at(1).set_vertical_flip(true);
 
-    BN_LOG("donation amount: ", _donation_amount);
-    BN_LOG("fixedwidth str : ", to_string_fixed_width(_donation_amount));
+    _text_generator.generate(0, _box.y() + 38, "Donate how much?", _text_sprites);
+    _text_generator.generate(0, _box.y() + 64, "Press A to confirm or B to cancel", _text_sprites);
+
     update_text_sprites();
+
     
 }
 
 void donation_box::update(){
-    if(bn::keypad::left_pressed() && _place < 5){
+    if(bn::keypad::left_pressed() && _place < 4){
         ++_place;
     }
     if(bn::keypad::right_pressed() && _place > 0){
         --_place;
     }    
 
-    if(bn::keypad::up_pressed()) _donation_amount += ten_to_the(_place);
-    if(bn::keypad::down_pressed()) _donation_amount -= ten_to_the(_place);
+    for(bn::sprite_ptr &selector : _selectors){
+        selector.set_bg_priority(0);
+        selector.set_x(13 - (6 * _place));
+        if(_blink_timer == 30){
+            selector.set_visible(true);
+        }else if(_blink_timer == 0){
+            selector.set_visible(false);
+        }
+    }
 
 
-    if(bn::keypad::up_pressed() || bn::keypad::down_pressed()){
-        common_stuff::bound(_donation_amount, 0, _ultramatter);
+    if(bn::keypad::down_held() || bn::keypad::up_held()){
+        ++_hold_timer;
 
-        update_text_sprites();
-        BN_LOG("updating...");
+        if(_hold_timer >=210) _hold_timer = 30;
+    }
+    if(bn::keypad::down_released() || bn::keypad::up_released()) _hold_timer = 0;
 
-    }    
+
+    if(bn::keypad::up_pressed() || 
+      (bn::keypad::up_held() && _hold_timer >= 30 && _hold_timer % 3 == 0)){
+        _donation_amount += ten_to_the(_place);
+        _selectors.at(0).set_y(DB_USEL_Y - 1);
+    }else{
+        _selectors.at(0).set_y(DB_USEL_Y);
+    }
+    if(bn::keypad::down_pressed() || 
+      (bn::keypad::down_held() && _hold_timer >= 30 && _hold_timer % 3 == 0)){
+        _donation_amount -= ten_to_the(_place);
+        _selectors.at(1).set_y(DB_DSEL_Y + 1);
+    }else{
+        //todo: maybe make it last more than one frame idk
+        _selectors.at(1).set_y(DB_DSEL_Y);
+    }
+
+    common_stuff::bound(_donation_amount, 0, _ultramatter);
+
+    update_text_sprites();    
+
+    ++_blink_timer;
+
+    if(_blink_timer > 60){
+        _blink_timer = 0;
+    }
 }
 
 uint16_t donation_box::ten_to_the(uint8_t pow){

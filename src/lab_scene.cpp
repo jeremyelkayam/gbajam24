@@ -30,7 +30,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 
 bn::optional<scene_type> lab_scene::update(){
     bn::optional<scene_type> result;
-    // _menu.update();
+    _dbox.update();
     if(_text_box){
         _interact_icon.set_visible(false);
         _text_box->update();
@@ -41,7 +41,6 @@ bn::optional<scene_type> lab_scene::update(){
         if(bn::keypad::a_pressed()){
             _text_box->advance();
         }
-        _dbox.update();
     }else{
         _slung.update();
 

@@ -10,10 +10,11 @@ namespace aru {
     class donation_box {
         private:
             bn::sprite_text_generator &_text_generator;
-            bn::vector<bn::sprite_ptr, 4> _text_sprites;
-            bn::vector<bn::sprite_ptr, 16> _donation_amount_sprites;
+            bn::vector<bn::sprite_ptr, 16> _text_sprites;
+            bn::vector<bn::sprite_ptr, 8> _donation_amount_sprites;
             bn::regular_bg_ptr _box;
-            uint8_t _place;
+            bn::vector<bn::sprite_ptr, 2> _selectors;
+            uint8_t _place, _hold_timer, _blink_timer;
             uint16_t _donation_amount;
             const uint16_t &_ultramatter;
         

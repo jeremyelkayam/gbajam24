@@ -32,4 +32,7 @@ namespace aru
     constexpr uint8_t TB_ARROW_OTIME = 25;
 
     constexpr uint16_t UM_MAX = 65535;
+
+    constexpr bn::fixed DB_USEL_Y = -58;
+    constexpr bn::fixed DB_DSEL_Y = -49;
 }
