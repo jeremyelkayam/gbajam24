@@ -26,7 +26,9 @@ namespace aru {
             common_stuff();
             static void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
 
-            static void bound(uint16_t &num, const uint16_t &min, const uint16_t &max);
+            static uint16_t bound(const uint16_t &num, const uint16_t &min, const uint16_t &max);
+            static uint16_t bounded_subtraction(const uint16_t &subtractee, const uint16_t &subtractor,  const uint16_t &min);
+            static uint16_t bounded_addition(const uint16_t &first, const uint16_t &second,  const uint16_t &max);
 
         private:
 

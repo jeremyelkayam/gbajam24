@@ -1,5 +1,6 @@
 #include "common_stuff.h"
 #include "cute_prop_sprite_font.h"
+#include "bn_log.h"
 namespace aru { 
 
 
@@ -30,14 +31,35 @@ void common_stuff::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, 
     }
 }
 
-void common_stuff::bound(uint16_t &num, const uint16_t &min, const uint16_t &max){
+uint16_t common_stuff::bound(const uint16_t &num, const uint16_t &min, const uint16_t &max){
     BN_ASSERT(min < max);
     if(num < min){
-        num = min;
+        return min;
     }
     if(max < num){
-        num = max;
+        return max;
+    }
+    return num;
+}
+
+uint16_t common_stuff::bounded_subtraction(const uint16_t &subtractee, const uint16_t &subtractor, const uint16_t &min){
+    if(subtractee < subtractor){
+        return min;
+    }else{
+        uint16_t sub_result = subtractee - subtractor;
+        if(sub_result < min) return min;
+        return sub_result;
     }
 }
+
+uint16_t common_stuff::bounded_addition(const uint16_t &first, const uint16_t &second,  const uint16_t &max){
+    //prevent it from going past max value
+    BN_LOG("trying to add ", first, " + ", second);
+    if(65535 - first < second) return max;
+    uint16_t addition_result = first + second;
+    if(addition_result > max) return max;
+    return addition_result;
+}
+
 
 }

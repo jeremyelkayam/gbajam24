@@ -64,21 +64,27 @@ void donation_box::update(){
 
     if(bn::keypad::up_pressed() || 
       (bn::keypad::up_held() && _hold_timer >= 30 && _hold_timer % 3 == 0)){
-        _donation_amount += ten_to_the(_place);
+
+        _donation_amount = common_stuff::bounded_addition(_donation_amount, ten_to_the(_place), _ultramatter);
+
         _selectors.at(0).set_y(DB_USEL_Y - 1);
+
     }else{
+
         _selectors.at(0).set_y(DB_USEL_Y);
+
     }
     if(bn::keypad::down_pressed() || 
       (bn::keypad::down_held() && _hold_timer >= 30 && _hold_timer % 3 == 0)){
-        _donation_amount -= ten_to_the(_place);
+
+        _donation_amount = common_stuff::bounded_subtraction(_donation_amount, ten_to_the(_place), 0);
+
         _selectors.at(1).set_y(DB_DSEL_Y + 1);
+
     }else{
         //todo: maybe make it last more than one frame idk
         _selectors.at(1).set_y(DB_DSEL_Y);
     }
-
-    common_stuff::bound(_donation_amount, 0, _ultramatter);
 
     update_text_sprites();    
 
