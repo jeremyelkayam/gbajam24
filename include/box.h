@@ -8,13 +8,20 @@
 
 namespace aru { 
     class box {
-        private:
+        protected:
             bn::sprite_text_generator &_text_generator;
             bn::vector<bn::sprite_ptr, 256> _text_sprites;
             bn::regular_bg_ptr _box;
             bool _done;
 
-            void setup_text_sprites();
+            /*
+             * Formats a longer string into up to 24 separate strings, separated
+             * automatically based on width.
+             * 
+             * Throws an error if the string is too big to fit into 24 lines (8 text boxes).
+             */
+            bn::vector<bn::string<64>, 24> split_into_lines(const char *text);
+
 
         public:
             box(bn::sprite_text_generator &text_generator);
