@@ -18,9 +18,11 @@ common_stuff::common_stuff() :
     if(savefile.format_tag != default_format_tag){
         savefile.format_tag = default_format_tag;
         savefile.ultramatter = 10000;
+        savefile.donated_amount = 0;
         savefile.hover_upgrade_lvl = 0;
         savefile.shoot_upgrade_lvl = 0;
         savefile.sword_upgrade_lvl = 0;
+        savefile.current_level = 0;
     }
 }
 
