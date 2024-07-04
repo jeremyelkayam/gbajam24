@@ -36,9 +36,6 @@ bn::optional<scene_type> lab_scene::update(){
         if(_text_boxes.front()->done() || bn::keypad::select_pressed()){
             _text_boxes.pop_front();
         }
-        if(bn::keypad::a_pressed()){
-            _text_boxes.front()->advance();
-        }
         if(bn::keypad::start_pressed()){
             //todo: stop at a box that requires player input
             _text_boxes.clear();
@@ -51,7 +48,7 @@ bn::optional<scene_type> lab_scene::update(){
         if(_player.hitbox().intersects(_slung.hitbox()) && bn::keypad::a_pressed()){
             
             _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
-            "My name is Jardiniero (you've probably heard of me and if you haven't then you should have). I am the best gardener on Pinata Island, even after all this time there's no one as good as I was. The land that you are messing about with used to be my garden. I could make any plant grow and have any pinata stay in the garden... well, apart from one pinata. Let's face it, if I couldn't get one, no-one else could. Now forget about all that, you've got a long way to go before you can even call this a garden. Not long after I started the garden I met my wonderful wife. She worked on the ships which traded pinatas and other goods.", 
+            "Blah.\n \n \nBlahblah.\nBlah.", 
             bn::sprite_items::portrait, false, true)));
 
         }else{

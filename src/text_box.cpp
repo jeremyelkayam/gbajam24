@@ -1,6 +1,7 @@
 #include "text_box.h"
 #include "constants.h"
 #include <bn_log.h>
+#include <bn_keypad.h>
 #include "bn_regular_bg_items_textbox.h"
 #include "bn_sprite_items_downarrow.h"
 
@@ -44,6 +45,12 @@ void text_box::setup_text_sprites(){
 }
 
 void text_box::update(){
+
+
+    if(bn::keypad::a_pressed()){
+        advance();
+    }
+    
     for(bn::sprite_ptr &sprite : _text_sprites){
         if(!sprite.visible()){
             sprite.set_visible(true);

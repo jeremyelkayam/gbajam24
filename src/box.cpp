@@ -1,6 +1,7 @@
 #include "box.h"
 #include "bn_regular_bg_items_textbox.h"
 #include "cute_prop_sprite_font.h"
+#include <bn_log.h>
 
 namespace aru {
 
@@ -37,7 +38,7 @@ bn::vector<bn::string<64>, 24> box::split_into_lines(const char *text){
 
         //this case lets us handle manual newlines (\n)
         if(text[pos] == '\n') line_end = pos;
-
+        
         //if this variable is set, we know where the end of the line is
         if(line_end){
             //copy the current line, up to the last space, into the result vector
