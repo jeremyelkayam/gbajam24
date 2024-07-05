@@ -27,8 +27,7 @@ private:
     bn::sprite_animate_action<2> _interact_icon_anim;
     bn::regular_bg_ptr _bg;
     bn::deque<bn::unique_ptr<box>, 16> _text_boxes;
-    // selection_box _menu;
-
+ 
 public:
     lab_scene(common_stuff &cstuff);
     [[nodiscard]] virtual bn::optional<scene_type> update() final;

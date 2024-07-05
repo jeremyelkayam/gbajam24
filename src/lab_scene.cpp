@@ -31,6 +31,7 @@ bn::optional<scene_type> lab_scene::update(){
     bn::optional<scene_type> result;
     if(!_text_boxes.empty()){
         _interact_icon.set_visible(false);
+        _text_boxes.front()->set_visible(true);
         _text_boxes.front()->update();
 
         if(_text_boxes.front()->done() || bn::keypad::select_pressed()){
@@ -50,6 +51,7 @@ bn::optional<scene_type> lab_scene::update(){
             _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
             "Blah.\n \n \nBlahblah.\nBlah.", 
             bn::sprite_items::portrait, false, true)));
+            _text_boxes.push_back(bn::unique_ptr<donation_box>(new donation_box(_cstuff.text_generator, _cstuff.savefile.ultramatter)));
 
         }else{
             //have to put this here otherwise you jump when coming out of menus

@@ -28,6 +28,7 @@ namespace aru {
             virtual ~box() {return;} //ayy, oracle vm where u at
             virtual bool done() {return _done;}
             virtual void update()=0;
+            virtual void set_visible(bool visible);
 
     };
 }

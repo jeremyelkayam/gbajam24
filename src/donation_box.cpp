@@ -8,20 +8,17 @@
 
 namespace aru { 
 
-donation_box::donation_box(bn::sprite_text_generator &text_generator, const uint16_t &ultramatter) : 
-    _text_generator(text_generator),
-    _box(bn::regular_bg_items::textbox.create_bg(0, -104)),
+donation_box::donation_box(bn::sprite_text_generator &text_generator, uint16_t &ultramatter) : 
+    box(text_generator),
     _place(0),
     _hold_timer(0),
     _blink_timer(0),
     _donation_amount(0),
     _ultramatter(ultramatter) {
-    _box.set_priority(2);
 
-    _text_generator.set_bg_priority(0);
-    _text_generator.set_center_alignment();
-    _text_generator.set_one_sprite_per_character(false);
-
+    _box.set_y(-104);
+    update_text_sprites();
+    
 
     _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box.y() + 46,61)),
     _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box.y() + 55,61)),
@@ -30,8 +27,7 @@ donation_box::donation_box(bn::sprite_text_generator &text_generator, const uint
     _text_generator.generate(0, _box.y() + 38, "Donate how much?", _text_sprites);
     _text_generator.generate(0, _box.y() + 64, "Press A to confirm or B to cancel", _text_sprites);
 
-    update_text_sprites();
-
+    set_visible(false);
     
 }
 
@@ -93,6 +89,17 @@ void donation_box::update(){
     if(_blink_timer > 60){
         _blink_timer = 0;
     }
+
+    if(bn::keypad::a_pressed()){
+        _done = true;
+        //cannot donate more than what you've got on hand...
+        BN_ASSERT(_donation_amount < _ultramatter);
+        _ultramatter -= _donation_amount;
+    }
+
+    if(bn::keypad::a_pressed() || bn::keypad::b_pressed()){
+        _done = true;
+    }
 }
 
 uint16_t donation_box::ten_to_the(uint8_t pow){
@@ -110,5 +117,22 @@ bn::string<6> donation_box::to_string_fixed_width(uint16_t n)
     for (int i = 5; i--; n /= 10) result[i] = char('0' + n % 10);
     return result;
 }
+
+void donation_box::update_text_sprites(){
+    _text_generator.set_bg_priority(0);
+    _text_generator.set_center_alignment();
+    _text_generator.set_one_sprite_per_character(false);
+
+    _donation_amount_sprites.clear();
+    _text_generator.generate(0, _box.y() + 50, to_string_fixed_width(_donation_amount), _donation_amount_sprites);
+
+}
+
+void donation_box::set_visible(bool visible){
+    box::set_visible(visible);
+    common_stuff::set_sprite_arr_visible(_selectors, visible);
+    common_stuff::set_sprite_arr_visible(_donation_amount_sprites, visible);
+}
+
 
 }

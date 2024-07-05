@@ -1,4 +1,5 @@
 #include "box.h"
+#include "common_stuff.h"
 #include "bn_regular_bg_items_textbox.h"
 #include "cute_prop_sprite_font.h"
 #include <bn_log.h>
@@ -10,6 +11,7 @@ box::box(bn::sprite_text_generator &text_generator) :
     _box(bn::regular_bg_items::textbox.create_bg(0, 0)),
     _done(false) {
     _box.set_priority(2);
+    set_visible(false);
 }
 
 bn::vector<bn::string<64>, 24> box::split_into_lines(const char *text){
@@ -64,6 +66,11 @@ bn::vector<bn::string<64>, 24> box::split_into_lines(const char *text){
     }
 
     return result;
+}
+
+void box::set_visible(bool visible){
+    common_stuff::set_sprite_arr_visible(_text_sprites, visible);
+    _box.set_visible(visible);
 }
 
 }

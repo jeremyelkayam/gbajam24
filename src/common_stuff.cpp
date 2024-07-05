@@ -55,8 +55,6 @@ uint16_t common_stuff::bounded_subtraction(const uint16_t &subtractee, const uin
 }
 
 uint16_t common_stuff::bounded_addition(const uint16_t &first, const uint16_t &second,  const uint16_t &max){
-    //prevent it from going past max value
-    BN_LOG("trying to add ", first, " + ", second);
     if(65535 - first < second) return max;
     uint16_t addition_result = first + second;
     if(addition_result > max) return max;
