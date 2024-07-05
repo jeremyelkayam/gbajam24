@@ -5,6 +5,7 @@
 #include "bn_regular_bg_items_lab.h"
 #include "bn_regular_bg_items_testbg.h"
 #include "bn_sprite_items_dummy_sprite.h"
+#include "bn_sprite_items_slung.h"
 #include "bn_sprite_items_a_button_prompt.h"
 #include "bn_sprite_items_portrait.h"
 
@@ -17,7 +18,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _cam(bn::camera_ptr::create(128,128)),
     _level(_cam, bn::regular_bg_items::lab),
     _player(_cam,128,128,_level),
-    _slung(_cam, 188,170,80,50,bn::sprite_items::dummy_sprite),
+    _slung(_cam, 188,180,80,50,bn::sprite_items::slung),
     _interact_icon(bn::sprite_items::a_button_prompt.create_sprite(_slung.x(), _slung.hitbox().top() - 16)),
     _interact_icon_anim(bn::create_sprite_animate_action_forever(_interact_icon, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1)),
     _bg(bn::regular_bg_items::testbg.create_bg(0,0)){
@@ -31,11 +32,11 @@ bn::optional<scene_type> lab_scene::update(){
     bn::optional<scene_type> result;
     if(!_text_boxes.empty()){
         _interact_icon.set_visible(false);
-        _text_boxes.front()->set_visible(true);
         _text_boxes.front()->update();
 
         if(_text_boxes.front()->done() || bn::keypad::select_pressed()){
             _text_boxes.pop_front();
+            _text_boxes.front()->set_visible(true);
         }
         if(bn::keypad::start_pressed()){
             //todo: stop at a box that requires player input
@@ -49,9 +50,13 @@ bn::optional<scene_type> lab_scene::update(){
         if(_player.hitbox().intersects(_slung.hitbox()) && bn::keypad::a_pressed()){
             
             _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
-            "Blah.\n \n \nBlahblah.\nBlah.", 
+            "i can save the game for you if ya want", 
             bn::sprite_items::portrait, false, true)));
-            _text_boxes.push_back(bn::unique_ptr<donation_box>(new donation_box(_cstuff.text_generator, _cstuff.savefile.ultramatter)));
+            bn::vector<bn::string<8>, 4> opts;
+            opts.push_back("Yes");
+            opts.push_back("No");
+            _text_boxes.push_back(bn::unique_ptr<selection_box>(new selection_box(_cstuff.text_generator, "Save game data?", opts)));
+            _text_boxes.front()->set_visible(true);
 
         }else{
             //have to put this here otherwise you jump when coming out of menus
