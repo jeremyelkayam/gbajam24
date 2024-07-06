@@ -4,10 +4,7 @@
 #include <bn_blending.h>
 #include "bn_regular_bg_items_lab.h"
 #include "bn_regular_bg_items_testbg.h"
-#include "bn_sprite_items_dummy_sprite.h"
-#include "bn_sprite_items_slung.h"
 #include "bn_sprite_items_a_button_prompt.h"
-#include "bn_sprite_items_portrait.h"
 
 #include "lab_scene.h"
 
@@ -18,8 +15,6 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _cam(bn::camera_ptr::create(128,128)),
     _level(_cam, bn::regular_bg_items::lab),
     _player(_cam,128,128,_level),
-    // _slung(_cam, 168,180),
-    // _vax_mchn(_cam, 210,172,50,50,bn::sprite_items::dummy_sprite),
     _interact_icon(bn::sprite_items::a_button_prompt.create_sprite(0, 0)),
     _interact_icon_anim(bn::create_sprite_animate_action_forever(_interact_icon, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1)),
     _bg(bn::regular_bg_items::testbg.create_bg(0,0)){
@@ -27,6 +22,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _interact_icon.set_visible(false);
     _interact_icon.set_camera(_cam);
     _interactables.emplace_front(bn::unique_ptr<slung>(new slung(_cam, 168, 180, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 210, 172, _cstuff)));
     
 }
 
@@ -57,7 +53,6 @@ bn::optional<scene_type> lab_scene::update(){
     }else{
         // _slung.update();
         // _vax_mchn.update();
-        _player.update();
 
         bool can_interact = false;
 
@@ -74,31 +69,10 @@ bn::optional<scene_type> lab_scene::update(){
                 //so just break at the first one in the list
             }
         }
-        if(can_interact){
-            _interact_icon.set_visible(true);
-            _interact_icon_anim.update();
-        }else{
-            _interact_icon.set_visible(false);
+        _interact_icon.set_visible(can_interact);
+        _interact_icon_anim.update();
 
-        }
-
-        // if(_player.hitbox().intersects(_slung.hitbox())){
-            
-            
-        //     _interact_icon.set_visible(true);
-        //     _interact_icon_anim.update();
-
-        //     //todo: maybe make the interactable entities each return their own deque of boxes
-        //     if(bn::keypad::a_pressed()){
-        //     }
-
-        // }else if(_player.hitbox().intersects(_vax_mchn.hitbox())){
-
-        //     if(bn::keypad::a_pressed()){
-        //         _text_boxes.push_back(bn::unique_ptr<donation_box>(new donation_box(_cstuff.text_generator, _cstuff.savefile.ultramatter)));
-        //     }
-        // }else{
-        // }
+        if(!(can_interact && bn::keypad::a_pressed())) _player.update();
     }
 
 
