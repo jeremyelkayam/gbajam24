@@ -40,7 +40,10 @@ bn::optional<scene_type> lab_scene::update(){
             _text_boxes.pop_front();
             if(next_box) _text_boxes.push_front(bn::move(next_box));            
 
-            _text_boxes.front()->set_visible(true);
+            BN_LOG("ending current box");
+            if(!_text_boxes.empty()){
+                _text_boxes.front()->set_visible(true);
+            }
         }
         else if(bn::keypad::start_pressed())
         {
@@ -57,11 +60,8 @@ bn::optional<scene_type> lab_scene::update(){
             
             _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
             "i can save the game for you if ya want", 
-            bn::sprite_items::portrait, false, true)));
-            bn::vector<bn::string<8>, 4> opts;
-            opts.push_back("Yes");
-            opts.push_back("No");
-            _text_boxes.push_back(bn::unique_ptr<selection_box>(new selection_box(_cstuff.text_generator, "Save game data?", opts)));
+            bn::sprite_items::portrait, false, true)));         
+            _text_boxes.push_back(bn::unique_ptr<save_selection_box>(new save_selection_box(_cstuff)));
             _text_boxes.front()->set_visible(true);
 
         }else{
