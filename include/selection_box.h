@@ -11,7 +11,7 @@ namespace aru {
 
         public:
             selection_box(bn::sprite_text_generator &text_generator, 
-                const char *text, const bn::vector<bn::string<8>,4> &options);
+                const bn::string<64> &text, const bn::vector<bn::string<8>,4> &options);
             virtual void update();
             virtual void set_visible(bool visible);
     };

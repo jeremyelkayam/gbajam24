@@ -18,7 +18,7 @@ upgrade_selection_box::upgrade_selection_box(bn::sprite_text_generator &text_gen
                     stream << price;
                     stream << " ultramatter?";
 
-                    return result.c_str();
+                    return result;
                 }(), 
                 []{
                     bn::vector<bn::string<8>,4> result;

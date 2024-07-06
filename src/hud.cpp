@@ -49,11 +49,9 @@ void hud::update(){
                 }else{
                     _enemy_hp.set_visible(false);
                 }
-                // int_to_text(_enemy_hp_text_sprites, _displayed_enemy_hp, 90, 72);
             }
         }else{
             _enemy_hp_label_text_sprites.clear();
-            // _enemy_hp_text_sprites.clear();
             _enemy_hp.set_visible(false);
         }
     }

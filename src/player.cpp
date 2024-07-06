@@ -128,7 +128,6 @@ void player::update(){
     //     _coyote_timer = 12; // 12 frames is 0.2s
     // }
     
-    //todo : adjust the player sprite up 2
 
 
 

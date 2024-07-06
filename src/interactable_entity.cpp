@@ -64,7 +64,7 @@ bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
     result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
             _cstuff.text_generator, _cstuff.savefile.hover_upgrade_lvl,
-            _cstuff.savefile.ultramatter, 1000,"HOVER")));
+            _cstuff.savefile.ultramatter, 1000, "HOVER")));
     return result;
 }
 

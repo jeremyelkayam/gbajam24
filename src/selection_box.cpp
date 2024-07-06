@@ -8,7 +8,7 @@
 
 namespace aru { 
 
-selection_box::selection_box(bn::sprite_text_generator &text_generator, const char *text, const bn::vector<bn::string<8>,4> &options) : 
+selection_box::selection_box(bn::sprite_text_generator &text_generator, const bn::string<64> &text, const bn::vector<bn::string<8>,4> &options) : 
     box(text_generator),
     _selector(bn::sprite_items::cute_prop_font.create_sprite(0,0,29)),
     _options(options),
@@ -34,7 +34,6 @@ selection_box::selection_box(bn::sprite_text_generator &text_generator, const ch
     BN_LOG("number of sprites: ", _option_sprites.size());
 }
 void selection_box::update(){
-    //will also need to do one for the donation box
     bn::fixed xcor = _option_sprites.at(_selected_option).x() - 20;
     bn::fixed ycor = _option_sprites.at(_selected_option).y();
 
