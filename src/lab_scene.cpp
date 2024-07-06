@@ -23,6 +23,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _interact_icon.set_camera(_cam);
     _interactables.emplace_front(bn::unique_ptr<slung>(new slung(_cam, 168, 180, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 210, 172, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 210, 172, _cstuff)));
     
 }
 

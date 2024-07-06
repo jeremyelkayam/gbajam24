@@ -1,10 +1,12 @@
 #include "interactable_entity.h"
 #include "bn_sprite_items_slung.h"
 #include "bn_sprite_items_portrait.h"
+#include "bn_sprite_items_hover_upgrade.h"
+#include "bn_sprite_items_dummy_sprite.h"
 #include "text_box.h"
 #include "save_selection_box.h"
 #include "donation_box.h"
-#include "bn_sprite_items_dummy_sprite.h"
+#include "upgrade_selection_box.h"
 
 namespace aru 
 {
@@ -46,7 +48,23 @@ vax_mchn::vax_mchn(const bn::camera_ptr &cam,
 
 bn::deque<bn::unique_ptr<box>, 16> vax_mchn::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
-    result.push_back(bn::unique_ptr<donation_box>(new donation_box(_cstuff.text_generator, _cstuff.savefile.ultramatter)));
+    result.push_back(bn::unique_ptr<donation_box>(new donation_box(
+        _cstuff.text_generator, _cstuff.savefile.ultramatter)));
+    return result;
+}
+
+hover_upgrader::hover_upgrader(const bn::camera_ptr &cam, 
+    const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
+        interactable_entity(cam, x, y, 50,50,bn::sprite_items::hover_upgrade, cstuff)
+{
+    
+}
+
+bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
+    bn::deque<bn::unique_ptr<box>, 16> result;
+    result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
+            _cstuff.text_generator, _cstuff.savefile.hover_upgrade_lvl,
+            _cstuff.savefile.ultramatter, 1000,"HOVER")));
     return result;
 }
 
