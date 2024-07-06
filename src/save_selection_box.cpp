@@ -23,7 +23,6 @@ save_selection_box::save_selection_box(common_stuff &cstuff) :
 void save_selection_box::update(){
     selection_box::update();
     if(bn::keypad::a_pressed() && _selected_option == 1){
-        BN_LOG("SAVING GAME DATA NOW!");
         _cstuff.save();
         _done = true;
         _next_text = "Thank you for waiting. I've successfully logged your progress thus far.";
@@ -35,7 +34,6 @@ void save_selection_box::update(){
 
 bn::unique_ptr<box> save_selection_box::next_box(){
     BN_ASSERT(_done);
-
     return bn::unique_ptr<box>(new text_box(_cstuff.text_generator, 
             _next_text.c_str(), 
             bn::sprite_items::portrait, false, true));
