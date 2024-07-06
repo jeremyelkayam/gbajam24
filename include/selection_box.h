@@ -10,7 +10,8 @@ namespace aru {
             uint8_t _selected_option;
 
         public:
-            selection_box(bn::sprite_text_generator &text_generator, const char *text, const bn::vector<bn::string<8>,4> &options);
+            selection_box(bn::sprite_text_generator &text_generator, 
+                const char *text, const bn::vector<bn::string<8>,4> &options);
             virtual void update();
             virtual void set_visible(bool visible);
     };

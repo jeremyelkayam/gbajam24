@@ -21,7 +21,7 @@ private:
     bn::camera_ptr _cam;
     level _level;
     player _player;
-    interactable_entity _slung;
+    interactable_entity _slung, _vax_mchn;
 
     bn::sprite_ptr _interact_icon;
     bn::sprite_animate_action<2> _interact_icon_anim;

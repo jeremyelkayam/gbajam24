@@ -19,7 +19,8 @@ namespace aru {
              * Formats a longer string into up to 24 separate strings, separated
              * automatically based on width.
              * 
-             * Throws an error if the string is too big to fit into 24 lines (8 text boxes).
+             * Throws an error if the string is too big to fit into 24 lines 
+             * (8 text boxes).
              */
             bn::vector<bn::string<64>, 24> split_into_lines(const char *text);
 
