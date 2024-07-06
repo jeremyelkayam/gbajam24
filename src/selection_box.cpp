@@ -1,5 +1,6 @@
 #include "selection_box.h"
 #include "constants.h"
+#include "common_stuff.h"
 #include <bn_log.h>
 #include "bn_regular_bg_items_textbox.h"
 #include "bn_sprite_items_cute_prop_font.h"
@@ -7,23 +8,29 @@
 
 namespace aru { 
 
-selection_box::selection_box(bn::sprite_text_generator &text_generator, const char *text) : 
-    _text_generator(text_generator),
+selection_box::selection_box(bn::sprite_text_generator &text_generator, const char *text, const bn::vector<bn::string<8>,4> &options) : 
+    box(text_generator),
     _selector(bn::sprite_items::cute_prop_font.create_sprite(0,0,29)),
-    _box(bn::regular_bg_items::textbox.create_bg(0, -50)),
+    _options(options),
     _selected_option(0) {
     _box.set_priority(2);
     _selector.set_bg_priority(0);
+    _box.set_y(-50);
 
     _text_generator.set_bg_priority(0);
     _text_generator.set_center_alignment();
     _text_generator.set_one_sprite_per_character(false);
 
-
     _text_generator.generate(0, -10, text, _text_sprites);
+    bn::fixed spacing = 30;
+    bn::fixed start_x = -spacing * bn::fixed(0.5) * (_options.size() - 1);
 
-    _text_generator.generate(-20, 10, "YES", _option_sprites);
-    _text_generator.generate(20, 10, "NO", _option_sprites);
+    for(int z = 0; z < _options.size(); ++z){
+        _text_generator.generate(start_x + spacing * z, 10, _options.at(z), _option_sprites);
+    }
+
+    set_visible(false);
+    
     BN_LOG("number of sprites: ", _option_sprites.size());
 }
 void selection_box::update(){
@@ -40,8 +47,14 @@ void selection_box::update(){
     _selector.set_position(xcor, ycor);
 
     if(bn::keypad::a_pressed()) {
-        BN_LOG("selected option: ", _selected_option);
+        BN_LOG("selected option: ", _options.at(_selected_option));
     }
+}
+
+void selection_box::set_visible(bool visible){
+    box::set_visible(visible);
+    common_stuff::set_sprite_arr_visible(_option_sprites, visible);
+    _selector.set_visible(visible);
 }
 
 }

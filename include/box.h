@@ -3,6 +3,7 @@
 #include <bn_regular_bg_ptr.h>
 #include <bn_vector.h>
 #include <bn_sprite_ptr.h>
+#include <bn_unique_ptr.h>
 #include <bn_string.h>
 #include <bn_sprite_actions.h>
 
@@ -29,6 +30,9 @@ namespace aru {
             virtual bool done() {return _done;}
             virtual void update()=0;
             virtual void set_visible(bool visible);
+            virtual bn::unique_ptr<box> next_box();
+
+            virtual bool input_required() {return true;}
 
     };
 }

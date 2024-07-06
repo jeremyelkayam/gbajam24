@@ -31,16 +31,22 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 bn::optional<scene_type> lab_scene::update(){
     bn::optional<scene_type> result;
     if(!_text_boxes.empty()){
+        
         _interact_icon.set_visible(false);
         _text_boxes.front()->update();
 
-        if(_text_boxes.front()->done() || bn::keypad::select_pressed()){
+        if(_text_boxes.front()->done() || (bn::keypad::select_pressed() && !_text_boxes.front()->input_required())){
+            bn::unique_ptr<box> next_box = _text_boxes.front()->next_box();
             _text_boxes.pop_front();
+            if(next_box) _text_boxes.push_front(bn::move(next_box));            
+
             _text_boxes.front()->set_visible(true);
         }
-        if(bn::keypad::start_pressed()){
-            //todo: stop at a box that requires player input
-            _text_boxes.clear();
+        else if(bn::keypad::start_pressed())
+        {
+            while(!_text_boxes.front()->input_required()){
+                _text_boxes.pop_front();
+            }
         }
     }else{
         _slung.update();

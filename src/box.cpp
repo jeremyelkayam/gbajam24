@@ -73,4 +73,9 @@ void box::set_visible(bool visible){
     _box.set_visible(visible);
 }
 
+bn::unique_ptr<box> box::next_box(){
+    BN_ASSERT(_done);
+    return bn::unique_ptr<box>();
+}
+
 }
