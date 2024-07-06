@@ -63,12 +63,10 @@ bn::unique_ptr<box> upgrade_selection_box::next_box(){
         stream << "ability was upgraded.";
 
         return bn::unique_ptr<box>(new text_box(_text_generator, 
-            result.c_str(), 
-            bn::sprite_items::portrait, true, false));
+            result.c_str(), true));
     }else if(_not_enough_money){
         return bn::unique_ptr<box>(new text_box(_text_generator, 
-            "Not enough money.", 
-            bn::sprite_items::portrait, true, false));
+            "Not enough money.", true));
     }
     return bn::unique_ptr<box>();
     

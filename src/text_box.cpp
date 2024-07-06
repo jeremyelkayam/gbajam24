@@ -7,15 +7,14 @@
 
 namespace aru { 
 
-text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, const bn::sprite_item &portrait, bool top_box, bool rf_portrait) : 
-    box(text_generator),
-    _portrait(portrait.create_sprite(-76,0)),
-    _next_prompt(bn::sprite_items::downarrow.create_sprite(TB_ARROW_X,TB_ARROW_Y)),
-    _top_box(top_box),
-    _current_line(0),
-    _arrowtimer(0) {
+text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, 
+    bool top_box) : 
+        box(text_generator),
+        _next_prompt(bn::sprite_items::downarrow.create_sprite(TB_ARROW_X,TB_ARROW_Y)),
+        _top_box(top_box),
+        _current_line(0),
+        _arrowtimer(0) {
     _box.set_priority(2);
-    _portrait.set_bg_priority(0);
     _next_prompt.set_bg_priority(0);
     _next_prompt.set_visible(false);
     _text = split_into_lines(text);
@@ -23,12 +22,22 @@ text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, 
     if(top_box){
         _box.set_y(-104);
     }
-    if(rf_portrait){
-        _portrait.set_horizontal_flip(true);
-        _portrait.set_x(-_portrait.x());
-    }
-
+    
     setup_text_sprites();
+
+}
+
+text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, 
+    const bn::sprite_item &portrait, bool top_box, bool rf_portrait) : 
+        text_box(text_generator, text, top_box) {
+    _portrait.emplace(portrait.create_sprite(-76,0));
+
+    _portrait->set_bg_priority(0);
+
+    if(rf_portrait){
+        _portrait->set_horizontal_flip(true);
+        _portrait->set_x(-_portrait->x());
+    }
 }
 
 void text_box::setup_text_sprites(){
@@ -89,7 +98,7 @@ void text_box::advance(){
 
 void text_box::set_visible(bool visible){
     _box.set_visible(visible);
-    _portrait.set_visible(visible);
+    _portrait->set_visible(visible);
 }
 
 }
