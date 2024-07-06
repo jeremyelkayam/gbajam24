@@ -12,6 +12,7 @@
 #include "interactable_entity.h"
 #include "common_stuff.h"
 #include "donation_box.h"
+#include <bn_forward_list.h>
 
 namespace aru{
 
@@ -21,7 +22,8 @@ private:
     bn::camera_ptr _cam;
     level _level;
     player _player;
-    interactable_entity _slung, _vax_mchn;
+    bn::forward_list<bn::unique_ptr<interactable_entity>, 6> _interactables;
+
 
     bn::sprite_ptr _interact_icon;
     bn::sprite_animate_action<2> _interact_icon_anim;
