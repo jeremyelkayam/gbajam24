@@ -98,7 +98,7 @@ void text_box::advance(){
 
 void text_box::set_visible(bool visible){
     _box.set_visible(visible);
-    _portrait->set_visible(visible);
+    if(_portrait) _portrait->set_visible(visible);
 }
 
 }
