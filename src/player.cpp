@@ -22,8 +22,10 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
         bn::sprite_items::aru.tiles_item(), 7, 8)),
     _jumpsquat(bn::create_sprite_animate_action_once(_sprite, 2, 
         bn::sprite_items::aru.tiles_item(), 5, 6)),
-    // _fall(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 5, 5)),
-    // _hover(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 6, 6)),
+    _fall(bn::create_sprite_animate_action_forever(_sprite, 8, 
+        bn::sprite_items::aru.tiles_item(), 17, 18)),
+    _hover(bn::create_sprite_animate_action_forever(_sprite, 8, 
+        bn::sprite_items::aru.tiles_item(), 19, 20)),
     _run(bn::create_sprite_animate_action_forever(_sprite, 4, 
         bn::sprite_items::aru.tiles_item(), 9, 10, 11, 12, 13, 14, 15, 16)),
     _DUSTCLOUD_OFFSET(20),
@@ -46,13 +48,13 @@ void player::update(){
 
     switch(_current_state){
         case PSTATE::HOVER:
-            _jump.update();
+            _hover.update();
             break;
         case PSTATE::JUMP:
             _jump.update();
             break;
         case PSTATE::FALL:
-            _jump.update();
+            _fall.update();
             break;
         case PSTATE::STAND:
             _idle.update();
@@ -116,6 +118,7 @@ void player::update(){
         }
         if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
             _current_state = PSTATE::HOVER;
+            _hover.reset();
         }
 
         if(_current_state == PSTATE::HOVER){
@@ -132,6 +135,7 @@ void player::update(){
 
         if(_current_state != PSTATE::HOVER && _yspeed > 0){ 
             _current_state = PSTATE::FALL;
+            _fall.reset();
         }
 
     }

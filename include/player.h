@@ -34,8 +34,8 @@ private:
     bn::sprite_animate_action<20> _idle;
     bn::sprite_animate_action<2> _jump;
     bn::sprite_animate_action<2> _jumpsquat;
-    // bn::sprite_animate_action<2> _fall;
-    // bn::sprite_animate_action<2> _hover;
+    bn::sprite_animate_action<2> _fall;
+    bn::sprite_animate_action<2> _hover;
     bn::sprite_animate_action<8> _run;
     bn::forward_list<bullet, 8> _bullets;
 
