@@ -3,7 +3,7 @@
 
 
 #include "player.h"
-#include "bn_sprite_items_arutest.h"
+#include "bn_sprite_items_aru.h"
 #include "bn_sprite_items_jumpcloud.h"
 #include "bn_sprite_items_sprintcloud.h"
 
@@ -11,16 +11,22 @@ namespace aru {
 
 player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) : 
     combat_entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, PLAYER_MAX_YSPEED,
-        PLAYER_HP, PLAYER_CONTACT_DAMAGE, PLAYER_IFRAMES,level,bn::sprite_items::arutest),
+        PLAYER_HP, PLAYER_CONTACT_DAMAGE, PLAYER_IFRAMES,level,bn::sprite_items::aru),
     _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
     _current_state(PSTATE::STAND),
-    _idle(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 0, 1, 2, 1)),
-    // _jump(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 4, 4)),
+    _idle(bn::create_sprite_animate_action_forever(_sprite, 10, 
+        bn::sprite_items::aru.tiles_item(), 0, 1, 2, 1, 0, 1, 4, 1, 0, 1, 2, 1, 0, 1, 2, 1,
+        3, 1, 2, 1)),
+    _jump(bn::create_sprite_animate_action_forever(_sprite, 8, 
+        bn::sprite_items::aru.tiles_item(), 7, 8)),
+    _jumpsquat(bn::create_sprite_animate_action_once(_sprite, 2, 
+        bn::sprite_items::aru.tiles_item(), 5, 6)),
     // _fall(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 5, 5)),
     // _hover(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 6, 6)),
-    // _run(bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::arutest.tiles_item(), 3, 3)),
-    _DUSTCLOUD_OFFSET(40),
+    _run(bn::create_sprite_animate_action_forever(_sprite, 4, 
+        bn::sprite_items::aru.tiles_item(), 9, 10, 11, 12, 13, 14, 15, 16)),
+    _DUSTCLOUD_OFFSET(20),
     _jbuf_timer(0),
     _coyote_timer(0),
     _shoot_timer(0),
@@ -31,26 +37,37 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
 
 void player::update(){
 
+    if(_current_state == PSTATE::JUMPSQUAT){
+        if(_jumpsquat.done()){
+            _jumpsquat.reset();
+            jump();
+        }
+    }
+
     switch(_current_state){
         case PSTATE::HOVER:
-            _sprite.set_tiles(bn::sprite_items::arutest.tiles_item(), 6);
+            _jump.update();
             break;
         case PSTATE::JUMP:
-            _sprite.set_tiles(bn::sprite_items::arutest.tiles_item(), 4);
+            _jump.update();
             break;
         case PSTATE::FALL:
-            _sprite.set_tiles(bn::sprite_items::arutest.tiles_item(), 5);
+            _jump.update();
             break;
         case PSTATE::STAND:
             _idle.update();
             break;
         case PSTATE::RUN:
-            _sprite.set_tiles(bn::sprite_items::arutest.tiles_item(), 3);
+            _run.update();
+            break;
+        case PSTATE::JUMPSQUAT:
+            _jumpsquat.update();
             break;
     }
 
     if((bn::keypad::left_held() || bn::keypad::right_held()) && _current_state == PSTATE::STAND){
         _current_state = PSTATE::RUN;
+        _run.reset();
     }
 
     if(bn::keypad::left_pressed()){
@@ -79,6 +96,7 @@ void player::update(){
     if(!bn::keypad::left_held() && !bn::keypad::right_held()){
         _target_xspeed = 0;
         if(_current_state == PSTATE::RUN){
+            _idle.reset();
             _current_state = PSTATE::STAND;
         }
     }
@@ -88,12 +106,12 @@ void player::update(){
         _hover_timer = PLAYER_HOVER_TIME;
         
         if(bn::keypad::a_pressed() || _jbuf_timer){
-            jump();
+            _current_state = PSTATE::JUMPSQUAT;
         }
     }else{
         if(bn::keypad::a_pressed()){
             if(_coyote_timer){
-                jump();
+                _current_state = PSTATE::JUMPSQUAT;
             }
         }
         if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
@@ -115,6 +133,7 @@ void player::update(){
         if(_current_state != PSTATE::HOVER && _yspeed > 0){ 
             _current_state = PSTATE::FALL;
         }
+
     }
 
     if(bn::keypad::b_pressed()){
@@ -157,7 +176,8 @@ void player::update(){
 void player::jump(){
     combat_entity::jump();
     _jbuf_timer = 0;
-    _jumpcloud.start(_hitbox.x(), _hitbox.y() + 16);
+    _jumpcloud.start(_hitbox.x(), _hitbox.y() + 8);
+    _jump.reset();
     _current_state = PSTATE::JUMP;
 }
 
@@ -195,6 +215,7 @@ bool player::check_bullet_collision(enemy &enemy){
 
 void player::land(){
     combat_entity::land();
+    _idle.reset();
     _current_state = PSTATE::STAND;
 }
 

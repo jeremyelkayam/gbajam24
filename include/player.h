@@ -13,7 +13,8 @@ namespace aru
         FALL,
         STAND,
         RUN,
-        HOVER
+        HOVER,
+        JUMPSQUAT
         // SHOOT,
         // SLASH
     };
@@ -30,11 +31,12 @@ public:
 private:
     effect _jumpcloud, _sprintcloud;
     PSTATE _current_state;
-    bn::sprite_animate_action<4> _idle;
-    // bn::sprite_animate_action<2> _jump;
+    bn::sprite_animate_action<20> _idle;
+    bn::sprite_animate_action<2> _jump;
+    bn::sprite_animate_action<2> _jumpsquat;
     // bn::sprite_animate_action<2> _fall;
     // bn::sprite_animate_action<2> _hover;
-    // bn::sprite_animate_action<2> _run;
+    bn::sprite_animate_action<8> _run;
     bn::forward_list<bullet, 8> _bullets;
 
     static bool bullet_deletable(bullet &b) {return b.should_be_deleted();}
