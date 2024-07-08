@@ -41,7 +41,6 @@ void player::update(){
 
     if(_current_state == PSTATE::JUMPSQUAT){
         if(_jumpsquat.done()){
-            _jumpsquat.reset();
             jump();
         }
     }
@@ -69,7 +68,7 @@ void player::update(){
 
     if((bn::keypad::left_held() || bn::keypad::right_held()) && _current_state == PSTATE::STAND){
         _current_state = PSTATE::RUN;
-        _run.reset();
+        start_anim(_run);
     }
 
     if(bn::keypad::left_pressed()){
@@ -98,7 +97,7 @@ void player::update(){
     if(!bn::keypad::left_held() && !bn::keypad::right_held()){
         _target_xspeed = 0;
         if(_current_state == PSTATE::RUN){
-            _idle.reset();
+            start_anim(_idle);
             _current_state = PSTATE::STAND;
         }
     }
@@ -109,16 +108,18 @@ void player::update(){
         
         if(bn::keypad::a_pressed() || _jbuf_timer){
             _current_state = PSTATE::JUMPSQUAT;
+            start_anim(_jumpsquat);
         }
     }else{
         if(bn::keypad::a_pressed()){
             if(_coyote_timer){
                 _current_state = PSTATE::JUMPSQUAT;
+                start_anim(_jumpsquat);
             }
         }
         if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
             _current_state = PSTATE::HOVER;
-            _hover.reset();
+            start_anim(_hover);
         }
 
         if(_current_state == PSTATE::HOVER){
@@ -135,7 +136,7 @@ void player::update(){
 
         if(_current_state != PSTATE::HOVER && _yspeed > 0){ 
             _current_state = PSTATE::FALL;
-            _fall.reset();
+            start_anim(_fall);
         }
 
     }
@@ -181,7 +182,7 @@ void player::jump(){
     combat_entity::jump();
     _jbuf_timer = 0;
     _jumpcloud.start(_hitbox.x(), _hitbox.y() + 8);
-    _jump.reset();
+    start_anim(_jump);
     _current_state = PSTATE::JUMP;
 }
 
@@ -219,8 +220,14 @@ bool player::check_bullet_collision(enemy &enemy){
 
 void player::land(){
     combat_entity::land();
-    _idle.reset();
+    start_anim(_idle);
     _current_state = PSTATE::STAND;
+}
+
+void player::start_anim(bn::isprite_animate_action &anim){
+    anim.reset();
+    anim.update();
+
 }
 
 }

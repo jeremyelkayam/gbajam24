@@ -49,6 +49,7 @@ private:
     virtual bool apply_gravity() const override;
     void shoot();
     virtual void land();
+    void start_anim(bn::isprite_animate_action &anim);
     
 };
 

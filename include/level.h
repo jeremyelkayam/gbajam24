@@ -4,6 +4,7 @@
 #include <bn_regular_bg_item.h>
 #include <bn_camera_ptr.h>
 #include <bn_fixed_rect.h>
+#include "tile_info.h"
 
 
 namespace aru
