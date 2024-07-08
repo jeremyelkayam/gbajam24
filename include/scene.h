@@ -10,7 +10,8 @@ enum class scene_type
     GJ24,
     TITLE,
     LEVEL,
-    LAB
+    LAB,
+    MENU
 };
 
 class scene {

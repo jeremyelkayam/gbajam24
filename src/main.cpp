@@ -17,6 +17,7 @@
 #include "bn_sprite_items_portrait.h"
 #include "hud.h"
 #include "lab_scene.h"
+#include "menu_scene.h"
 #include "common_stuff.h"
 #include "cute_prop_sprite_font.h"
 
@@ -24,14 +25,12 @@
 int main()
 {
     bn::core::init();
-    // bn::regular_bg_ptr bg = bn::regular_bg_items::testbg.create_bg(0,0);
-    // bn::sprite_text_generator boxgen(aru::cute_prop_sprite_font);
 
     bn::bg_palettes::set_transparent_color(bn::color(25, 25, 25));
     // bn::camera_ptr cam = bn::camera_ptr::create(128,128);
 
     bn::unique_ptr<aru::scene> scene;
-    bn::optional<aru::scene_type> next_scene = aru::scene_type::LAB;
+    bn::optional<aru::scene_type> next_scene = aru::scene_type::MENU;
 
     aru::common_stuff cstuff;
     
@@ -45,6 +44,10 @@ int main()
             switch(*next_scene){
                 case aru::scene_type::LAB: { 
                     scene.reset(new aru::lab_scene(cstuff));
+                    break;
+                }
+                case aru::scene_type::MENU: { 
+                    scene.reset(new aru::menu_scene());
                     break;
                 }
                 default: { 

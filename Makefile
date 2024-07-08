@@ -30,8 +30,8 @@ TARGET      :=  $(notdir $(CURDIR))
 BUILD       :=  build
 LIBBUTANO   :=  ../butano/butano
 PYTHON      :=  python
-SOURCES     :=  src
-INCLUDES    :=  include
+SOURCES     :=  src external/src
+INCLUDES    :=  include external/include
 DATA        :=
 GRAPHICS    :=  graphics
 AUDIO       :=  audio
@@ -44,8 +44,8 @@ USERLDFLAGS :=
 USERLIBDIRS :=  
 USERLIBS    :=  
 DEFAULTLIBS :=  
-USERBUILD   :=  
-EXTTOOL     :=  
+USERBUILD   :=  external
+EXTTOOL     :=  @$(PYTHON) -B python-script.py --build=$(USERBUILD)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Export absolute butano path:

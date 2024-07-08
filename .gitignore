@@ -1,5 +1,6 @@
 #stolen from Butano repository
 build/
+external/
 .vscode/
 .qtc_clangd/
 *.gba
