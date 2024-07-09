@@ -16,7 +16,7 @@ bn::optional<scene_type> level_scene::update()
 {
     bn::optional<scene_type> result;
 
-    _player.update();
+    play_scene::update();
 
     return result;
 }

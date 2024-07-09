@@ -4,6 +4,7 @@
 #include "level.h"
 #include "player.h"
 #include "common_stuff.h"
+#include "camera_manager.h"
 
 namespace aru{
 
@@ -13,6 +14,8 @@ protected:
     bn::camera_ptr _cam;
     level _level;
     player _player;
+    camera_manager _cam_mgr;
+
 
     bn::regular_bg_ptr _bg;
  

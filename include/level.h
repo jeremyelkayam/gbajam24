@@ -14,8 +14,8 @@ class level
 public: 
     level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg);
     void update();
-    bn::fixed width() {return _bg_ptr.dimensions().width();}
-    bn::fixed height() {return _bg_ptr.dimensions().height();}
+    bn::fixed width() const {return _bg_ptr.dimensions().width();}
+    bn::fixed height() const {return _bg_ptr.dimensions().height();}
 
     bool is_thick_ground(const bn::fixed_point &coords) const;
     bool is_thin_ground(const bn::fixed_point &coords) const;

@@ -70,7 +70,7 @@ bn::optional<scene_type> lab_scene::update()
         _interact_icon.set_visible(can_interact);
         _interact_icon_anim.update();
 
-        if(!(can_interact && bn::keypad::a_pressed())) _player.update();
+        if(!(can_interact && bn::keypad::a_pressed())) play_scene::update();
     }
 
 
