@@ -3,31 +3,24 @@
 #include <bn_vector.h>
 #include <bn_unique_ptr.h>
 #include <bn_deque.h>
-#include "scene.h"
 #include "level.h"
 #include "player.h"
-#include "level.h"
 #include "text_box.h"
 #include "save_selection_box.h"
 #include "interactable_entity.h"
 #include "common_stuff.h"
+#include "play_scene.h"
 #include "donation_box.h"
-#include <bn_forward_list.h>
 
 namespace aru{
 
-class lab_scene : public scene{ 
+class lab_scene : public play_scene{ 
 private:
-    common_stuff &_cstuff;
-    bn::camera_ptr _cam;
-    level _level;
-    player _player;
     bn::forward_list<bn::unique_ptr<interactable_entity>, 6> _interactables;
 
 
     bn::sprite_ptr _interact_icon;
     bn::sprite_animate_action<2> _interact_icon_anim;
-    bn::regular_bg_ptr _bg;
     bn::deque<bn::unique_ptr<box>, 16> _text_boxes;
  
 public:
