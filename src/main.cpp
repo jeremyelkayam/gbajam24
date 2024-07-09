@@ -7,10 +7,6 @@
 #include <bn_keypad.h>
 
 //copyrat90 demo imports
-#include <bn_regular_bg_map_cell_info.h>
-#include <bn_regular_bg_map_ptr.h>
-#include <bn_format.h>
-
 
 #include "bn_regular_bg_items_testbg.h"
 #include "bn_regular_bg_items_testmap.h"
@@ -18,6 +14,7 @@
 #include "hud.h"
 #include "lab_scene.h"
 #include "menu_scene.h"
+#include "level_scene.h"
 #include "common_stuff.h"
 #include "cute_prop_sprite_font.h"
 
@@ -48,6 +45,10 @@ int main()
                 }
                 case aru::scene_type::MENU: { 
                     scene.reset(new aru::menu_scene());
+                    break;
+                }
+                case aru::scene_type::LEVEL: { 
+                    scene.reset(new aru::level_scene(cstuff));
                     break;
                 }
                 default: { 

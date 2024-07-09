@@ -44,6 +44,8 @@ bn::optional<scene_type> menu_scene::update(){
     if(bn::keypad::a_pressed()){
         if(_index == 0){
             result = scene_type::LAB;
+        }else if(_index == 1){
+            result = scene_type::LEVEL;
         }
     }
 

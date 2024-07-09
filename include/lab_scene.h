@@ -1,14 +1,10 @@
 #pragma once
 #include <bn_sprite_ptr.h>
-#include <bn_vector.h>
 #include <bn_unique_ptr.h>
 #include <bn_deque.h>
-#include "level.h"
-#include "player.h"
 #include "text_box.h"
 #include "save_selection_box.h"
 #include "interactable_entity.h"
-#include "common_stuff.h"
 #include "play_scene.h"
 #include "donation_box.h"
 
