@@ -20,6 +20,8 @@ class hud {
         uint8_t _displayed_player_hp, _target_player_hp, _max_player_hp, 
             _displayed_enemy_hp, _target_enemy_hp, _max_enemy_hp;
 
+
+        //todo: refactor the target values into const references to the actual values
         uint16_t _displayed_currency, _target_currency, _ehp_visible_timer;
 
     public:
@@ -27,6 +29,7 @@ class hud {
         hud();
         void update();
         void update_player_hp(const uint8_t &hp);
+        void update_currency(const uint16_t &crcy);
         void update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, 
             const uint8_t &current_hp, const uint8_t &max_hp);
 

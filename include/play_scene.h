@@ -5,6 +5,7 @@
 #include "player.h"
 #include "common_stuff.h"
 #include "camera_manager.h"
+#include "hud.h"
 
 namespace aru{
 
@@ -15,6 +16,7 @@ protected:
     level _level;
     player _player;
     camera_manager _cam_mgr;
+    hud _hud;
 
 
     bn::regular_bg_ptr _bg;

@@ -3,6 +3,7 @@
 #include "bn_sprite_items_bar_3px.h"
 #include "bn_sprite_items_bar_5px.h"
 #include <bn_log.h>
+#include "common_stuff.h"
 
 namespace aru {
 
@@ -16,15 +17,14 @@ hud::hud() :
     _displayed_enemy_hp(10),
     _target_enemy_hp(10),
     _max_enemy_hp(10),
-    _displayed_currency(10),
-    _target_currency(10) 
+    _displayed_currency(10000),
+    _target_currency(10000) 
 {
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();
     _text_generator.generate(-110, -72, "HP", _player_hp_label_text_sprites);  
-    // int_to_text(_player_hp_text_sprites, _displayed_player_hp, -110, -64);
+    int_to_text(_crcy_text_sprites, _displayed_currency, 90, -72);
     
-    _text_generator.generate(100, -72, "E:0", _crcy_text_sprites);  
     
 }
 
@@ -68,7 +68,17 @@ void hud::update(){
         bn::fixed scale_factor = bn::fixed(_displayed_player_hp) / bn::fixed(_max_player_hp);
         _player_hp.set_vertical_scale(scale_factor);
         _player_hp.set_y(4 + (bn::fixed(-32)*scale_factor).floor_integer());
-        // int_to_text(_player_hp_text_sprites, _displayed_player_hp, -110, -64);
+    }
+    //todo: refactor this...
+    if(_displayed_currency != _target_currency){
+        if(_displayed_currency > _target_currency){
+            //todo: calculate difference based on time (e.g. difference / 120 for 2 secs) 
+            _displayed_currency = common_stuff::bounded_subtraction(_displayed_currency, 10, _target_currency);
+        }else if(_displayed_currency < _target_currency){
+            _displayed_currency = common_stuff::bounded_addition(_displayed_currency, 10, _target_currency);
+        }         
+        _crcy_text_sprites.clear();
+        int_to_text(_crcy_text_sprites, _displayed_currency, 90, -72);
     }
 
 }
@@ -91,6 +101,10 @@ void hud::update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, con
     // int_to_text(_enemy_hp_text_sprites, _displayed_enemy_hp, 90, 72);
 }
 
+void hud::update_currency(const uint16_t &crcy){
+    _target_currency = crcy;
+}
+
 void hud::hide(){
 
 }
@@ -109,6 +123,7 @@ void hud::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &inte
     bn::string<8> text_str;
     bn::ostringstream text_stream(text_str);
     text_stream << integer;
+    _text_generator.set_one_sprite_per_character(false);
     _text_generator.generate(x, y, text_str, sprites); 
 }
 

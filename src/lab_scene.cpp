@@ -54,7 +54,7 @@ bn::optional<scene_type> lab_scene::update()
 
         for(bn::unique_ptr<interactable_entity> &ent : _interactables){
             ent->update();
-            
+
             if(_player.hitbox().intersects(ent->hitbox())) {
                 _interact_icon.set_position(ent->x(), ent->hitbox().top() - 16);
                 can_interact = true;
@@ -72,6 +72,8 @@ bn::optional<scene_type> lab_scene::update()
 
         if(!result && !(can_interact && bn::keypad::a_pressed())) result = play_scene::update();
     }
+
+    _hud.update_currency(_cstuff.savefile.ultramatter);
 
 
     return result;

@@ -21,6 +21,7 @@ bn::optional<scene_type> play_scene::update(){
 
     _player.update();
     _cam_mgr.update();
+    _hud.update();
 
     return result;
 }

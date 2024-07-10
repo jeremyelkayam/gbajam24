@@ -93,7 +93,7 @@ void donation_box::update(){
     if(bn::keypad::a_pressed()){
         _done = true;
         //cannot donate more than what you've got on hand...
-        BN_ASSERT(_donation_amount < _ultramatter);
+        BN_ASSERT(_donation_amount <= _ultramatter);
         _ultramatter -= _donation_amount;
     }
 
