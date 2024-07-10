@@ -17,9 +17,9 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 {
     _interact_icon.set_visible(false);
     _interact_icon.set_camera(_cam);
-    _interactables.emplace_front(bn::unique_ptr<slung>(new slung(_cam, 168, 180, _cstuff)));
-    _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 210, 172, _cstuff)));
-    _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 60, 180, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<slung>(new slung(_cam, 350, 208, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 450, 190, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 100, 202, _cstuff)));
     
 }
 
@@ -49,12 +49,12 @@ bn::optional<scene_type> lab_scene::update()
             }
         }
     }else{
-        // _slung.update();
-        // _vax_mchn.update();
 
         bool can_interact = false;
 
         for(bn::unique_ptr<interactable_entity> &ent : _interactables){
+            ent->update();
+            
             if(_player.hitbox().intersects(ent->hitbox())) {
                 _interact_icon.set_position(ent->x(), ent->hitbox().top() - 16);
                 can_interact = true;
@@ -63,8 +63,8 @@ bn::optional<scene_type> lab_scene::update()
                     _text_boxes = ent->interact_boxes();
                 }
 
-                break; //shouldn't be able to interact w/ multiple entities
-                //so just break at the first one in the list
+
+                break;
             }
         }
         _interact_icon.set_visible(can_interact);

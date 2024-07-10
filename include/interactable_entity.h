@@ -1,5 +1,6 @@
 #pragma once
 #include <bn_sprite_animate_actions.h>
+#include <bn_vector.h>
 #include <bn_sprite_item.h>
 #include <bn_sprite_ptr.h>
 #include <bn_fixed_rect.h>
@@ -25,7 +26,9 @@ public:
     virtual bn::deque<bn::unique_ptr<box>, 16> interact_boxes()=0;
 
 protected:
+    uint8_t _current_anim;
     common_stuff &_cstuff;
+    bn::vector<bn::sprite_animate_action<16>,4> _anims;
 };
 
 class slung : public interactable_entity
