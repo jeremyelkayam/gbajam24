@@ -10,10 +10,11 @@ namespace aru {
 
 class hud_element {
     protected:
+        bn::sprite_text_generator &_generator;
         uint16_t _displayed, _target, _delta;
 
     public:
-        hud_element(const uint16_t &tracked_value);
+        hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator);
         virtual ~hud_element() {return;}
         virtual void update();
         void set_tracked_value(const uint16_t &tracked_value);
@@ -22,7 +23,6 @@ class hud_element {
 
 class text_hud_element : public hud_element {
     private:
-        bn::sprite_text_generator &_generator;
         bn::vector<bn::sprite_ptr, 8> _text_sprites;
         void int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, 
             const bn::fixed x, bn::fixed y);
@@ -33,21 +33,29 @@ class text_hud_element : public hud_element {
         virtual void update();
 };
 
+class health_hud_element : public hud_element { 
+    protected:
+        bn::sprite_ptr _health_bar;
+        uint16_t _max;
+    public:
+        health_hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator);
+        virtual void set_visible(bool visible) {_health_bar.set_visible(visible);}
+        virtual void update();
+};
+
 class hud { 
     private:
-        bn::vector<bn::sprite_ptr, 8>   //_player_hp_text_sprites, 
-                                        _player_hp_label_text_sprites,
-                                        // _enemy_hp_text_sprites,
+        bn::vector<bn::sprite_ptr, 8>   _player_hp_label_text_sprites,
                                         _enemy_hp_label_text_sprites;
                                         
         bn::sprite_text_generator _text_generator;
-        bn::sprite_ptr _player_hp,_enemy_hp;
+        bn::sprite_ptr _enemy_hp;
         
-        uint8_t _displayed_player_hp, _target_player_hp, _max_player_hp, 
+        uint8_t 
             _displayed_enemy_hp, _target_enemy_hp, _max_enemy_hp;
 
         text_hud_element _currency_meter;
-
+        health_hud_element _player_hp;
 
         //todo: refactor the target values into const references to the actual values
         uint16_t _ehp_visible_timer;
