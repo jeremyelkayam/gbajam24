@@ -17,14 +17,11 @@ hud::hud() :
     _displayed_enemy_hp(10),
     _target_enemy_hp(10),
     _max_enemy_hp(10),
-    _displayed_currency(10000),
-    _target_currency(10000) 
+    _currency_meter(10000, _text_generator)
 {
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();
     _text_generator.generate(-110, -72, "HP", _player_hp_label_text_sprites);  
-    int_to_text(_crcy_text_sprites, _displayed_currency, 90, -72);
-    
     
 }
 
@@ -69,17 +66,8 @@ void hud::update(){
         _player_hp.set_vertical_scale(scale_factor);
         _player_hp.set_y(4 + (bn::fixed(-32)*scale_factor).floor_integer());
     }
-    //todo: refactor this...
-    if(_displayed_currency != _target_currency){
-        if(_displayed_currency > _target_currency){
-            //todo: calculate difference based on time (e.g. difference / 120 for 2 secs) 
-            _displayed_currency = common_stuff::bounded_subtraction(_displayed_currency, 10, _target_currency);
-        }else if(_displayed_currency < _target_currency){
-            _displayed_currency = common_stuff::bounded_addition(_displayed_currency, 10, _target_currency);
-        }         
-        _crcy_text_sprites.clear();
-        int_to_text(_crcy_text_sprites, _displayed_currency, 90, -72);
-    }
+
+    _currency_meter.update();
 
 }
 
@@ -89,7 +77,6 @@ void hud::update_player_hp(const uint8_t &hp){
 
 void hud::update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, const uint8_t &current_hp, const uint8_t &max_hp){
     _enemy_hp_label_text_sprites.clear();
-    // _enemy_hp_text_sprites.clear();
     _ehp_visible_timer = 300;
 
     _displayed_enemy_hp = prev_hp;
@@ -98,11 +85,10 @@ void hud::update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, con
 
     _text_generator.set_center_alignment();
     _text_generator.generate(90, 64, enemy_name, _enemy_hp_label_text_sprites);
-    // int_to_text(_enemy_hp_text_sprites, _displayed_enemy_hp, 90, 72);
 }
 
 void hud::update_currency(const uint16_t &crcy){
-    _target_currency = crcy;
+    _currency_meter.set_tracked_value(crcy);
 }
 
 void hud::hide(){
@@ -113,18 +99,50 @@ void hud::show(){
 
 }
 
-void hud::set_all_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible){
-    for(bn::sprite_ptr &sprite : sprites){
-        sprite.set_visible(visible);
-    }
-}
-
-void hud::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y){
+void hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y){
     bn::string<8> text_str;
     bn::ostringstream text_stream(text_str);
     text_stream << integer;
-    _text_generator.set_one_sprite_per_character(false);
-    _text_generator.generate(x, y, text_str, sprites); 
+    _generator.set_one_sprite_per_character(false);
+    _generator.set_left_alignment();
+    _generator.generate(x, y, text_str, sprites); 
 }
+
+hud_element::hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator) : 
+    _generator(generator),
+    _displayed(tracked_value),
+    _tracked(tracked_value),
+    _delta(0) {
+
+    int_to_text(_text_sprites, _displayed, 90, -72);
+    
+}
+
+void hud_element::update(){
+    if(_displayed != _tracked){
+        if(_displayed > _tracked){
+            _displayed = common_stuff::bounded_subtraction(_displayed, _delta, _tracked);
+        }else if(_displayed < _tracked){
+            _displayed = common_stuff::bounded_addition(_displayed, _delta, _tracked);
+        }
+        _text_sprites.clear();
+        int_to_text(_text_sprites, _displayed, 90, -72);
+    }
+}
+
+void hud_element::set_tracked_value(const uint16_t &tracked_value) {
+    _tracked = tracked_value;
+    uint16_t diff = 0;
+
+    if(_displayed > _tracked){
+        diff = _displayed - _tracked;
+    }else if(_displayed < _tracked){
+        diff = _tracked - _displayed;
+    }
+    //should take 2 seconds to change.
+    _delta = (diff * bn::fixed(.01666666666)).ceil_integer();
+}
+
+
 
 }

@@ -26,6 +26,8 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 bn::optional<scene_type> lab_scene::update()
 {
     bn::optional<scene_type> result;
+    uint16_t old_currency = _cstuff.savefile.ultramatter;
+
     if(!_text_boxes.empty()){
         
         _interact_icon.set_visible(false);
@@ -73,7 +75,9 @@ bn::optional<scene_type> lab_scene::update()
         if(!result && !(can_interact && bn::keypad::a_pressed())) result = play_scene::update();
     }
 
-    _hud.update_currency(_cstuff.savefile.ultramatter);
+    if(old_currency != _cstuff.savefile.ultramatter){
+        _hud.update_currency(_cstuff.savefile.ultramatter);
+    }
 
 
     return result;
