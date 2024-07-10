@@ -205,10 +205,7 @@ bool combat_entity::on_thick_ground() const{
     for(uint16_t xtile = left_tile();
             xtile < current_right_tile; ++xtile){
 
-        bn::regular_bg_map_cell tile_type = _level.cell_at(xtile, current_foot_tile);
-        if(tile_type == _level._THICK_GROUND 
-        || tile_type == _level._LFT_CORNER 
-        || tile_type == _level._RFT_CORNER){
+        if(_level.tile_has_flag(bn::point(xtile, current_foot_tile), tile_flags::FLOOR)){
             return true;
         }
     }
