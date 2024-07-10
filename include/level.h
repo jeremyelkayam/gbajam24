@@ -41,8 +41,10 @@ public:
     bool is_up_slope(const bn::fixed_point &coords) const;
     bool is_down_slope(const bn::fixed_point &coords) const;
     bool is_ceiling(const bn::fixed_point &coords) const;
-    bool tile_has_flag(const bn::point &coords, const tile_flags &flags);
-    bool tile_has_flag(const bn::fixed_point &coords, const tile_flags &flags);
+    bool tile_has_flag(const bn::point &coords, 
+        const tile_flags &flags) const;
+    bool tile_has_flag(const bn::fixed_point &coords, 
+        const tile_flags &flags) const;
     void print_hitbox(const bn::fixed_rect &hitbox) const;
 
     // tile_flags GetTileFlagsByPosition(bn::fixed_point position) const;
@@ -61,7 +63,7 @@ private:
     bn::unordered_map<bn::regular_bg_map_cell, tile_flags, TILE_VARIATION_COUNT> _tile_flags;
 
 public: //temp. later we will do flags
-    const bn::regular_bg_map_cell _THIN_GROUND, _RF_WALL, _LF_WALL, _CEILING,
+    const bn::regular_bg_map_cell _RF_WALL, _LF_WALL, _CEILING,
         _RFT_CORNER, _LFT_CORNER, _RFB_CORNER, _LFB_CORNER,
         _UP_SLOPE, _DOWN_SLOPE, _UP_HALFSLOPE_1, _UP_HALFSLOPE_2,
         _DOWN_HALFSLOPE_1, _DOWN_HALFSLOPE_2;

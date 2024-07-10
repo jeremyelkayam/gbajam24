@@ -218,8 +218,8 @@ bool combat_entity::on_thin_ground() const{
     for(uint16_t xtile = left_tile();
             xtile < current_right_tile; ++xtile){
 
-        bn::regular_bg_map_cell tile_type = _level.cell_at(xtile, current_foot_tile);
-        if(tile_type == _level._THIN_GROUND){
+        bn::point coords(xtile, current_foot_tile);
+        if(_level.tile_has_flag(coords, tile_flags::THIN_FLOOR)){
             return true;
         }
     }

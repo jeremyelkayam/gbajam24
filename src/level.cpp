@@ -17,7 +17,6 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
     _bg_ptr(_bg.create_bg(_COLUMNS * 4,
         _ROWS * 4)),
     _cells(_bg_ptr.map().cells_ref().value()),
-    _THIN_GROUND(cell_at(3,0)),
     _RF_WALL(cell_at(5,0)),
     _LF_WALL(cell_at(7,0)),
     _CEILING(cell_at(9,0)),
@@ -127,17 +126,18 @@ bool level::is_thick_ground(const bn::fixed_point &coords) const{
     return !!(tile_flags::FLOOR & _tile_flags.at(cell_type));
 }
 
-bool level::tile_has_flag(const bn::point &coords, const tile_flags &flags){
-    return !!(flags & _tile_flags[cell_at(coords.x(), coords.y())]);
+bool level::tile_has_flag(const bn::point &coords, 
+        const tile_flags &flags) const {
+    return !!(flags & _tile_flags.at(cell_at(coords.x(), coords.y())));
 }
 
-bool level::tile_has_flag(const bn::fixed_point &coords, const tile_flags &flags){
-    return !!(flags & _tile_flags[cell_at(coords)]);
+bool level::tile_has_flag(const bn::fixed_point &coords, 
+        const tile_flags &flags) const {
+    return !!(flags & _tile_flags.at(cell_at(coords)));
 }
 
 bool level::is_thin_ground(const bn::fixed_point &coords) const{
-    bn::regular_bg_map_cell cell_type = cell_at(coords);
-    return cell_type == _THIN_GROUND;
+    return tile_has_flag(coords, tile_flags::THIN_FLOOR);
 }
 
 bool level::is_leftfacing_wall(const bn::fixed_point &coords) const{
