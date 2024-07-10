@@ -46,7 +46,7 @@ class hud {
 
     public:
 
-        hud();
+        hud(const uint16_t &crcy);
         void update();
         void update_player_hp(const uint8_t &hp);
         void update_currency(const uint16_t &crcy);

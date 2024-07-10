@@ -11,6 +11,7 @@ play_scene::play_scene(common_stuff &cstuff, const bn::regular_bg_item &map, con
     _level(_cam, map),
     _player(_cam,128,128,_level),
     _cam_mgr(_cam, _level, _player),
+    _hud(_cstuff.savefile.ultramatter),
     _bg(backdrop.create_bg(0,0)) {
 
     _bg.set_z_order(1);

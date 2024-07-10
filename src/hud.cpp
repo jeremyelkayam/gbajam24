@@ -7,7 +7,7 @@
 
 namespace aru {
 
-hud::hud() : 
+hud::hud(const uint16_t &crcy) : 
     _text_generator(fixed_8x8_sprite_font),
     _player_hp(bn::sprite_items::bar_5px.create_sprite(-110,-28)),
     _enemy_hp(bn::sprite_items::bar_3px.create_sprite(90,72)),
@@ -17,7 +17,7 @@ hud::hud() :
     _displayed_enemy_hp(10),
     _target_enemy_hp(10),
     _max_enemy_hp(10),
-    _currency_meter(10000, _text_generator)
+    _currency_meter(crcy, _text_generator)
 {
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();
@@ -114,7 +114,7 @@ hud_element::hud_element(const uint16_t &tracked_value, bn::sprite_text_generato
     _tracked(tracked_value),
     _delta(0) {
 
-    int_to_text(_text_sprites, _displayed, 90, -72);
+    int_to_text(_text_sprites, _displayed, 80, -72);
     
 }
 
@@ -126,7 +126,7 @@ void hud_element::update(){
             _displayed = common_stuff::bounded_addition(_displayed, _delta, _tracked);
         }
         _text_sprites.clear();
-        int_to_text(_text_sprites, _displayed, 90, -72);
+        int_to_text(_text_sprites, _displayed, 80, -72);
     }
 }
 
