@@ -9,20 +9,28 @@ namespace aru {
 
 
 class hud_element {
+    protected:
+        uint16_t _displayed, _target, _delta;
+
+    public:
+        hud_element(const uint16_t &tracked_value);
+        virtual ~hud_element() {return;}
+        virtual void update();
+        void set_tracked_value(const uint16_t &tracked_value);
+        virtual void set_visible(bool visible)=0;
+};
+
+class text_hud_element : public hud_element {
     private:
         bn::sprite_text_generator &_generator;
         bn::vector<bn::sprite_ptr, 8> _text_sprites;
-        uint16_t _displayed, _tracked, _delta;
         void int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, 
             const bn::fixed x, bn::fixed y);
-
     public:
-        hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator);
-        void update();
-        void set_tracked_value(const uint16_t &tracked_value);
-        void set_visible(bool visible) 
-            {common_stuff::set_sprite_arr_visible(
+        text_hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator);
+        virtual void set_visible(bool visible) {common_stuff::set_sprite_arr_visible(
                 _text_sprites, visible);}
+        virtual void update();
 };
 
 class hud { 
@@ -38,7 +46,7 @@ class hud {
         uint8_t _displayed_player_hp, _target_player_hp, _max_player_hp, 
             _displayed_enemy_hp, _target_enemy_hp, _max_enemy_hp;
 
-        hud_element _currency_meter;
+        text_hud_element _currency_meter;
 
 
         //todo: refactor the target values into const references to the actual values

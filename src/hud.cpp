@@ -99,7 +99,7 @@ void hud::show(){
 
 }
 
-void hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y){
+void text_hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y){
     bn::string<8> text_str;
     bn::ostringstream text_stream(text_str);
     text_stream << integer;
@@ -108,41 +108,50 @@ void hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16
     _generator.generate(x, y, text_str, sprites); 
 }
 
-hud_element::hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator) : 
-    _generator(generator),
+hud_element::hud_element(const uint16_t &tracked_value) : 
     _displayed(tracked_value),
-    _tracked(tracked_value),
-    _delta(0) {
-
-    int_to_text(_text_sprites, _displayed, 80, -72);
-    
+    _target(tracked_value),
+    _delta(0) {    
 }
 
 void hud_element::update(){
-    if(_displayed != _tracked){
-        if(_displayed > _tracked){
-            _displayed = common_stuff::bounded_subtraction(_displayed, _delta, _tracked);
-        }else if(_displayed < _tracked){
-            _displayed = common_stuff::bounded_addition(_displayed, _delta, _tracked);
+    if(_displayed != _target){
+        if(_displayed > _target){
+            _displayed = common_stuff::bounded_subtraction(_displayed, _delta, _target);
+        }else if(_displayed < _target){
+            _displayed = common_stuff::bounded_addition(_displayed, _delta, _target);
         }
-        _text_sprites.clear();
-        int_to_text(_text_sprites, _displayed, 80, -72);
     }
 }
 
 void hud_element::set_tracked_value(const uint16_t &tracked_value) {
-    _tracked = tracked_value;
+    _target = tracked_value;
     uint16_t diff = 0;
 
-    if(_displayed > _tracked){
-        diff = _displayed - _tracked;
-    }else if(_displayed < _tracked){
-        diff = _tracked - _displayed;
+    if(_displayed > _target){
+        diff = _displayed - _target;
+    }else if(_displayed < _target){
+        diff = _target - _displayed;
     }
     //should take 2 seconds to change.
     _delta = (diff * bn::fixed(.01666666666)).ceil_integer();
 }
 
 
+text_hud_element::text_hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator) : 
+    hud_element(tracked_value),
+    _generator(generator) {
+
+    int_to_text(_text_sprites, _displayed, 80, -72);
+    
+}
+
+void text_hud_element::update(){
+    if(_displayed != _target){
+        hud_element::update();
+        _text_sprites.clear();
+        int_to_text(_text_sprites, _displayed, 80, -72);
+    }
+}
 
 }

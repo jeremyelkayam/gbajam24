@@ -73,24 +73,24 @@ void player::update(){
 
     if(bn::keypad::left_pressed()){
         _target_xspeed = -_MAX_XSPEED;
-        _sprintcloud.set_horizontal_flip(true);
-        _sprite.set_horizontal_flip(false);
-        if(_grounded){
-            if(!_sprintcloud.visible()){
-                _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
-            }
+        if(_grounded && (!_sprintcloud.visible() || facing_right())){
+            _sprintcloud.set_horizontal_flip(true);
+            _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
         }
+        _sprite.set_horizontal_flip(false);
+
     }
 
 
 
     if(bn::keypad::right_pressed()){
         _target_xspeed = _MAX_XSPEED;
-        _sprintcloud.set_horizontal_flip(false);
-        _sprite.set_horizontal_flip(true);
-        if(!_sprintcloud.visible() && _grounded){
-            _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 15);
+        if(_grounded && (!_sprintcloud.visible() || !facing_right())){
+            //todo: should appear when you land as well
+           _sprintcloud.set_horizontal_flip(false);
+            _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
         }
+        _sprite.set_horizontal_flip(true);
         
     }
     
