@@ -33,7 +33,7 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
     _DOWN_HALFSLOPE_2(cell_at(29,0))
 {
     _tile_flags.clear();
-    _tile_flags.push_back(tile_flags::EMPTY);
+    _tile_flags.insert(0, tile_flags::EMPTY);
     int group = 0;
     BN_ASSERT(_cells[0] == 0, "First cell is not empty. check transparent color.");
     for (int i = 1; group < TILE_GROUP_COUNT; ++i)
@@ -46,49 +46,49 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
         switch (group)
         {
         case 0:
-            _tile_flags.push_back(tile_flags::FLOOR);
+            _tile_flags.insert(_cells[i], tile_flags::FLOOR);
             break;
         case 1:
-            _tile_flags.push_back(tile_flags::THIN_FLOOR);
+            _tile_flags.insert(_cells[i], tile_flags::THIN_FLOOR);
             break;
         case 2:
-            _tile_flags.push_back(tile_flags::LEFT_BLOCKING_WALL);
+            _tile_flags.insert(_cells[i], tile_flags::LEFT_BLOCKING_WALL);
             break;
         case 3:
-            _tile_flags.push_back(tile_flags::RIGHT_BLOCKING_WALL);
+            _tile_flags.insert(_cells[i], tile_flags::RIGHT_BLOCKING_WALL);
             break;
         case 4:
-            _tile_flags.push_back(tile_flags::CEILING);
+            _tile_flags.insert(_cells[i], tile_flags::CEILING);
             break;
         case 5:
-            _tile_flags.push_back(tile_flags::FLOOR | tile_flags::LEFT_BLOCKING_WALL);
+            _tile_flags.insert(_cells[i], tile_flags::FLOOR | tile_flags::LEFT_BLOCKING_WALL);
             break;
         case 6:
-            _tile_flags.push_back(tile_flags::FLOOR | tile_flags::RIGHT_BLOCKING_WALL);
+            _tile_flags.insert(_cells[i], tile_flags::FLOOR | tile_flags::RIGHT_BLOCKING_WALL);
             break;
         case 7:
-            _tile_flags.push_back(tile_flags::CEILING | tile_flags::LEFT_BLOCKING_WALL);
+            _tile_flags.insert(_cells[i], tile_flags::CEILING | tile_flags::LEFT_BLOCKING_WALL);
             break;
         case 8:
-            _tile_flags.push_back(tile_flags::CEILING | tile_flags::RIGHT_BLOCKING_WALL);
+            _tile_flags.insert(_cells[i], tile_flags::CEILING | tile_flags::RIGHT_BLOCKING_WALL);
             break;
         case 9:
-            _tile_flags.push_back(tile_flags::UP_SLOPE);
+            _tile_flags.insert(_cells[i], tile_flags::UP_SLOPE);
             break;
         case 10:
-            _tile_flags.push_back(tile_flags::DOWN_SLOPE);
+            _tile_flags.insert(_cells[i], tile_flags::DOWN_SLOPE);
             break;
         case 11:
-            _tile_flags.push_back(tile_flags::UP_HALFSLOPE_A);
+            _tile_flags.insert(_cells[i], tile_flags::UP_HALFSLOPE_A);
             break;
         case 12:
-            _tile_flags.push_back(tile_flags::UP_HALFSLOPE_B);
+            _tile_flags.insert(_cells[i], tile_flags::UP_HALFSLOPE_B);
             break;
         case 13:
-            _tile_flags.push_back(tile_flags::DOWN_HALFSLOPE_A);
+            _tile_flags.insert(_cells[i], tile_flags::DOWN_HALFSLOPE_A);
             break;
         case 14:
-            _tile_flags.push_back(tile_flags::DOWN_HALFSLOPE_B);
+            _tile_flags.insert(_cells[i], tile_flags::DOWN_HALFSLOPE_B);
             break;
         default:
             BN_ERROR("Invalid tile group number");
@@ -124,7 +124,7 @@ bn::regular_bg_map_cell level::cell_at(const unsigned short &xtile, const unsign
 
 bool level::is_thick_ground(const bn::fixed_point &coords) const{
     bn::regular_bg_map_cell cell_type = cell_at(coords);
-    return !!(tile_flags::FLOOR & _tile_flags[cell_type]);
+    return !!(tile_flags::FLOOR & _tile_flags.at(cell_type));
 }
 
 bool level::tile_has_flag(const bn::point &coords, const tile_flags &flags){

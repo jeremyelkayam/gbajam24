@@ -4,7 +4,7 @@
 #include <bn_regular_bg_item.h>
 #include <bn_camera_ptr.h>
 #include <bn_fixed_rect.h>
-#include "tile_info.h"
+#include <bn_unordered_map.h>
 
 
 namespace aru
@@ -58,7 +58,7 @@ private:
     static constexpr int TILE_VARIATION_COUNT = 32;
     static constexpr int TILE_GROUP_COUNT = 15;
 
-    bn::vector<tile_flags, TILE_VARIATION_COUNT> _tile_flags;
+    bn::unordered_map<bn::regular_bg_map_cell, tile_flags, TILE_VARIATION_COUNT> _tile_flags;
 
 public: //temp. later we will do flags
     const bn::regular_bg_map_cell _THIN_GROUND, _RF_WALL, _LF_WALL, _CEILING,
