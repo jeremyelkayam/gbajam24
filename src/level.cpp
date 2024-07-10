@@ -16,17 +16,7 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
     _COLUMNS(_bg.map_item().dimensions().width()),
     _bg_ptr(_bg.create_bg(_COLUMNS * 4,
         _ROWS * 4)),
-    _cells(_bg_ptr.map().cells_ref().value()),
-    _RFT_CORNER(cell_at(11,0)),
-    _LFT_CORNER(cell_at(13,0)),
-    _RFB_CORNER(cell_at(15,0)),
-    _LFB_CORNER(cell_at(17,0)),
-    _UP_SLOPE(cell_at(19,0)),
-    _DOWN_SLOPE(cell_at(21,0)),
-    _UP_HALFSLOPE_1(cell_at(23,0)),
-    _UP_HALFSLOPE_2(cell_at(25,0)),
-    _DOWN_HALFSLOPE_1(cell_at(27,0)),
-    _DOWN_HALFSLOPE_2(cell_at(29,0))
+    _cells(_bg_ptr.map().cells_ref().value())
 {
     _tile_flags.clear();
     _tile_flags.insert(0, tile_flags::EMPTY);
@@ -151,13 +141,11 @@ bool level::is_rightfacing_wall(const bn::fixed_point &coords) const{
 }
 
 bool level::is_up_slope(const bn::fixed_point &coords) const{
-    bn::regular_bg_map_cell cell_type = cell_at(coords);
-    return cell_type == _UP_SLOPE;
+    return tile_has_flag(coords, tile_flags::UP_SLOPE);
 }
 
 bool level::is_down_slope(const bn::fixed_point &coords) const{
-    bn::regular_bg_map_cell cell_type = cell_at(coords);
-    return cell_type == _DOWN_SLOPE;
+    return tile_has_flag(coords, tile_flags::DOWN_SLOPE);
 }
 
 bool level::is_ceiling(const bn::fixed_point &coords) const{

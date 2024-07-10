@@ -48,12 +48,10 @@ void combat_entity::update(){
         
         bn::regular_bg_map_cell tile_type = _level.cell_at(center_xtile, ytile);
 
-        if(tile_type == _level._UP_SLOPE || 
-           tile_type == _level._DOWN_SLOPE ||
-           tile_type == _level._UP_HALFSLOPE_1 || 
-           tile_type == _level._DOWN_HALFSLOPE_1 ||
-           tile_type == _level._UP_HALFSLOPE_2 || 
-           tile_type == _level._DOWN_HALFSLOPE_2){
+        if(_level.tile_has_flag(tile_type, 
+            tile_flags::UP_SLOPE | tile_flags:: DOWN_SLOPE | 
+            tile_flags::UP_HALFSLOPE_A | tile_flags:: UP_HALFSLOPE_B | 
+            tile_flags::DOWN_HALFSLOPE_A | tile_flags:: DOWN_HALFSLOPE_B)){
             // BN_LOG("ur on an up slope");
             sloped_ground_ytile = ytile;
             sloped_ground_type = tile_type;
@@ -115,27 +113,33 @@ void combat_entity::update(){
         //y=mx+b
         bn::fixed b;
         bn::fixed m;
-        if(sloped_ground_type == _level._UP_SLOPE){
+        if(_level.tile_has_flag(sloped_ground_type, 
+                tile_flags::UP_SLOPE)){
             m =  -1;
             b = ((center_xtile + sloped_ground_ytile + 1) * 8);
             _xspeed *= INVSQRT2;
-        }else if(sloped_ground_type == _level._UP_HALFSLOPE_1){
+        }else if(_level.tile_has_flag(sloped_ground_type, 
+                tile_flags::UP_HALFSLOPE_A)){
             m =  -0.5;
             b = ((bn::fixed(center_xtile) * bn::fixed(0.5)).floor_integer()
                  + sloped_ground_ytile + 1) * 8;
             _xspeed *= INVSQRT54THS;
-        }else if(sloped_ground_type == _level._UP_HALFSLOPE_2){
+        }else if(_level.tile_has_flag(sloped_ground_type, 
+                tile_flags::UP_HALFSLOPE_B)){
             m =  -0.5;
             b = ((bn::fixed(center_xtile - 1) * bn::fixed(0.5)).floor_integer()
                  + sloped_ground_ytile + 1) * 8;
             _xspeed *= INVSQRT54THS;
-        }else if(sloped_ground_type == _level._DOWN_SLOPE){
+        }else if(_level.tile_has_flag(sloped_ground_type, 
+                tile_flags::DOWN_SLOPE)){
             m =  1;
             b = -((center_xtile - sloped_ground_ytile) * 8);
-        }else if(sloped_ground_type == _level._DOWN_HALFSLOPE_1){
+        }else if(_level.tile_has_flag(sloped_ground_type, 
+                tile_flags::DOWN_HALFSLOPE_A)){
             m =  0.5;
             b = ((sloped_ground_ytile - bn::fixed(center_xtile)*bn::fixed(0.5)) * 8);
-        }else if(sloped_ground_type == _level._DOWN_HALFSLOPE_2){
+        }else if(_level.tile_has_flag(sloped_ground_type, 
+                tile_flags::DOWN_HALFSLOPE_B)){
             m =  0.5;
             b = ((sloped_ground_ytile - bn::fixed(center_xtile - 1)*bn::fixed(0.5)) * 8);
         }

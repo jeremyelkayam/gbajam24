@@ -47,8 +47,12 @@ public:
         const tile_flags &flags) const;
     void print_hitbox(const bn::fixed_rect &hitbox) const;
 
-    // tile_flags GetTileFlagsByPosition(bn::fixed_point position) const;
 
+    bn::regular_bg_map_cell cell_at(const bn::fixed_point &coords) const;
+    bn::regular_bg_map_cell cell_at(const unsigned short &xtile, const unsigned short &ytile) const;
+
+    bool tile_has_flag(const bn::regular_bg_map_cell &tile_index, 
+        const tile_flags &flags) const;
 
 private:
     bn::regular_bg_item _bg;
@@ -61,18 +65,6 @@ private:
     static constexpr int TILE_GROUP_COUNT = 15;
 
     bn::unordered_map<bn::regular_bg_map_cell, tile_flags, TILE_VARIATION_COUNT> _tile_flags;
-
-public: //temp. later we will do flags
-    const bn::regular_bg_map_cell
-        _RFT_CORNER, _LFT_CORNER, _RFB_CORNER, _LFB_CORNER,
-        _UP_SLOPE, _DOWN_SLOPE, _UP_HALFSLOPE_1, _UP_HALFSLOPE_2,
-        _DOWN_HALFSLOPE_1, _DOWN_HALFSLOPE_2;
-    bn::regular_bg_map_cell cell_at(const bn::fixed_point &coords) const;
-    bn::regular_bg_map_cell cell_at(const unsigned short &xtile, const unsigned short &ytile) const;
-
-    bool tile_has_flag(const bn::regular_bg_map_cell &tile_index, 
-        const tile_flags &flags) const;
-
 };
 
 [[nodiscard]] constexpr tile_flags operator|(tile_flags f1, tile_flags f2)
