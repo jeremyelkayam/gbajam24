@@ -63,7 +63,7 @@ private:
     bn::unordered_map<bn::regular_bg_map_cell, tile_flags, TILE_VARIATION_COUNT> _tile_flags;
 
 public: //temp. later we will do flags
-    const bn::regular_bg_map_cell _LF_WALL, _CEILING,
+    const bn::regular_bg_map_cell
         _RFT_CORNER, _LFT_CORNER, _RFB_CORNER, _LFB_CORNER,
         _UP_SLOPE, _DOWN_SLOPE, _UP_HALFSLOPE_1, _UP_HALFSLOPE_2,
         _DOWN_HALFSLOPE_1, _DOWN_HALFSLOPE_2;

@@ -17,8 +17,6 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
     _bg_ptr(_bg.create_bg(_COLUMNS * 4,
         _ROWS * 4)),
     _cells(_bg_ptr.map().cells_ref().value()),
-    _LF_WALL(cell_at(7,0)),
-    _CEILING(cell_at(9,0)),
     _RFT_CORNER(cell_at(11,0)),
     _LFT_CORNER(cell_at(13,0)),
     _RFB_CORNER(cell_at(15,0)),
@@ -145,10 +143,7 @@ bool level::is_thin_ground(const bn::fixed_point &coords) const{
 }
 
 bool level::is_leftfacing_wall(const bn::fixed_point &coords) const{
-    bn::regular_bg_map_cell cell_type = cell_at(coords);
-    return cell_type == _LF_WALL
-        || cell_type == _LFT_CORNER
-        || cell_type == _LFB_CORNER;
+    return tile_has_flag(coords, tile_flags::RIGHT_BLOCKING_WALL);
 }
 
 bool level::is_rightfacing_wall(const bn::fixed_point &coords) const{
@@ -166,9 +161,7 @@ bool level::is_down_slope(const bn::fixed_point &coords) const{
 }
 
 bool level::is_ceiling(const bn::fixed_point &coords) const{
-    bn::regular_bg_map_cell cell_type = cell_at(coords);
-    return cell_type == _CEILING;
-}
+    return tile_has_flag(coords, tile_flags::CEILING);}
 
 void level::print_hitbox(const bn::fixed_rect &hitbox) const{
     for(bn::fixed ycor = hitbox.top(); ycor <= hitbox.bottom(); ycor += 8){
