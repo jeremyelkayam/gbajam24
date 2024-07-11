@@ -6,10 +6,11 @@
 
 namespace aru {
 
-box::box(bn::sprite_text_generator &text_generator) : 
+box::box(bn::sprite_text_generator &text_generator, uint8_t anim_index) : 
     _text_generator(text_generator),
     _box(bn::regular_bg_items::textbox.create_bg(0, 0)),
-    _done(false) {
+    _done(false),
+    _anim_index(anim_index)  {
     _box.set_priority(2);
     set_visible(false);
 }
@@ -23,6 +24,11 @@ bn::vector<bn::string<64>, 24> box::split_into_lines(const char *text){
     uint16_t line_start = 0;
     uint16_t line_end = 0;
     for(uint16_t pos = 0; text[pos] != '\0'; ++pos){
+        if(text[pos] == '$'){
+            ++pos;
+            BN_ASSERT(text[pos] != '\0');
+            ++pos;
+        }
         char c = text[pos];
         line_width += cute_prop_sprite_font_character_widths[c - ' '];
         if(line_width > max_line_width){

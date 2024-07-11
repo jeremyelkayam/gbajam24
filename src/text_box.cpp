@@ -22,14 +22,14 @@ text_box::text_box(bn::sprite_text_generator &text_generator, const char *text,
     if(top_box){
         _box.set_y(-104);
     }
-    
     setup_text_sprites();
 
 }
 
 text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, 
-    const bn::sprite_item &portrait, bool top_box, bool rf_portrait) : 
+    const bn::sprite_item &portrait, bool top_box, bool rf_portrait, uint8_t anim_index) : 
         text_box(text_generator, text, top_box) {
+    _anim_index = anim_index;
     _portrait.emplace(portrait.create_sprite(-76,0));
 
     _portrait->set_bg_priority(0);
@@ -46,6 +46,26 @@ void text_box::setup_text_sprites(){
     _text_generator.set_left_alignment();
     _text_generator.set_one_sprite_per_character(true);
     for(uint8_t i = _current_line; (i < _current_line+3) && (i < _text.size()); i++ ){    
+
+        // bn::string<64> str = _text.at(i);
+        // char *ctl_begin = str.begin();
+        // char *ctl_end = str.begin();
+
+        // for (auto str_it = str.begin(); str_it != str.end(); ++str_it) {
+        //     char c = *str_it;
+        //     if(c == '$'){
+        //         // BN_LOG("control character found");
+        //         ctl_begin = str_it;
+        //         ctl_end = str_it+2;
+        //         _anim_index = *(str_it + 1) - '0';
+        //         break;
+        //     }
+        // }
+
+        // str.erase(ctl_begin, ctl_end);
+        // BN_LOG("new index ", _anim_index);
+
+
         _text_generator.generate(_box.x() - 112,_box.y() + 38 + (i - _current_line)*14 - (_top_box ? 3 : 0), _text.at(i), _text_sprites);
     }
     for(bn::sprite_ptr &sprite : _text_sprites){

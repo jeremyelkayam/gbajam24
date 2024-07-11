@@ -17,9 +17,10 @@ namespace aru {
             text_box(bn::sprite_text_generator &text_generator, const char *text, 
                 bool top_box);
             text_box(bn::sprite_text_generator &text_generator, const char *text, 
-                const bn::sprite_item &portrait, bool top_box, bool rf_portrait);
+                const bn::sprite_item &portrait, bool top_box, bool rf_portrait, uint8_t anim_index = 0);
             void update();
-            virtual bool input_required() {return false;}
+            virtual bool input_required() const {return false;}
+            uint8_t anim_index() const {return _anim_index;}
 
     };
 }

@@ -31,10 +31,13 @@ slung::slung(const bn::camera_ptr &cam,
         interactable_entity(cam, x, y, 50,30,bn::sprite_items::slung, cstuff)
 {
     _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 10, 
-        bn::sprite_items::slung.tiles_item(), 0, 2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 0, 1, 1, 1));
+        bn::sprite_items::slung.tiles_item(), 2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 0, 0, 1, 1, 1));
 
     _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 7, 
         bn::sprite_items::slung.tiles_item(), 4, 4, 3, 4, 4, 5, 4, 5, 4, 5));
+
+    _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 20, 
+        bn::sprite_items::slung.tiles_item(), 6, 7, 6, 8, 9, 8));
 
 }
 
@@ -42,9 +45,8 @@ bn::deque<bn::unique_ptr<box>, 16> slung::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
     result.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
         "i can save the game for you if ya want", 
-    bn::sprite_items::portrait, true, true)));         
-    result.push_back(bn::unique_ptr<save_selection_box>(new save_selection_box(_cstuff)));
-    _current_anim = 1;
+    bn::sprite_items::portrait, true, true, 1)));         
+    result.push_back(bn::unique_ptr<save_selection_box>(new save_selection_box(_cstuff, 2)));
     return result;
 }
 
@@ -75,6 +77,15 @@ bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
             _cstuff.text_generator, _cstuff.savefile.hover_upgrade_lvl,
             _cstuff.savefile.ultramatter, 1000, "HOVER")));
     return result;
+}
+
+void interactable_entity::set_current_anim(uint8_t index){
+    BN_ASSERT(index < _anims.size());
+    if(_current_anim != index){
+        _current_anim = index;
+        _anims.at(_current_anim).update();        
+    }
+
 }
 
 }

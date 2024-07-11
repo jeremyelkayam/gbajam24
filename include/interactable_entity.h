@@ -23,6 +23,7 @@ public:
     
     virtual ~interactable_entity() {return;}
     virtual void update();
+    void set_current_anim(uint8_t index);
     virtual bn::deque<bn::unique_ptr<box>, 16> interact_boxes()=0;
 
 protected:

@@ -60,6 +60,14 @@ bn::optional<scene_type> lab_scene::update()
     for(bn::unique_ptr<interactable_entity> &ent : _interactables){
         ent->update();
 
+        if(_interacting_with){
+            if(_text_boxes.empty()){
+                _interacting_with->set_current_anim(0);
+            }else{
+                _interacting_with->set_current_anim(_text_boxes.front()->anim_index());
+            }
+        }
+
         //this guarantees that you can't open a text box the same frame you close it...
         if(!text_box_frame && _player.hitbox().intersects(ent->hitbox())) {
             _interact_icon.set_position(ent->x(), ent->hitbox().top() - 16);
@@ -67,7 +75,8 @@ bn::optional<scene_type> lab_scene::update()
 
             if(bn::keypad::a_pressed()){
                 _text_boxes = ent->interact_boxes();
-                _player.move_to(ent->x() + (ent->facing_right() ? 30 : -30), !ent->facing_right());
+                _player.move_to(ent->x() + (ent->facing_right() ? 35 : -35), !ent->facing_right());
+                _interacting_with = ent.get();
             }
 
             break;

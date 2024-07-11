@@ -6,7 +6,7 @@
 
 namespace aru {
 
-save_selection_box::save_selection_box(common_stuff &cstuff) : 
+save_selection_box::save_selection_box(common_stuff &cstuff, uint8_t anim_index) : 
     selection_box(cstuff.text_generator, "Save game data?", 
             []{
                  bn::vector<bn::string<8>,4> result;
@@ -17,7 +17,7 @@ save_selection_box::save_selection_box(common_stuff &cstuff) :
         ),
     _cstuff(cstuff)
 {
-    
+    _anim_index = anim_index;
 }
 
 void save_selection_box::update(){
@@ -36,7 +36,7 @@ bn::unique_ptr<box> save_selection_box::next_box(){
     BN_ASSERT(_done);
     return bn::unique_ptr<box>(new text_box(_cstuff.text_generator, 
             _next_text.c_str(), 
-            bn::sprite_items::portrait, true, true));
+            bn::sprite_items::portrait, true, true, 1));
     
 
 }

@@ -75,8 +75,7 @@ void player::update(){
         if(_target_xcor > x()){
             _target_xspeed = _MAX_XSPEED;
             _sprite.set_horizontal_flip(true);
-        }        
-        BN_LOG("target xcor - x", *_target_xcor - x());
+        }
         //todo: less c/p'd code here
         if(-_MAX_XSPEED < (*_target_xcor - x()) && (*_target_xcor - x()) < _MAX_XSPEED ){
             _target_xspeed = 0;

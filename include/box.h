@@ -14,6 +14,7 @@ namespace aru {
             bn::vector<bn::sprite_ptr, 256> _text_sprites;
             bn::regular_bg_ptr _box;
             bool _done;
+            uint8_t _anim_index;
 
             /*
              * Formats a longer string into up to 24 separate strings, separated
@@ -26,14 +27,15 @@ namespace aru {
 
 
         public:
-            box(bn::sprite_text_generator &text_generator);
+            box(bn::sprite_text_generator &text_generator, uint8_t anim_index = 0);
             virtual ~box() {return;} //ayy, oracle vm where u at
             virtual bool done() {return _done;}
             virtual void update()=0;
             virtual void set_visible(bool visible);
             virtual bn::unique_ptr<box> next_box();
+            uint8_t anim_index() const {return _anim_index;}
 
-            virtual bool input_required() {return true;}
+            virtual bool input_required() const {return true;}
 
     };
 }
