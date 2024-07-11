@@ -28,6 +28,7 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
         bn::sprite_items::aru.tiles_item(), 19, 20)),
     _run(bn::create_sprite_animate_action_forever(_sprite, 4, 
         bn::sprite_items::aru.tiles_item(), 9, 10, 11, 12, 13, 14, 15, 16)),
+    _face_right_after_moving(false),
     _DUSTCLOUD_OFFSET(20),
     _jbuf_timer(0),
     _coyote_timer(0),
@@ -75,10 +76,12 @@ void player::update(){
             _target_xspeed = _MAX_XSPEED;
             _sprite.set_horizontal_flip(true);
         }        
+        BN_LOG("target xcor - x", *_target_xcor - x());
         //todo: less c/p'd code here
         if(-_MAX_XSPEED < (*_target_xcor - x()) && (*_target_xcor - x()) < _MAX_XSPEED ){
             _target_xspeed = 0;
             _current_state = PSTATE::STAND;
+            _sprite.set_horizontal_flip(_face_right_after_moving);
         }
     }else{
 
@@ -203,9 +206,10 @@ void player::jump(){
     _current_state = PSTATE::JUMP;
 }
 
-void player::move_to(bn::fixed xcor){
+void player::move_to(const bn::fixed &xcor, const bool &face_right){
     _target_xcor.emplace(xcor);
     _current_state = PSTATE::RUN;
+    _face_right_after_moving = face_right;
     start_anim(_run);
 }
 void player::clear_target(){

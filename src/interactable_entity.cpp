@@ -66,7 +66,7 @@ hover_upgrader::hover_upgrader(const bn::camera_ptr &cam,
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
         interactable_entity(cam, x, y, 50,40,bn::sprite_items::hover_upgrade, cstuff)
 {
-    
+    _sprite.set_horizontal_flip(true);
 }
 
 bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){

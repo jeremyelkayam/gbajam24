@@ -20,7 +20,6 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _interactables.emplace_front(bn::unique_ptr<slung>(new slung(_cam, 350, 208, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 450, 190, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 100, 202, _cstuff)));
-    
 }
 
 bn::optional<scene_type> lab_scene::update()
@@ -68,7 +67,7 @@ bn::optional<scene_type> lab_scene::update()
 
             if(bn::keypad::a_pressed()){
                 _text_boxes = ent->interact_boxes();
-                _player.move_to(ent->x() - 20);
+                _player.move_to(ent->x() + (ent->facing_right() ? 30 : -30), !ent->facing_right());
             }
 
             break;
