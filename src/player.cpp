@@ -66,88 +66,105 @@ void player::update(){
             break;
     }
 
-    if((bn::keypad::left_held() || bn::keypad::right_held()) && _current_state == PSTATE::STAND){
-        _current_state = PSTATE::RUN;
-        start_anim(_run);
-    }
-
-    if(bn::keypad::left_pressed()){
-        _target_xspeed = -_MAX_XSPEED;
-        if(_grounded && (!_sprintcloud.visible() || facing_right())){
-            _sprintcloud.set_horizontal_flip(true);
-            _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
+    if(_target_xcor){
+        if(_target_xcor < x()){
+            _target_xspeed = -_MAX_XSPEED;
+            _sprite.set_horizontal_flip(false);
         }
-        _sprite.set_horizontal_flip(false);
-
-    }
-
-
-
-    if(bn::keypad::right_pressed()){
-        _target_xspeed = _MAX_XSPEED;
-        if(_grounded && (!_sprintcloud.visible() || !facing_right())){
-            //todo: should appear when you land as well
-           _sprintcloud.set_horizontal_flip(false);
-            _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
-        }
-        _sprite.set_horizontal_flip(true);
-        
-    }
-    
-    if(!bn::keypad::left_held() && !bn::keypad::right_held()){
-        _target_xspeed = 0;
-        if(_current_state == PSTATE::RUN){
-            start_anim(_idle);
+        if(_target_xcor > x()){
+            _target_xspeed = _MAX_XSPEED;
+            _sprite.set_horizontal_flip(true);
+        }        
+        //todo: less c/p'd code here
+        if(-_MAX_XSPEED < (*_target_xcor - x()) && (*_target_xcor - x()) < _MAX_XSPEED ){
+            _target_xspeed = 0;
             _current_state = PSTATE::STAND;
         }
-    }
-    
-
-    if(_grounded){ 
-        _hover_timer = PLAYER_HOVER_TIME;
-        
-        if(bn::keypad::a_pressed() || _jbuf_timer){
-            _current_state = PSTATE::JUMPSQUAT;
-            start_anim(_jumpsquat);
-        }
     }else{
-        if(bn::keypad::a_pressed()){
-            if(_coyote_timer){
+
+        if((bn::keypad::left_held() || bn::keypad::right_held()) && _current_state == PSTATE::STAND){
+            _current_state = PSTATE::RUN;
+            start_anim(_run);
+        }
+
+        if(bn::keypad::left_pressed()){
+            _target_xspeed = -_MAX_XSPEED;
+            if(_grounded && (!_sprintcloud.visible() || facing_right())){
+                _sprintcloud.set_horizontal_flip(true);
+                _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
+            }
+            _sprite.set_horizontal_flip(false);
+
+        }
+
+
+
+        if(bn::keypad::right_pressed()){
+            _target_xspeed = _MAX_XSPEED;
+            if(_grounded && (!_sprintcloud.visible() || !facing_right())){
+                //todo: should appear when you land as well
+            _sprintcloud.set_horizontal_flip(false);
+                _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
+            }
+            _sprite.set_horizontal_flip(true);
+            
+        }
+        
+        if(!bn::keypad::left_held() && !bn::keypad::right_held()){
+            _target_xspeed = 0;
+            if(_current_state == PSTATE::RUN){
+                start_anim(_idle);
+                _current_state = PSTATE::STAND;
+            }
+        }
+        
+
+        if(_grounded){ 
+            _hover_timer = PLAYER_HOVER_TIME;
+            
+            if(bn::keypad::a_pressed() || _jbuf_timer){
                 _current_state = PSTATE::JUMPSQUAT;
                 start_anim(_jumpsquat);
             }
-        }
-        if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
-            _current_state = PSTATE::HOVER;
-            start_anim(_hover);
-        }
-
-        if(_current_state == PSTATE::HOVER){
-            --_hover_timer;
-            _yspeed -= 0.5;
-            if(_yspeed < -1){
-                _yspeed = -1;
+        }else{
+            if(bn::keypad::a_pressed()){
+                if(_coyote_timer){
+                    _current_state = PSTATE::JUMPSQUAT;
+                    start_anim(_jumpsquat);
+                }
+            }
+            if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
+                _current_state = PSTATE::HOVER;
+                start_anim(_hover);
             }
 
-            if(_hover_timer == 0 || bn::keypad::a_released()){
-               _current_state = PSTATE::JUMP;
+            if(_current_state == PSTATE::HOVER){
+                --_hover_timer;
+                _yspeed -= 0.5;
+                if(_yspeed < -1){
+                    _yspeed = -1;
+                }
+
+                if(_hover_timer == 0 || bn::keypad::a_released()){
+                _current_state = PSTATE::JUMP;
+                }
             }
+
+            if(_current_state != PSTATE::HOVER && _yspeed > 0){ 
+                _current_state = PSTATE::FALL;
+                start_anim(_fall);
+            }
+
         }
 
-        if(_current_state != PSTATE::HOVER && _yspeed > 0){ 
-            _current_state = PSTATE::FALL;
-            start_anim(_fall);
+        if(bn::keypad::b_pressed()){
+            shoot();
         }
 
     }
 
-    if(bn::keypad::b_pressed()){
-        shoot();
-    }
 
-
-
-    
+    //todo: add coyote time back
     // if(!grounded && was_grounded && _yspeed >=0){
     //     _coyote_timer = 12; // 12 frames is 0.2s
     // }
@@ -184,6 +201,15 @@ void player::jump(){
     _jumpcloud.start(_hitbox.x(), _hitbox.y() + 8);
     start_anim(_jump);
     _current_state = PSTATE::JUMP;
+}
+
+void player::move_to(bn::fixed xcor){
+    _target_xcor.emplace(xcor);
+    _current_state = PSTATE::RUN;
+    start_anim(_run);
+}
+void player::clear_target(){
+    _target_xcor.reset();
 }
 
 bool player::on_thin_ground() const{

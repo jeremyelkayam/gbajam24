@@ -36,7 +36,7 @@ bn::unique_ptr<box> save_selection_box::next_box(){
     BN_ASSERT(_done);
     return bn::unique_ptr<box>(new text_box(_cstuff.text_generator, 
             _next_text.c_str(), 
-            bn::sprite_items::portrait, false, true));
+            bn::sprite_items::portrait, true, true));
     
 
 }

@@ -32,14 +32,19 @@ slung::slung(const bn::camera_ptr &cam,
 {
     _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 10, 
         bn::sprite_items::slung.tiles_item(), 0, 2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 0, 1, 1, 1));
+
+    _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 7, 
+        bn::sprite_items::slung.tiles_item(), 4, 4, 3, 4, 4, 5, 4, 5, 4, 5));
+
 }
 
 bn::deque<bn::unique_ptr<box>, 16> slung::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
     result.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
         "i can save the game for you if ya want", 
-    bn::sprite_items::portrait, false, true)));         
+    bn::sprite_items::portrait, true, true)));         
     result.push_back(bn::unique_ptr<save_selection_box>(new save_selection_box(_cstuff)));
+    _current_anim = 1;
     return result;
 }
 

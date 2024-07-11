@@ -27,6 +27,8 @@ public:
     virtual void update() override;
     virtual void jump() override;
     bool check_bullet_collision(enemy &enemy);
+    void move_to(bn::fixed xcor);
+    void clear_target();
 
 private:
     effect _jumpcloud, _sprintcloud;
@@ -38,6 +40,7 @@ private:
     bn::sprite_animate_action<2> _hover;
     bn::sprite_animate_action<8> _run;
     bn::forward_list<bullet, 8> _bullets;
+    bn::optional<bn::fixed> _target_xcor;
 
     static bool bullet_deletable(bullet &b) {return b.should_be_deleted();}
 

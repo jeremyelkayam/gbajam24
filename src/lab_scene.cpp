@@ -27,6 +27,7 @@ bn::optional<scene_type> lab_scene::update()
 {
     bn::optional<scene_type> result;
     uint16_t old_currency = _cstuff.savefile.ultramatter;
+    bool text_box_frame = false;
 
     if(!_text_boxes.empty()){
         
@@ -50,34 +51,39 @@ bn::optional<scene_type> lab_scene::update()
                 _text_boxes.pop_front();
             }
         }
+        text_box_frame = true;
     }else{
-
-        bool can_interact = false;
-
-        for(bn::unique_ptr<interactable_entity> &ent : _interactables){
-            ent->update();
-
-            if(_player.hitbox().intersects(ent->hitbox())) {
-                _interact_icon.set_position(ent->x(), ent->hitbox().top() - 16);
-                can_interact = true;
-
-                if(bn::keypad::a_pressed()){
-                    _text_boxes = ent->interact_boxes();
-                }
-
-
-                break;
-            }
-        }
-        _interact_icon.set_visible(can_interact);
-        _interact_icon_anim.update();
-
-        if(!result && !(can_interact && bn::keypad::a_pressed())) result = play_scene::update();
+        _player.clear_target();
     }
+
+    bool can_interact = false;
+
+    for(bn::unique_ptr<interactable_entity> &ent : _interactables){
+        ent->update();
+
+        //this guarantees that you can't open a text box the same frame you close it...
+        if(!text_box_frame && _player.hitbox().intersects(ent->hitbox())) {
+            _interact_icon.set_position(ent->x(), ent->hitbox().top() - 16);
+            can_interact = true;
+
+            if(bn::keypad::a_pressed()){
+                _text_boxes = ent->interact_boxes();
+                _player.move_to(ent->x() - 20);
+            }
+
+            break;
+        }
+    }
+    _interact_icon.set_visible(can_interact);
+    _interact_icon_anim.update();
+
+    if(!result && !(can_interact && bn::keypad::a_pressed())) result = play_scene::update();
+    
 
     if(old_currency != _cstuff.savefile.ultramatter){
         _hud.update_currency(_cstuff.savefile.ultramatter);
     }
+
 
 
     return result;
