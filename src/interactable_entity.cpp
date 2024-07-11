@@ -1,7 +1,9 @@
 #include "interactable_entity.h"
 #include "bn_sprite_items_slung.h"
 #include "bn_sprite_items_portrait.h"
+#include "bn_sprite_items_gun_upgrade.h"
 #include "bn_sprite_items_hover_upgrade.h"
+#include "bn_sprite_items_sword_upgrade.h"
 #include "bn_sprite_items_dummy_sprite.h"
 #include "text_box.h"
 #include "save_selection_box.h"
@@ -26,6 +28,17 @@ void interactable_entity::update(){
     }
 }
 
+void interactable_entity::set_current_anim(uint8_t index){
+    if(!_anims.empty()){
+        BN_ASSERT(index < _anims.size());
+        if(_current_anim != index){
+            _current_anim = index;
+            _anims.at(_current_anim).update();        
+        }
+    }
+
+}
+
 slung::slung(const bn::camera_ptr &cam, 
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
         interactable_entity(cam, x, y, 50,30,bn::sprite_items::slung, cstuff)
@@ -40,6 +53,8 @@ slung::slung(const bn::camera_ptr &cam,
         bn::sprite_items::slung.tiles_item(), 6, 7, 6, 8, 9, 8));
 
 }
+
+
 
 bn::deque<bn::unique_ptr<box>, 16> slung::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
@@ -68,7 +83,7 @@ hover_upgrader::hover_upgrader(const bn::camera_ptr &cam,
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
         interactable_entity(cam, x, y, 50,40,bn::sprite_items::hover_upgrade, cstuff)
 {
-    _sprite.set_horizontal_flip(true);
+
 }
 
 bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
@@ -79,13 +94,35 @@ bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
     return result;
 }
 
-void interactable_entity::set_current_anim(uint8_t index){
-    BN_ASSERT(index < _anims.size());
-    if(_current_anim != index){
-        _current_anim = index;
-        _anims.at(_current_anim).update();        
-    }
-
+shoot_upgrader::shoot_upgrader(const bn::camera_ptr &cam, 
+    const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
+        interactable_entity(cam, x, y, 50,40,bn::sprite_items::gun_upgrade, cstuff)
+{
+    _sprite.set_horizontal_flip(true);
 }
+
+bn::deque<bn::unique_ptr<box>, 16> shoot_upgrader::interact_boxes(){
+    bn::deque<bn::unique_ptr<box>, 16> result;
+    result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
+            _cstuff.text_generator, _cstuff.savefile.shoot_upgrade_lvl,
+            _cstuff.savefile.ultramatter, 1000, "SHOOT")));
+    return result;
+}
+
+slash_upgrader::slash_upgrader(const bn::camera_ptr &cam, 
+    const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
+        interactable_entity(cam, x, y, 50,40,bn::sprite_items::sword_upgrade, cstuff)
+{
+    _sprite.set_horizontal_flip(true);
+}
+
+bn::deque<bn::unique_ptr<box>, 16> slash_upgrader::interact_boxes(){
+    bn::deque<bn::unique_ptr<box>, 16> result;
+    result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
+            _cstuff.text_generator, _cstuff.savefile.shoot_upgrade_lvl,
+            _cstuff.savefile.ultramatter, 1000, "SLASH")));
+    return result;
+}
+
 
 }

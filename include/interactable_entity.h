@@ -56,4 +56,20 @@ public:
     virtual bn::deque<bn::unique_ptr<box>, 16> interact_boxes();
 };
 
+class shoot_upgrader: public interactable_entity
+{
+public:
+    shoot_upgrader(const bn::camera_ptr &cam, const bn::fixed &x, 
+        const bn::fixed &y, common_stuff &cstuff);
+    virtual bn::deque<bn::unique_ptr<box>, 16> interact_boxes();
+};
+
+class slash_upgrader: public interactable_entity
+{
+public:
+    slash_upgrader(const bn::camera_ptr &cam, const bn::fixed &x, 
+        const bn::fixed &y, common_stuff &cstuff);
+    virtual bn::deque<bn::unique_ptr<box>, 16> interact_boxes();
+};
+
 }

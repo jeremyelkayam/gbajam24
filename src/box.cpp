@@ -80,7 +80,7 @@ void box::set_visible(bool visible){
 }
 
 bn::unique_ptr<box> box::next_box(){
-    BN_ASSERT(_done);
+    // BN_ASSERT(_done);
     return bn::unique_ptr<box>();
 }
 

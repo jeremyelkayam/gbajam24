@@ -19,7 +19,9 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _interact_icon.set_camera(_cam);
     _interactables.emplace_front(bn::unique_ptr<slung>(new slung(_cam, 350, 208, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 450, 190, _cstuff)));
-    _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 100, 202, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 450, 112, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<shoot_upgrader>(new shoot_upgrader(_cam, 80, 209, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<slash_upgrader>(new slash_upgrader(_cam, 110, 112, _cstuff)));
 }
 
 bn::optional<scene_type> lab_scene::update()
@@ -46,7 +48,7 @@ bn::optional<scene_type> lab_scene::update()
         }
         else if(bn::keypad::start_pressed())
         {
-            while(!_text_boxes.front()->input_required()){
+            while(!_text_boxes.empty() && !_text_boxes.front()->input_required()){
                 _text_boxes.pop_front();
             }
         }
