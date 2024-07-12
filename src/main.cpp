@@ -38,6 +38,9 @@ int main()
             next_scene = scene->update();
         }
         if(next_scene){
+            //yeah kinda shitty but w/e
+            //todo: scene transitions
+            scene.reset();
             switch(*next_scene){
                 case aru::scene_type::LAB: { 
                     scene.reset(new aru::lab_scene(cstuff));
