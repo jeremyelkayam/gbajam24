@@ -5,6 +5,7 @@
 #include "bn_sprite_items_hover_upgrade.h"
 #include "bn_sprite_items_sword_upgrade.h"
 #include "bn_sprite_items_dummy_sprite.h"
+#include "bn_sprite_items_warp.h"
 #include "text_box.h"
 #include "save_selection_box.h"
 #include "donation_box.h"
@@ -33,6 +34,7 @@ void interactable_entity::set_current_anim(uint8_t index){
         BN_ASSERT(index < _anims.size());
         if(_current_anim != index){
             _current_anim = index;
+            _anims.at(_current_anim).reset();        
             _anims.at(_current_anim).update();        
         }
     }
@@ -74,8 +76,7 @@ vax_mchn::vax_mchn(const bn::camera_ptr &cam,
 
 bn::deque<bn::unique_ptr<box>, 16> vax_mchn::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
-    result.push_back(bn::unique_ptr<donation_box>(new donation_box(
-        _cstuff.text_generator, _cstuff.savefile.ultramatter)));
+    result.push_back(bn::unique_ptr<donation_box>(new donation_box(_cstuff)));
     return result;
 }
 
@@ -121,6 +122,24 @@ bn::deque<bn::unique_ptr<box>, 16> slash_upgrader::interact_boxes(){
     result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
             _cstuff.text_generator, _cstuff.savefile.shoot_upgrade_lvl,
             _cstuff.savefile.ultramatter, 1000, "SLASH")));
+    return result;
+}
+
+warp_point::warp_point(const bn::camera_ptr &cam, 
+    const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
+        interactable_entity(cam, x, y, 50,40,bn::sprite_items::warp, cstuff)
+{
+}
+
+bn::deque<bn::unique_ptr<box>, 16> warp_point::interact_boxes(){
+    bn::deque<bn::unique_ptr<box>, 16> result;
+    bn::vector<bn::string<8>, 4> opts;
+    opts.emplace_back("No");
+    opts.emplace_back("Yes");
+    result.push_back(bn::unique_ptr<selection_box>(new selection_box(
+        _cstuff.text_generator, 
+        "Warp to the next level?",
+        opts)));
     return result;
 }
 

@@ -4,17 +4,17 @@
 #include "bn_regular_bg_items_textbox.h"
 #include "bn_sprite_items_cute_prop_font.h"
 #include "bn_keypad.h"
-#include "common_stuff.h"
 
 namespace aru { 
 
-donation_box::donation_box(bn::sprite_text_generator &text_generator, uint16_t &ultramatter) : 
-    box(text_generator),
+donation_box::donation_box(common_stuff &cstuff) : 
+    box(cstuff.text_generator),
     _place(0),
     _hold_timer(0),
     _blink_timer(0),
     _donation_amount(0),
-    _ultramatter(ultramatter) {
+    _ultramatter(cstuff.savefile.ultramatter),
+    _total_donated(cstuff.savefile.total_donated) {
 
     _box.set_y(-104);
     update_text_sprites();
@@ -95,6 +95,7 @@ void donation_box::update(){
         //cannot donate more than what you've got on hand...
         BN_ASSERT(_donation_amount <= _ultramatter);
         _ultramatter -= _donation_amount;
+        _total_donated += _donation_amount;
     }
 
     if(bn::keypad::a_pressed() || bn::keypad::b_pressed()){

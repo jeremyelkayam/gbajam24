@@ -14,5 +14,6 @@ namespace aru {
                 const bn::string<64> &text, const bn::vector<bn::string<8>,4> &options);
             virtual void update();
             virtual void set_visible(bool visible);
+            bn::string<8> selected() {return _options.at(_selected_option);}
     };
 }

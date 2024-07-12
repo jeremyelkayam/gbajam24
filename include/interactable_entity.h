@@ -72,4 +72,12 @@ public:
     virtual bn::deque<bn::unique_ptr<box>, 16> interact_boxes();
 };
 
+class warp_point: public interactable_entity
+{
+public:
+    warp_point(const bn::camera_ptr &cam, const bn::fixed &x, 
+        const bn::fixed &y, common_stuff &cstuff);
+    virtual bn::deque<bn::unique_ptr<box>, 16> interact_boxes();
+};
+
 }
