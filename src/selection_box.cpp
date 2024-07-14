@@ -42,7 +42,6 @@ void selection_box::set_visible(bool visible){
 }
 
 void selection_box::init(){
-    BN_LOG("run init function");
     box::init();
     _box->set_y(-50);
     _selector = bn::sprite_items::cute_prop_font.create_sprite_optional(0,0,29);

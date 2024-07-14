@@ -18,7 +18,8 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 {
     _interact_icon.set_visible(false);
     _interact_icon.set_camera(_cam);
-    _interactables.emplace_front(bn::unique_ptr<slung>(new slung(_cam, 350, 208, _cstuff)));
+    _interacting_with = new slung(_cam, 350, 208, _cstuff);
+    _interactables.emplace_front(bn::unique_ptr<slung>((slung*)_interacting_with));
     _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 450, 190, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 400, 112, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<shoot_upgrader>(new shoot_upgrader(_cam, 80, 209, _cstuff)));
@@ -27,10 +28,15 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 
     _player.update();
     _player.move_to(315, true);
+    _cam.set_position(315,150);
     for(const char *line : LV1_CUTSCENE_DIALOGUE){
-        // BN_LOG("pushing cutscene dialogue");
-        // _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
-            // line, bn::sprite_items::portrait, true, true, 1)));
+        uint8_t anim_index = 1;
+        if(bn::string<256>(line) == bn::string<256>("...")){
+            anim_index = 2;
+        }
+        BN_LOG("pushing cutscene dialogue");
+        _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
+            line, bn::sprite_items::portrait, true, false, anim_index)));
     }
 }
 
@@ -43,7 +49,6 @@ bn::optional<scene_type> lab_scene::update()
 
     if(!_text_boxes.empty()){
         _interact_icon.set_visible(false);
-        BN_LOG("start loop");
         _text_boxes.front()->update();      
 
         if(_text_boxes.front()->done() || (bn::keypad::select_pressed() && !_text_boxes.front()->input_required())){
@@ -98,7 +103,6 @@ bn::optional<scene_type> lab_scene::update()
             can_interact = true;
 
             if(bn::keypad::a_pressed()){
-                BN_LOG("interact with entity");
                 _text_boxes = ent->interact_boxes();
                 _player.move_to(ent->x() + (ent->facing_right() ? 35 : -35), !ent->facing_right());
                 _interacting_with = ent.get();
