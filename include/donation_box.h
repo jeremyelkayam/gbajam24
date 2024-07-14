@@ -22,6 +22,7 @@ namespace aru {
             virtual void update();
 
             virtual void set_visible(bool visible);
+            virtual void init();
 
     };
 }

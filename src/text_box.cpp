@@ -15,7 +15,7 @@ text_box::text_box(bn::sprite_text_generator &text_generator, const char *text,
         _arrowtimer(0) {
     _text = split_into_lines(text);
 
-
+    BN_LOG("constructor");
 }
 
 text_box::text_box(bn::sprite_text_generator &text_generator, const char *text, 

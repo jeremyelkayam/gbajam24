@@ -11,20 +11,8 @@ namespace aru {
 selection_box::selection_box(bn::sprite_text_generator &text_generator, const bn::string<64> &text, const bn::vector<bn::string<8>,4> &options) : 
     box(text_generator),
     _options(options),
+    _text(text),
     _selected_option(0) {
-
-    _text_generator.set_bg_priority(0);
-    _text_generator.set_center_alignment();
-    _text_generator.set_one_sprite_per_character(false);
-
-    _text_generator.generate(0, -10, text, _text_sprites);
-    bn::fixed spacing = 30;
-    bn::fixed start_x = -spacing * bn::fixed(0.5) * (_options.size() - 1);
-
-    for(int z = 0; z < _options.size(); ++z){
-        _text_generator.generate(start_x + spacing * z, 10, _options.at(z), _option_sprites);
-    }
-    update();
 }
 void selection_box::update(){
     if(!_box){
@@ -59,6 +47,19 @@ void selection_box::init(){
     _box->set_y(-50);
     _selector = bn::sprite_items::cute_prop_font.create_sprite_optional(0,0,29);
     _selector->set_bg_priority(0);
+
+
+    _text_generator.set_bg_priority(0);
+    _text_generator.set_center_alignment();
+    _text_generator.set_one_sprite_per_character(false);
+
+    _text_generator.generate(0, -10, _text, _text_sprites);
+    bn::fixed spacing = 30;
+    bn::fixed start_x = -spacing * bn::fixed(0.5) * (_options.size() - 1);
+
+    for(int z = 0; z < _options.size(); ++z){
+        _text_generator.generate(start_x + spacing * z, 10, _options.at(z), _option_sprites);
+    }
 }
 
 }

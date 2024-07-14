@@ -16,22 +16,13 @@ donation_box::donation_box(common_stuff &cstuff) :
     _ultramatter(cstuff.savefile.ultramatter),
     _total_donated(cstuff.savefile.total_donated) {
 
-    _box->set_y(-104);
-    update_text_sprites();
-    
-
-    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box->y() + 46,61)),
-    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box->y() + 55,61)),
-    _selectors.at(1).set_vertical_flip(true);
-
-    _text_generator.generate(0, _box->y() + 38, "Donate how much?", _text_sprites);
-    _text_generator.generate(0, _box->y() + 64, "Press A to confirm or B to cancel", _text_sprites);
-
-    set_visible(false);
-    
 }
 
 void donation_box::update(){
+    if(!_box){
+        init();
+    }
+
     if(bn::keypad::left_pressed() && _place < 4){
         ++_place;
     }
@@ -135,5 +126,19 @@ void donation_box::set_visible(bool visible){
     common_stuff::set_sprite_arr_visible(_donation_amount_sprites, visible);
 }
 
+void donation_box::init(){
+    box::init();
+
+    _box->set_y(-104);
+    update_text_sprites();
+    
+
+    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box->y() + 46,61)),
+    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box->y() + 55,61)),
+    _selectors.at(1).set_vertical_flip(true);
+
+    _text_generator.generate(0, _box->y() + 38, "Donate how much?", _text_sprites);
+    _text_generator.generate(0, _box->y() + 64, "Press A to confirm or B to cancel", _text_sprites);
+}
 
 }

@@ -7,6 +7,7 @@ namespace aru {
             bn::optional<bn::sprite_ptr> _selector;
             bn::vector<bn::sprite_ptr, 4> _option_sprites;
             bn::vector<bn::string<8>, 4> _options;
+            bn::string<64> _text;
             uint8_t _selected_option;
 
         public:
