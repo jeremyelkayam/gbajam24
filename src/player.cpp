@@ -53,9 +53,13 @@ void player::update(){
             _hover.update();
             break;
         case PSTATE::JUMP:
+            _jump.set_wait_updates(bn::abs((_MAX_UP_SPEED - _yspeed - 2)).ceil_integer());
+            BN_LOG("wait updates for jumping anim: ", _jump.wait_updates());
             _jump.update();
             break;
         case PSTATE::FALL:
+            _fall.set_wait_updates((_MAX_DOWN_SPEED - _yspeed + 2).ceil_integer());
+            BN_LOG("wait updates for falling anim: ", _fall.wait_updates());
             _fall.update();
             break;
         case PSTATE::STAND:
@@ -153,7 +157,7 @@ void player::update(){
                 }
             }
 
-            if(_current_state != PSTATE::HOVER && _yspeed > 0){ 
+            if(_current_state != PSTATE::FALL && _current_state != PSTATE::HOVER && _yspeed > 0){ 
                 _current_state = PSTATE::FALL;
                 start_anim(_fall);
             }
