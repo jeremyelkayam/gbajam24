@@ -2,8 +2,6 @@
 #include <bn_log.h>
 #include <bn_bg_palettes.h>
 #include <bn_blending.h>
-#include "bn_regular_bg_items_lab.h"
-#include "bn_regular_bg_items_testbg.h"
 #include "bn_sprite_items_a_button_prompt.h"
 #include "bn_sprite_items_portrait.h"
 #include "selection_box.h"
@@ -12,7 +10,7 @@
 namespace aru {
 
 lab_scene::lab_scene(common_stuff &cstuff) :
-    play_scene(cstuff, bn::regular_bg_items::lab, bn::regular_bg_items::testbg),
+    play_scene(cstuff, lab_data),
     _interact_icon(bn::sprite_items::a_button_prompt.create_sprite(0, 0)),
     _interact_icon_anim(bn::create_sprite_animate_action_forever(_interact_icon, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1))
 {

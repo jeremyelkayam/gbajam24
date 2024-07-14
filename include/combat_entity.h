@@ -14,7 +14,11 @@ namespace aru
 class combat_entity : public entity
 {
 public:
-    combat_entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, const bn::fixed &max_yspeed, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem);
+    combat_entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, 
+        const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, 
+        const bn::fixed &max_up_speed, const bn::fixed &max_down_speed, 
+        const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, 
+        level &level, const bn::sprite_item &spritem);
     virtual void update();
     bn::fixed xspeed() const {return _xspeed;}
 
@@ -35,7 +39,7 @@ public:
 protected:
     level &_level;
     bn::optional<bn::sprite_animate_action<6>> _explosion_anim;
-    const bn::fixed _MAX_XSPEED, _MAX_YSPEED, _ACCEL, _G;
+    const bn::fixed _MAX_XSPEED, _MAX_UP_SPEED, _MAX_DOWN_SPEED, _ACCEL, _G;
     const uint8_t _HIT_IFRAMES;
     bn::fixed _xspeed, _target_xspeed, _yspeed;
     

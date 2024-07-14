@@ -6,6 +6,7 @@
 #include "common_stuff.h"
 #include "camera_manager.h"
 #include "hud.h"
+#include "level_data.h"
 
 namespace aru{
 
@@ -22,7 +23,7 @@ protected:
     bn::regular_bg_ptr _bg;
  
 public:
-    play_scene(common_stuff &cstuff, const bn::regular_bg_item &map, const bn::regular_bg_item &backdrop);
+    play_scene(common_stuff &cstuff, const level_data &ld);
     [[nodiscard]] virtual bn::optional<scene_type> update();
 };
 

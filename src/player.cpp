@@ -11,7 +11,8 @@
 namespace aru {
 
 player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) : 
-    combat_entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, PLAYER_MAX_YSPEED,
+    combat_entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, 
+        PLAYER_JUMP_YSPEED, PLAYER_FALL_YSPEED,
         PLAYER_HP, PLAYER_CONTACT_DAMAGE, PLAYER_IFRAMES,level,bn::sprite_items::aru),
     _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
@@ -224,7 +225,7 @@ bool player::on_thin_ground() const{
 }
 
 bool player::apply_gravity() const{
-   return _current_state != PSTATE::HOVER && (!bn::keypad::a_held() || _jump_timer > 4) && _yspeed < _MAX_YSPEED;
+   return _current_state != PSTATE::HOVER && (!bn::keypad::a_held() || _jump_timer > PLAYER_JUMP_HOLD_A_CAP) && _yspeed < _MAX_DOWN_SPEED;
 }
 
 void player::shoot(){

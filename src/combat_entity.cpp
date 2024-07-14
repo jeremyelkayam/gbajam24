@@ -4,13 +4,19 @@
 
 namespace aru 
 {
-combat_entity::combat_entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, const bn::fixed &max_yspeed, const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, level &level, const bn::sprite_item &spritem): 
+combat_entity::combat_entity(const bn::camera_ptr &cam, const bn::fixed &x, 
+        const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, 
+        const bn::fixed &max_xspeed, const bn::fixed &max_up_speed, 
+        const bn::fixed &max_down_speed, const uint8_t &hp, 
+        const uint8_t &contact_damage, const uint8_t &iframes, level &level, 
+        const bn::sprite_item &spritem): 
     entity(cam, x, y, width, height, spritem),
     _level(level),
     _MAX_XSPEED(max_xspeed),
-    _MAX_YSPEED(max_yspeed),
+    _MAX_UP_SPEED(max_up_speed),
+    _MAX_DOWN_SPEED(max_down_speed),
     _ACCEL(0.75),
-    _G(1),
+    _G(GRAVITY_ACCELERATION),
     _HIT_IFRAMES(iframes),
     _grounded(false),
     _max_hp(hp),
@@ -36,11 +42,11 @@ void combat_entity::update(){
         _xspeed = -_MAX_XSPEED;
     }
 
-    if(_yspeed > _MAX_YSPEED){
-        _yspeed = _MAX_YSPEED;
+    if(_yspeed > _MAX_DOWN_SPEED){
+        _yspeed = _MAX_DOWN_SPEED;
     }
-    if(_yspeed < -_MAX_YSPEED){
-        _yspeed = -_MAX_YSPEED;
+    if(_yspeed < _MAX_UP_SPEED){
+        _yspeed = -_MAX_UP_SPEED;
     }
 
     for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
@@ -193,7 +199,7 @@ bool combat_entity::facing_wall() const{
 }
 
 void combat_entity::jump(){
-    _yspeed = -_MAX_YSPEED;
+    _yspeed = _MAX_UP_SPEED;
     _jump_timer = 0;
 }
 
@@ -236,7 +242,7 @@ void combat_entity::land(){
 }
 
 bool combat_entity::apply_gravity() const{
-   return  (_jump_timer > 4) && _yspeed < _MAX_YSPEED;
+   return  (_jump_timer > 4) && _yspeed < _MAX_DOWN_SPEED;
 }
 
 void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){

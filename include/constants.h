@@ -6,13 +6,25 @@ namespace aru
 {
     constexpr bn::fixed INVSQRT2 = bn::fixed(0.707107);
     constexpr bn::fixed INVSQRT54THS = bn::fixed(0.894421);
+
+    constexpr bn::fixed GRAVITY_ACCELERATION = bn::fixed(0.5);
     
     constexpr bn::fixed PLAYER_WIDTH = 16;
     constexpr bn::fixed PLAYER_HEIGHT = 36;
-    constexpr bn::fixed PLAYER_MAX_XSPEED = 3;
-    constexpr bn::fixed PLAYER_MAX_YSPEED = 8;
+    constexpr bn::fixed PLAYER_MAX_XSPEED = 2;
+    constexpr bn::fixed PLAYER_FALL_YSPEED = 5;
+    constexpr bn::fixed PLAYER_JUMP_YSPEED = -5;
+
+    //the cap on the amount of time you can extend your upward momentum by holding a
+    //basically you know how you can hold a for a higher jump like in mario? 
+    //This is how long you can hold a 
+    constexpr uint8_t PLAYER_JUMP_HOLD_A_CAP = 10;
     constexpr uint8_t PLAYER_HP = 50;
+
+    //how much damage when someone comes into contact with the player
     constexpr uint8_t PLAYER_CONTACT_DAMAGE = 2;
+
+    //how many invincibility frames you get after being hit
     constexpr uint8_t PLAYER_IFRAMES = 120;
     constexpr uint8_t PLAYER_HOVER_TIME = 60;
     
