@@ -8,14 +8,13 @@ namespace aru {
 
 box::box(bn::sprite_text_generator &text_generator, uint8_t anim_index) : 
     _text_generator(text_generator),
-    _box(bn::regular_bg_items::textbox.create_bg(0, 0)),
     _done(false),
     _anim_index(anim_index)  {
-    _box.set_priority(2);
     set_visible(false);
 }
 
 bn::vector<bn::string<64>, 24> box::split_into_lines(const char *text){
+    
     const uint8_t max_line_width = 218;
     bn::vector<bn::string<64>, 24>result;
     
@@ -76,7 +75,13 @@ bn::vector<bn::string<64>, 24> box::split_into_lines(const char *text){
 
 void box::set_visible(bool visible){
     common_stuff::set_sprite_arr_visible(_text_sprites, visible);
-    _box.set_visible(visible);
+    BN_LOG("set visible ", visible);
+    if(visible == true && !_box){
+        _box = bn::regular_bg_items::textbox.create_bg_optional(0, 0);
+        _box->set_priority(2);
+    }else if(_box){
+        _box->set_visible(visible);
+    }
 }
 
 bn::unique_ptr<box> box::next_box(){

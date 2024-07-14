@@ -13,9 +13,7 @@ selection_box::selection_box(bn::sprite_text_generator &text_generator, const bn
     _selector(bn::sprite_items::cute_prop_font.create_sprite(0,0,29)),
     _options(options),
     _selected_option(0) {
-    _box.set_priority(2);
     _selector.set_bg_priority(0);
-    _box.set_y(-50);
 
     _text_generator.set_bg_priority(0);
     _text_generator.set_center_alignment();
@@ -30,10 +28,13 @@ selection_box::selection_box(bn::sprite_text_generator &text_generator, const bn
     }
 
     set_visible(false);
+    update();
     
     BN_LOG("number of sprites: ", _option_sprites.size());
 }
 void selection_box::update(){
+    if(_box) _box->set_y(-50);
+
     bn::fixed xcor = _option_sprites.at(_selected_option).x() - 20;
     bn::fixed ycor = _option_sprites.at(_selected_option).y();
 

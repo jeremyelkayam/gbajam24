@@ -12,7 +12,7 @@ namespace aru {
         protected:
             bn::sprite_text_generator &_text_generator;
             bn::vector<bn::sprite_ptr, 256> _text_sprites;
-            bn::regular_bg_ptr _box;
+            bn::optional<bn::regular_bg_ptr> _box;
             bool _done;
             uint8_t _anim_index;
 

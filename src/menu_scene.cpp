@@ -18,7 +18,7 @@ menu_scene::menu_scene() :
     gen.generate(0, 75, "BUILT " + bn::string<32>(etf::current_date), _text_sprites);
 
     gen.generate(0, -50, "GBA JAM 2024", _text_sprites);
-    gen.generate(0, -40, "untitled bee robot post apoc game", _text_sprites);
+    gen.generate(0, -40, "Globlins!", _text_sprites);
 
     gen.generate(0, 10, "select stage", _text_sprites);
 

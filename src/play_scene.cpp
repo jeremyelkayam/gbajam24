@@ -7,9 +7,9 @@ namespace aru {
 
 play_scene::play_scene(common_stuff &cstuff, const bn::regular_bg_item &map, const bn::regular_bg_item &backdrop) :
     _cstuff(cstuff),
-    _cam(bn::camera_ptr::create(128,128)),
+    _cam(bn::camera_ptr::create(256,192)),
     _level(_cam, map),
-    _player(_cam,128,128,_level),
+    _player(_cam,256,208,_level),
     _cam_mgr(_cam, _level, _player),
     _hud(_cstuff.savefile.ultramatter),
     _bg(backdrop.create_bg(0,0)) {

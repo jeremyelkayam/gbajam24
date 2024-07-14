@@ -25,7 +25,7 @@ void save_selection_box::update(){
     if(bn::keypad::a_pressed() && _selected_option == 1){
         _cstuff.save();
         _done = true;
-        _next_text = "Thank you for waiting. I've successfully logged your progress thus far.";
+        _next_text = "Thank you for waiting. I've successfully recorded all the relevant details.";
     }else if(bn::keypad::a_pressed() || bn::keypad::b_pressed()){
         _done = true;
         _next_text = "No problem! Well, let me know if you need anything else before you head out.";

@@ -16,16 +16,16 @@ donation_box::donation_box(common_stuff &cstuff) :
     _ultramatter(cstuff.savefile.ultramatter),
     _total_donated(cstuff.savefile.total_donated) {
 
-    _box.set_y(-104);
+    _box->set_y(-104);
     update_text_sprites();
     
 
-    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box.y() + 46,61)),
-    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box.y() + 55,61)),
+    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box->y() + 46,61)),
+    _selectors.emplace_back(bn::sprite_items::cute_prop_font.create_sprite(0,_box->y() + 55,61)),
     _selectors.at(1).set_vertical_flip(true);
 
-    _text_generator.generate(0, _box.y() + 38, "Donate how much?", _text_sprites);
-    _text_generator.generate(0, _box.y() + 64, "Press A to confirm or B to cancel", _text_sprites);
+    _text_generator.generate(0, _box->y() + 38, "Donate how much?", _text_sprites);
+    _text_generator.generate(0, _box->y() + 64, "Press A to confirm or B to cancel", _text_sprites);
 
     set_visible(false);
     
@@ -125,7 +125,7 @@ void donation_box::update_text_sprites(){
     _text_generator.set_one_sprite_per_character(false);
 
     _donation_amount_sprites.clear();
-    _text_generator.generate(0, _box.y() + 50, to_string_fixed_width(_donation_amount), _donation_amount_sprites);
+    _text_generator.generate(0, _box->y() + 50, to_string_fixed_width(_donation_amount), _donation_amount_sprites);
 
 }
 

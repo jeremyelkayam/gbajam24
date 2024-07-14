@@ -5,6 +5,7 @@
 #include "bn_regular_bg_items_lab.h"
 #include "bn_regular_bg_items_testbg.h"
 #include "bn_sprite_items_a_button_prompt.h"
+#include "bn_sprite_items_portrait.h"
 #include "selection_box.h"
 #include "lab_scene.h"
 
@@ -23,19 +24,28 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _interactables.emplace_front(bn::unique_ptr<shoot_upgrader>(new shoot_upgrader(_cam, 80, 209, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<slash_upgrader>(new slash_upgrader(_cam, 110, 112, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<warp_point>(new warp_point(_cam, 256, 192, _cstuff)));
+
+    _player.update();
+    _player.move_to(315, true);
+    for(const char *line : LV1_CUTSCENE_DIALOGUE){
+        // BN_LOG("pushing cutscene dialogue");
+        // _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
+            // line, bn::sprite_items::portrait, true, true, 1)));
+    }
 }
 
 bn::optional<scene_type> lab_scene::update()
 {
+    BN_LOG("update loop");
+
     bn::optional<scene_type> result;
     uint16_t old_currency = _cstuff.savefile.ultramatter;
     bool text_box_frame = false;
 
     if(!_text_boxes.empty()){
-        
         _interact_icon.set_visible(false);
-        _text_boxes.front()->update();
-        _text_boxes.front()->set_visible(true);        
+        _text_boxes.front()->set_visible(true);  
+        _text_boxes.front()->update();      
 
         if(_text_boxes.front()->done() || (bn::keypad::select_pressed() && !_text_boxes.front()->input_required())){
             bn::unique_ptr<box> next_box = _text_boxes.front()->next_box();
@@ -94,6 +104,7 @@ bn::optional<scene_type> lab_scene::update()
             can_interact = true;
 
             if(bn::keypad::a_pressed()){
+                BN_LOG("interact with entity");
                 _text_boxes = ent->interact_boxes();
                 _player.move_to(ent->x() + (ent->facing_right() ? 35 : -35), !ent->facing_right());
                 _interacting_with = ent.get();

@@ -14,15 +14,10 @@ text_box::text_box(bn::sprite_text_generator &text_generator, const char *text,
         _top_box(top_box),
         _current_line(0),
         _arrowtimer(0) {
-    _box.set_priority(2);
     _next_prompt.set_bg_priority(0);
     _next_prompt.set_visible(false);
     _text = split_into_lines(text);
 
-    if(top_box){
-        _box.set_y(-104);
-    }
-    setup_text_sprites();
 
 }
 
@@ -66,7 +61,7 @@ void text_box::setup_text_sprites(){
         // BN_LOG("new index ", _anim_index);
 
 
-        _text_generator.generate(_box.x() - 112,_box.y() + 38 + (i - _current_line)*14 - (_top_box ? 3 : 0), _text.at(i), _text_sprites);
+        _text_generator.generate(_box->x() - 112,_box->y() + 38 + (i - _current_line)*14 - (_top_box ? 3 : 0), _text.at(i), _text_sprites);
     }
     for(bn::sprite_ptr &sprite : _text_sprites){
         sprite.set_visible(false);
@@ -75,6 +70,9 @@ void text_box::setup_text_sprites(){
 
 void text_box::update(){
 
+    if(_top_box){
+        _box->set_y(-104);
+    }
 
     if(bn::keypad::a_pressed()){
         advance();
@@ -98,7 +96,7 @@ void text_box::update(){
             multiplier = TB_ARROW_OTIME - _arrowtimer;
         }
 
-        _next_prompt.set_y(_box.y() + TB_ARROW_Y + TB_ARROW_INC_PER_FRAME * multiplier);     
+        _next_prompt.set_y(_box->y() + TB_ARROW_Y + TB_ARROW_INC_PER_FRAME * multiplier);     
     }
 }
 
@@ -117,7 +115,13 @@ void text_box::advance(){
 }
 
 void text_box::set_visible(bool visible){
-    _box.set_visible(visible);
+
+    if(!_box){
+        box::set_visible(visible);
+        setup_text_sprites();
+    }
+    box::set_visible(visible);
+    
     if(_portrait) _portrait->set_visible(visible);
 }
 

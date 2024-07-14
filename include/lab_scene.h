@@ -17,7 +17,7 @@ private:
 
     bn::sprite_ptr _interact_icon;
     bn::sprite_animate_action<2> _interact_icon_anim;
-    bn::deque<bn::unique_ptr<box>, 16> _text_boxes;
+    bn::deque<bn::unique_ptr<box>, 32> _text_boxes;
     interactable_entity *_interacting_with;
  
 public:

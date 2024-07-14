@@ -35,4 +35,25 @@ namespace aru
 
     constexpr bn::fixed DB_USEL_Y = -58;
     constexpr bn::fixed DB_DSEL_Y = -49;
+
+    constexpr const char *LV1_CUTSCENE_DIALOGUE[2] = {"...", "..."
+        // "Diagnostics seem fine... Maybe a new module is needed?",
+        // "...",
+        // "...",
+        // "Oh-! ARU-l33n, I didn't notice you warp in. How long have you been standing there?",
+        // "Right, well, anyways... How did everything go?",
+        // "Ah, that's it! That's the part!!! Wonderful, wonderful! I knew I could trust you. Now let me just...",
+        // "...",
+        // "...No dice. Well, it was only the first of many. Thank you, ARU-l33n. You did well, very well." "I'm already picking up a signal from the next piece, and I'm updating the teleporter coordinates now. So when you're ready...",
+        // "Ah- wait! I almost forgot to mention. During your adventure you likely picked up Energy Clusters- We can put those to use.",
+        // "I would have pre-installed you with more advanced systems, but as you can see... Supplies are rather limited, heheh. But with enough Energy Clusters I can upgrade your abilities!",
+        // "Since you're the one putting yourself in harm's way, I'll let you choose what to modify and when. For simplicity's sake I will categorize them: Shoot, Slash and Hover.",
+        // "Hehe... Quite like a video game, actually. Um... sorry, don't mind me.",
+        // "Anywho... How does that sound? Would you like to upgrade your systems now? Just step over to the terminals before heading out in the warp and press A to see what each will require.",
+        // "Oh, and... completely up to you, but if you have any resources to spare, I've also added the option to donate Energy Clusters to help with the completion of the machine. You can deposit energy into the machine by pressing A next to it.",
+        // "Though please, don't feel bad if you use them for upgrades instead. I'm sure I can still complete it without them, it will just help the process along...",
+        // "Probably.",
+        // "Enough of my rambling- I know you're very busy! Thank you for your work, ARU-l33n, and be safe!"
+    };
+
 }

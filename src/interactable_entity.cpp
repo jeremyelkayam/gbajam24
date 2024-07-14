@@ -60,9 +60,14 @@ slung::slung(const bn::camera_ptr &cam,
 
 bn::deque<bn::unique_ptr<box>, 16> slung::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
+
+    bn::string<256> text;
+    bn::ostringstream stream(text);
+    stream << "Hello, ARU-133n. The machine is currently at ";
+    stream << _cstuff.savefile.total_donated;
+    stream << " power. Anything you can give helps.\nWhile you're here, I can also record the progress we've made thus far.";
     result.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
-        "i can save the game for you if ya want", 
-    bn::sprite_items::portrait, true, true, 1)));         
+        text.c_str(), bn::sprite_items::portrait, true, true, 1)));         
     result.push_back(bn::unique_ptr<save_selection_box>(new save_selection_box(_cstuff, 2)));
     return result;
 }
