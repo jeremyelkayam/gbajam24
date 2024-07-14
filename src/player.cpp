@@ -1,5 +1,6 @@
 #include <bn_keypad.h>
 #include <bn_log.h>
+#include <bn_math.h>
 
 
 #include "player.h"
@@ -89,30 +90,29 @@ void player::update(){
             start_anim(_run);
         }
 
-        if(bn::keypad::left_pressed()){
-            _target_xspeed = -_MAX_XSPEED;
-            if(_grounded && (!_sprintcloud.visible() || facing_right())){
-                _sprintcloud.set_horizontal_flip(true);
-                _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
-            }
-            _sprite.set_horizontal_flip(false);
+        if(bn::abs(_target_xspeed) != _MAX_XSPEED){
+            if(bn::keypad::left_held()){
+                _target_xspeed = -_MAX_XSPEED;
+                if(_grounded && (!_sprintcloud.visible() || facing_right())){
+                    _sprintcloud.set_horizontal_flip(true);
+                    _sprintcloud.start(_hitbox.x() + _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
+                }
+                _sprite.set_horizontal_flip(false);
 
+            }else if(bn::keypad::right_held()){
+                _target_xspeed = _MAX_XSPEED;
+                if(_grounded && (!_sprintcloud.visible() || !facing_right())){
+                    //todo: should appear when you land as well
+                    _sprintcloud.set_horizontal_flip(false);
+                    _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
+                }
+                _sprite.set_horizontal_flip(true);
+                
+            }
         }
 
-
-
-        if(bn::keypad::right_pressed()){
-            _target_xspeed = _MAX_XSPEED;
-            if(_grounded && (!_sprintcloud.visible() || !facing_right())){
-                //todo: should appear when you land as well
-            _sprintcloud.set_horizontal_flip(false);
-                _sprintcloud.start(_hitbox.x() - _DUSTCLOUD_OFFSET, _hitbox.y() + 7);
-            }
-            _sprite.set_horizontal_flip(true);
-            
-        }
         
-        if(!bn::keypad::left_held() && !bn::keypad::right_held()){
+        if((!bn::keypad::left_held() && !bn::keypad::right_held()) || bn::keypad::left_released() || bn::keypad::right_released()){
             _target_xspeed = 0;
             if(_current_state == PSTATE::RUN){
                 start_anim(_idle);
