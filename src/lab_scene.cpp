@@ -36,7 +36,6 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 
 bn::optional<scene_type> lab_scene::update()
 {
-    BN_LOG("update loop");
 
     bn::optional<scene_type> result;
     uint16_t old_currency = _cstuff.savefile.ultramatter;
@@ -44,18 +43,13 @@ bn::optional<scene_type> lab_scene::update()
 
     if(!_text_boxes.empty()){
         _interact_icon.set_visible(false);
-        _text_boxes.front()->set_visible(true);  
+        BN_LOG("start loop");
         _text_boxes.front()->update();      
 
         if(_text_boxes.front()->done() || (bn::keypad::select_pressed() && !_text_boxes.front()->input_required())){
             bn::unique_ptr<box> next_box = _text_boxes.front()->next_box();
             _text_boxes.pop_front();
-            if(next_box) _text_boxes.push_front(bn::move(next_box));            
-
-            BN_LOG("ending current box");
-            if(!_text_boxes.empty()){
-                _text_boxes.front()->set_visible(true);
-            }
+            if(next_box) _text_boxes.push_front(bn::move(next_box));
         }
         else if(bn::keypad::start_pressed())
         {

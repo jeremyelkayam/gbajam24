@@ -37,5 +37,7 @@ namespace aru {
 
             virtual bool input_required() const {return true;}
 
+            virtual void init();
+
     };
 }

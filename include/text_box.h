@@ -4,8 +4,7 @@
 namespace aru { 
     class text_box : public box {
         private:
-            bn::optional<bn::sprite_ptr> _portrait;
-            bn::sprite_ptr _next_prompt;
+            bn::optional<bn::sprite_ptr> _portrait, _next_prompt;
             bn::vector<bn::string<64>, 24> _text;
             bool _top_box;
             uint8_t _current_line,_arrowtimer;
@@ -21,6 +20,7 @@ namespace aru {
             void update();
             virtual bool input_required() const {return false;}
             uint8_t anim_index() const {return _anim_index;}
+            virtual void init();
 
     };
 }

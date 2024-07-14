@@ -75,11 +75,7 @@ bn::vector<bn::string<64>, 24> box::split_into_lines(const char *text){
 
 void box::set_visible(bool visible){
     common_stuff::set_sprite_arr_visible(_text_sprites, visible);
-    BN_LOG("set visible ", visible);
-    if(visible == true && !_box){
-        _box = bn::regular_bg_items::textbox.create_bg_optional(0, 0);
-        _box->set_priority(2);
-    }else if(_box){
+    if(_box){
         _box->set_visible(visible);
     }
 }
@@ -87,6 +83,11 @@ void box::set_visible(bool visible){
 bn::unique_ptr<box> box::next_box(){
     // BN_ASSERT(_done);
     return bn::unique_ptr<box>();
+}
+
+void box::init(){
+    _box = bn::regular_bg_items::textbox.create_bg_optional(0, 0);
+    _box->set_priority(2);
 }
 
 }
