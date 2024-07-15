@@ -5,8 +5,9 @@ namespace aru {
     class text_box : public box {
         private:
             bn::optional<bn::sprite_ptr> _portrait, _next_prompt;
+            bn::optional<bn::sprite_item> _portrait_item;
             bn::vector<bn::string<64>, 24> _text;
-            bool _top_box;
+            bool _top_box, _rf_portrait;
             uint8_t _current_line,_arrowtimer;
             void setup_text_sprites();
             void advance();

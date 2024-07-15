@@ -20,6 +20,7 @@ public:
     bn::fixed_rect hitbox() const {return _hitbox;}
 
     bool facing_right() const {return _sprite.horizontal_flip();}
+    virtual void set_blending_enabled(bool enabled){_sprite.set_blending_enabled(enabled);}
 
 protected:
     bn::fixed_rect _hitbox;

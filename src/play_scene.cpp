@@ -15,6 +15,10 @@ play_scene::play_scene(common_stuff &cstuff, const level_data &ld) :
     _bg(ld.backdrop.create_bg(0,0)) {
 
     _bg.set_z_order(1);
+    _bg.set_blending_enabled(true);
+    _player.set_blending_enabled(true);
+    _level.set_blending_enabled(true);
+    _hud.set_blending_enabled(true);
 }
 
 bn::optional<scene_type> play_scene::update(){

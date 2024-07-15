@@ -11,8 +11,9 @@ text_box::text_box(bn::sprite_text_generator &text_generator, const char *text,
     bool top_box) : 
         box(text_generator),
         _top_box(top_box),
+        _rf_portrait(false),
         _current_line(0),
-        _arrowtimer(0) {
+        _arrowtimer(0){
     _text = split_into_lines(text);
 }
 
@@ -20,14 +21,11 @@ text_box::text_box(bn::sprite_text_generator &text_generator, const char *text,
     const bn::sprite_item &portrait, bool top_box, bool rf_portrait, uint8_t anim_index) : 
         text_box(text_generator, text, top_box) {
     _anim_index = anim_index;
-    _portrait.emplace(portrait.create_sprite(-76,0));
+    
+    _portrait_item.emplace(portrait);
 
-    _portrait->set_bg_priority(0);
+    _rf_portrait = rf_portrait;
 
-    if(rf_portrait){
-        _portrait->set_horizontal_flip(true);
-        _portrait->set_x(-_portrait->x());
-    }
 }
 
 void text_box::setup_text_sprites(){
@@ -102,6 +100,17 @@ void text_box::init(){
     _next_prompt = bn::sprite_items::downarrow.create_sprite_optional(TB_ARROW_X,TB_ARROW_Y);
     _next_prompt->set_bg_priority(0);
     _next_prompt->set_visible(false);
+
+    if(_portrait_item){
+        _portrait.emplace(_portrait_item->create_sprite(-76,0));
+
+        _portrait->set_bg_priority(0);
+
+        if(_rf_portrait){
+            _portrait->set_horizontal_flip(true);
+            _portrait->set_x(-_portrait->x());
+        }
+    }
 }
 
 }

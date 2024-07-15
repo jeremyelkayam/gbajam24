@@ -35,6 +35,10 @@ lab_scene::lab_scene(common_stuff &cstuff) :
         _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
             line, bn::sprite_items::portrait, true, false, anim_index)));
     }
+
+    for(bn::unique_ptr<interactable_entity> &ent : _interactables){
+        ent->set_blending_enabled(true);
+    }
 }
 
 bn::optional<scene_type> lab_scene::update()

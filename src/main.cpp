@@ -32,6 +32,7 @@ int main()
     aru::Transition transition(aru::Transition::Types::FADE, aru::Transition::Direction::IN, transition_time);
     transition.Init();
     bn::optional<aru::scene_type> next_scene = aru::scene_type::MENU;
+    bn::blending::set_white_fade_color();
     scene.reset(new aru::menu_scene());
 
     aru::common_stuff cstuff;
@@ -81,6 +82,7 @@ int main()
                     BN_LOG("fade in on new scene");
                 }else{
                     //we need to fade out
+                    bn::blending::set_black_fade_color();
                     transition.Set(aru::Transition::Types::FADE, aru::Transition::Direction::OUT, transition_time);
                     transition.Init();                    
                 }
