@@ -32,7 +32,6 @@ lab_scene::lab_scene(common_stuff &cstuff) :
         if(bn::string<256>(line) == bn::string<256>("...")){
             anim_index = 2;
         }
-        BN_LOG("pushing cutscene dialogue");
         _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
             line, bn::sprite_items::portrait, true, false, anim_index)));
     }

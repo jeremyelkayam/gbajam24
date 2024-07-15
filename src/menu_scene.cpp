@@ -28,6 +28,11 @@ menu_scene::menu_scene() :
     gen.generate(-40, 25, "LABORATORY", _text_sprites);
     gen.generate(-40, 35, "TEST MAP", _text_sprites);
 
+    _selector.set_blending_enabled(true);
+    for(bn::sprite_ptr &sprite : _text_sprites){
+        sprite.set_blending_enabled(true);
+    }
+
 
 }
 

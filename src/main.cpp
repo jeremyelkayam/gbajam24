@@ -17,48 +17,75 @@
 #include "level_scene.h"
 #include "common_stuff.h"
 #include "cute_prop_sprite_font.h"
+#include "transition.h"
 
 
 int main()
 {
     bn::core::init();
+    constexpr uint8_t transition_time = 20;
 
     bn::bg_palettes::set_transparent_color(bn::color(25, 25, 25));
     // bn::camera_ptr cam = bn::camera_ptr::create(128,128);
 
     bn::unique_ptr<aru::scene> scene;
+    aru::Transition transition(aru::Transition::Types::FADE, aru::Transition::Direction::IN, transition_time);
+    transition.Init();
     bn::optional<aru::scene_type> next_scene = aru::scene_type::MENU;
+    scene.reset(new aru::menu_scene());
 
     aru::common_stuff cstuff;
     
     while(true)
     {
         cstuff.rand.update();
-        if(scene){
-            next_scene = scene->update();
-        }
-        if(next_scene){
-            //yeah kinda shitty but w/e
-            //todo: scene transitions
-            scene.reset();
-            switch(*next_scene){
-                case aru::scene_type::LAB: { 
-                    scene.reset(new aru::lab_scene(cstuff));
-                    break;
-                }
-                case aru::scene_type::MENU: { 
-                    scene.reset(new aru::menu_scene());
-                    break;
-                }
-                case aru::scene_type::LEVEL: { 
-                    scene.reset(new aru::level_scene(cstuff));
-                    break;
-                }
-                default: { 
-                    BN_ERROR("the selected screen does not exist or is not yet implemented");
-                    break;
+
+        if(transition.GetState() != aru::Transition::State::DONE){
+            transition.Update();
+
+            //after finishing the transition out, clear out the scene
+            if(transition.GetDirection() == aru::Transition::Direction::OUT && 
+                transition.GetState() == aru::Transition::State::DONE){
+                scene.reset();
+            }
+        }else{
+            
+            if(scene){
+                next_scene = scene->update();
+            }
+
+            if(next_scene){
+
+                if(transition.GetDirection() == aru::Transition::Direction::OUT){
+                    //fading out is done, let's instantiate the transition and fade in
+                    switch(*next_scene){
+                        case aru::scene_type::LAB: { 
+                            scene.reset(new aru::lab_scene(cstuff));
+                            break;
+                        }
+                        case aru::scene_type::MENU: { 
+                            scene.reset(new aru::menu_scene());
+                            break;
+                        }
+                        case aru::scene_type::LEVEL: { 
+                            scene.reset(new aru::level_scene(cstuff));
+                            break;
+                        }
+                        default: { 
+                            BN_ERROR("the selected screen does not exist or is not yet implemented");
+                            break;
+                        }
+                    }
+                    transition.Set(aru::Transition::Types::FADE, aru::Transition::Direction::IN, transition_time);
+                    transition.Init();
+                    BN_LOG("fade in on new scene");
+                }else{
+                    //we need to fade out
+                    transition.Set(aru::Transition::Types::FADE, aru::Transition::Direction::OUT, transition_time);
+                    transition.Init();                    
                 }
             }
+        
         }
 
 
