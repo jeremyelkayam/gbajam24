@@ -80,9 +80,8 @@ bn::optional<scene_type> lab_scene::update()
                 selection_box *warp_sel_box = (selection_box *) _text_boxes.front().get();
                 if(warp_sel_box->selected() == bn::string<8>("Yes")){
                     result = scene_type::LEVEL;
-                }else if(warp_sel_box->selected() == bn::string<8>("No")){
-                    _text_boxes.pop_front();
                 }
+                _text_boxes.pop_front();
             }
         }
     }
