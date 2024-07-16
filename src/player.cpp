@@ -170,15 +170,6 @@ void player::update(){
 
     }
 
-
-    //todo: add coyote time back
-    // if(!grounded && was_grounded && _yspeed >=0){
-    //     _coyote_timer = 12; // 12 frames is 0.2s
-    // }
-    
-
-
-
     if(_jbuf_timer){
         --_jbuf_timer;
     }

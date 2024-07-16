@@ -34,6 +34,7 @@ namespace aru
     constexpr bn::fixed BULLET_HEIGHT = 4;
     constexpr bn::fixed BULLET_MAX_XSPEED = 6;
     constexpr bn::fixed BULLET_MAX_YSPEED = 0;
+    constexpr bn::fixed BULLET_FIRE_DELAY = 10;
     constexpr uint8_t BULLET_HP = 1;
     constexpr uint8_t BULLET_CONTACT_DAMAGE = 5;
     constexpr uint8_t BULLET_IFRAMES = 0;

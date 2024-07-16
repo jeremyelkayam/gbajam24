@@ -2,6 +2,7 @@
 #include <bn_log.h>
 #include <bn_bg_palettes.h>
 #include <bn_blending.h>
+#include <bn_music_items.h>
 #include "bn_sprite_items_a_button_prompt.h"
 #include "bn_sprite_items_portrait.h"
 #include "selection_box.h"
@@ -40,6 +41,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
         ent->set_blending_enabled(true);
         ent->set_mosaic_enabled(true);
     }
+    bn::music_items::test_song.play(1.0);
 }
 
 bn::optional<scene_type> lab_scene::update()

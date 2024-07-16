@@ -5,6 +5,7 @@
 #include <bn_bg_palettes.h>
 #include <bn_log.h>
 #include <bn_keypad.h>
+#include <bn_music.h>
 
 //copyrat90 demo imports
 
@@ -51,6 +52,7 @@ int main()
             if(transition.GetDirection() == aru::Transition::Direction::OUT && 
                 transition.GetState() == aru::Transition::State::DONE){
                 scene.reset();
+                if(bn::music::playing()) bn::music::stop();
             }
         }else{
             
