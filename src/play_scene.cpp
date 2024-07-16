@@ -19,6 +19,12 @@ play_scene::play_scene(common_stuff &cstuff, const level_data &ld) :
     _player.set_blending_enabled(true);
     _level.set_blending_enabled(true);
     _hud.set_blending_enabled(true);
+
+
+    _bg.set_mosaic_enabled(true);
+    _player.set_mosaic_enabled(true);
+    _level.set_mosaic_enabled(true);
+    _hud.set_mosaic_enabled(true);
 }
 
 bn::optional<scene_type> play_scene::update(){

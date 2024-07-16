@@ -20,6 +20,7 @@ class hud_element {
         void set_tracked_value(const uint16_t &tracked_value);
         virtual void set_visible(const bool &visible)=0;
         virtual void set_blending_enabled(const bool &enabled)=0;
+        virtual void set_mosaic_enabled(const bool &enabled)=0;
 };
 
 class text_hud_element : public hud_element {
@@ -32,6 +33,7 @@ class text_hud_element : public hud_element {
         virtual void set_visible(const bool &visible) {common_stuff::set_sprite_arr_visible(
                 _text_sprites, visible);}
         virtual void set_blending_enabled(const bool &enabled);
+        virtual void set_mosaic_enabled(const bool &enabled);
         virtual void update();
 };
 
@@ -41,8 +43,12 @@ class health_hud_element : public hud_element {
         uint16_t _max;
     public:
         health_hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator);
-        virtual void set_visible(const bool &visible) {_health_bar.set_visible(visible);}
-        virtual void set_blending_enabled(const bool &enabled) {_health_bar.set_blending_enabled(enabled);}
+        virtual void set_visible(const bool &visible) 
+            {_health_bar.set_visible(visible);}
+        virtual void set_blending_enabled(const bool &enabled) 
+            {_health_bar.set_blending_enabled(enabled);}
+        virtual void set_mosaic_enabled(const bool &enabled) 
+            {_health_bar.set_mosaic_enabled(enabled);}
         virtual void update();
 };
 
@@ -74,6 +80,7 @@ class hud {
         void hide();
         void show();
         void set_blending_enabled(const bool &enabled);
+        void set_mosaic_enabled(const bool &enabled);
 };
 
 }

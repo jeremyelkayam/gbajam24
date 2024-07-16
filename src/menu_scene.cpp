@@ -29,8 +29,10 @@ menu_scene::menu_scene() :
     gen.generate(-40, 35, "TEST MAP", _text_sprites);
 
     _selector.set_blending_enabled(true);
+    _selector.set_mosaic_enabled(true);
     for(bn::sprite_ptr &sprite : _text_sprites){
         sprite.set_blending_enabled(true);
+        sprite.set_mosaic_enabled(true);
     }
 
 

@@ -38,6 +38,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 
     for(bn::unique_ptr<interactable_entity> &ent : _interactables){
         ent->set_blending_enabled(true);
+        ent->set_mosaic_enabled(true);
     }
 }
 

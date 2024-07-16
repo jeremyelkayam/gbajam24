@@ -29,13 +29,16 @@ int main()
     // bn::camera_ptr cam = bn::camera_ptr::create(128,128);
 
     bn::unique_ptr<aru::scene> scene;
-    aru::Transition transition(aru::Transition::Types::FADE, aru::Transition::Direction::IN, transition_time);
+    aru::Transition transition(aru::Transition::Types::FADE, 
+        aru::Transition::Direction::IN, transition_time * 2);
     transition.Init();
     bn::optional<aru::scene_type> next_scene = aru::scene_type::MENU;
     bn::blending::set_white_fade_color();
     scene.reset(new aru::menu_scene());
 
     aru::common_stuff cstuff;
+    aru::Transition::Types fade_and_mosaic = aru::Transition::Types::FADE 
+        | aru::Transition::Types::BG_MOSAIC | aru::Transition::Types::SPRITE_MOSAIC;
     
     while(true)
     {
@@ -77,13 +80,15 @@ int main()
                             break;
                         }
                     }
-                    transition.Set(aru::Transition::Types::FADE, aru::Transition::Direction::IN, transition_time);
+                    transition.Set(fade_and_mosaic, aru::Transition::Direction::IN,
+                         transition_time);
                     transition.Init();
                     BN_LOG("fade in on new scene");
                 }else{
                     //we need to fade out
                     bn::blending::set_black_fade_color();
-                    transition.Set(aru::Transition::Types::FADE, aru::Transition::Direction::OUT, transition_time);
+                    transition.Set(fade_and_mosaic, aru::Transition::Direction::OUT, 
+                        transition_time);
                     transition.Init();                    
                 }
             }

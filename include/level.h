@@ -47,6 +47,7 @@ public:
         const tile_flags &flags) const;
     void print_hitbox(const bn::fixed_rect &hitbox) const;
     void set_blending_enabled(const bool &enabled){_bg_ptr.set_blending_enabled(enabled);}
+    void set_mosaic_enabled(const bool &enabled){_bg_ptr.set_mosaic_enabled(enabled);}
 
 
     bn::regular_bg_map_cell cell_at(const bn::fixed_point &coords) const;

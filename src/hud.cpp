@@ -96,6 +96,18 @@ void hud::set_blending_enabled(const bool &enabled){
     _player_hp.set_blending_enabled(enabled);
 }
 
+void hud::set_mosaic_enabled(const bool &enabled){
+    for(bn::sprite_ptr &sprite : _player_hp_label_text_sprites){
+        sprite.set_mosaic_enabled(enabled);
+    }
+    for(bn::sprite_ptr &sprite : _enemy_hp_label_text_sprites){
+        sprite.set_mosaic_enabled(enabled);
+    }    
+    _enemy_hp.set_mosaic_enabled(enabled);
+    _currency_meter.set_mosaic_enabled(enabled);
+    _player_hp.set_mosaic_enabled(enabled);
+}
+
 void text_hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y){
     bn::string<8> text_str;
     bn::ostringstream text_stream(text_str);
@@ -153,6 +165,12 @@ void text_hud_element::update(){
 void text_hud_element::set_blending_enabled(const bool &enabled){
     for(bn::sprite_ptr &sprite : _text_sprites){
         sprite.set_blending_enabled(enabled);
+    }
+}
+
+void text_hud_element::set_mosaic_enabled(const bool &enabled){
+    for(bn::sprite_ptr &sprite : _text_sprites){
+        sprite.set_mosaic_enabled(enabled);
     }
 }
 

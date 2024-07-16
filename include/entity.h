@@ -21,6 +21,7 @@ public:
 
     bool facing_right() const {return _sprite.horizontal_flip();}
     virtual void set_blending_enabled(bool enabled){_sprite.set_blending_enabled(enabled);}
+    virtual void set_mosaic_enabled(bool enabled){_sprite.set_mosaic_enabled(enabled);}
 
 protected:
     bn::fixed_rect _hitbox;
