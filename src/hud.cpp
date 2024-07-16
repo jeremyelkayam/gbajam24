@@ -2,6 +2,7 @@
 #include "common_fixed_8x8_sprite_font.h"
 #include "bn_sprite_items_bar_3px.h"
 #include "bn_sprite_items_bar_5px.h"
+#include "bn_sprite_items_bar_32x3.h"
 #include <bn_log.h>
 #include <bn_size.h>
 #include "common_stuff.h"
@@ -232,8 +233,8 @@ void hover_meter_hud_element::update()
 
 hover_meter_hud_element::hover_meter_hud_element(const uint16_t &tracked_value, 
         bn::sprite_text_generator &generator) : 
-    meter_hud_element(tracked_value, generator, bn::sprite_items::bar_5px, 
-        bn::fixed_point(-110, 40))
+    meter_hud_element(tracked_value, generator, bn::sprite_items::bar_32x3, 
+        bn::fixed_point(-116, 62))
 
 {
     _bar.set_visible(false);
