@@ -1,3 +1,4 @@
+#include <bn_log.h>
 #include "bullet.h"
 #include "bn_sprite_items_bullet.h"
 namespace aru { 
@@ -19,8 +20,14 @@ void bullet::update(){
 }
 
 bool bullet::should_be_deleted() const{
+    BN_LOG("bullet hitbox: ", _hitbox.position().x(), ", ", _hitbox.position().y());
+    BN_LOG("bullet cell", (int)_level.cell_at(_hitbox.position()));
+    BN_LOG("bullet cell empty?", _level.tile_has_flag(_hitbox.position(), tile_flags::EMPTY));
     //is this terrible??? YES! Let's refactor it at some point lol bc bugs are going to happen
-    return (_hp == 0) || (_level.cell_at(_hitbox.position()) != 0) || _xspeed == 0;
+    return _hp == 0
+        || _xspeed == 0
+        || !(_level.tile_has_flag(_hitbox.position(), tile_flags::EMPTY) 
+            || _level.tile_has_flag(_hitbox.position(), tile_flags::THIN_FLOOR));
 }
 
 }

@@ -164,7 +164,7 @@ void player::update(){
 
         }
 
-        if(bn::keypad::b_pressed()){
+        if(bn::keypad::b_held() && (_shoot_timer == 0)){
             shoot();
         }
 
@@ -224,10 +224,9 @@ bool player::apply_gravity() const{
 }
 
 void player::shoot(){
-    if(_shoot_timer == 0){
-        _shoot_timer = 12;
-        _bullets.emplace_front(*_sprite.camera().get(), x(), y(), _level, facing_right());
-    }
+    BN_ASSERT(_shoot_timer == 0, "player can only shoot once shoot timer has fully cooled down");
+    _shoot_timer = 12;
+    _bullets.emplace_front(*_sprite.camera().get(), x(), y(), _level, facing_right());
 }
 
 bool player::check_bullet_collision(enemy &enemy){

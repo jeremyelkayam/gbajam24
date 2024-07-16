@@ -125,7 +125,14 @@ bool level::tile_has_flag(const bn::fixed_point &coords,
 
 bool level::tile_has_flag(const bn::regular_bg_map_cell &tile_index, 
         const tile_flags &flags) const {
-    return _tile_flags.contains(tile_index) && !!(flags & _tile_flags.at(tile_index));
+    
+    if(_tile_flags.contains(tile_index)){
+        if(flags == tile_flags::EMPTY){
+            return !(_tile_flags.at(tile_index));
+        }
+        return !!(flags & _tile_flags.at(tile_index));
+    }
+    return false;
 }
 
 bool level::is_thin_ground(const bn::fixed_point &coords) const{
