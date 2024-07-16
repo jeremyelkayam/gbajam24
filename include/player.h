@@ -29,6 +29,7 @@ public:
     bool check_bullet_collision(enemy &enemy);
     void move_to(const bn::fixed &xcor, const bool &face_right);
     void clear_target();
+    uint8_t hover_time() {return _hover_timer;}
 
 private:
     effect _jumpcloud, _sprintcloud;

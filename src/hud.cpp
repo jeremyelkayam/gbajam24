@@ -3,6 +3,7 @@
 #include "bn_sprite_items_bar_3px.h"
 #include "bn_sprite_items_bar_5px.h"
 #include <bn_log.h>
+#include <bn_size.h>
 #include "common_stuff.h"
 #include "constants.h"
 
@@ -15,7 +16,10 @@ hud::hud(const uint16_t &crcy) :
     _target_enemy_hp(10),
     _max_enemy_hp(10),
     _currency_meter(crcy, _text_generator),
-    _player_hp(PLAYER_HP, _text_generator)
+    _player_hp_meter(PLAYER_HP, _text_generator, 
+        bn::sprite_items::bar_5px, bn::fixed_point(-110,-28)),
+    _hover_meter(PLAYER_HOVER_TIME, _text_generator, 
+        bn::sprite_items::bar_5px, bn::fixed_point(-110, 40))
 {
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();
@@ -51,13 +55,14 @@ void hud::update(){
         }
     }
 
-    _player_hp.update();
+    _player_hp_meter.update();
     _currency_meter.update();
+    _hover_meter.update();
 
 }
 
 void hud::update_player_hp(const uint8_t &hp){
-    _player_hp.set_tracked_value(hp);
+    _player_hp_meter.set_tracked_value(hp);
 }
 
 void hud::update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, const uint8_t &current_hp, const uint8_t &max_hp){
@@ -74,6 +79,11 @@ void hud::update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, con
 
 void hud::update_currency(const uint16_t &crcy){
     _currency_meter.set_tracked_value(crcy);
+}
+
+void hud::update_hover_time(const uint8_t &hover_time){
+    _hover_meter.set_tracked_value(hover_time);
+    BN_LOG("setting hover time to ", hover_time);
 }
 
 void hud::hide(){
@@ -93,7 +103,7 @@ void hud::set_blending_enabled(const bool &enabled){
     }    
     _enemy_hp.set_blending_enabled(enabled);
     _currency_meter.set_blending_enabled(enabled);
-    _player_hp.set_blending_enabled(enabled);
+    _player_hp_meter.set_blending_enabled(enabled);
 }
 
 void hud::set_mosaic_enabled(const bool &enabled){
@@ -105,7 +115,7 @@ void hud::set_mosaic_enabled(const bool &enabled){
     }    
     _enemy_hp.set_mosaic_enabled(enabled);
     _currency_meter.set_mosaic_enabled(enabled);
-    _player_hp.set_mosaic_enabled(enabled);
+    _player_hp_meter.set_mosaic_enabled(enabled);
 }
 
 void text_hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y){
@@ -174,18 +184,32 @@ void text_hud_element::set_mosaic_enabled(const bool &enabled){
     }
 }
 
-health_hud_element::health_hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator) : 
+meter_hud_element::meter_hud_element(const uint16_t &tracked_value, 
+        bn::sprite_text_generator &generator, const bn::sprite_item &bar, 
+        const bn::fixed_point &pos) : 
     hud_element(tracked_value, generator),
-    _health_bar(bn::sprite_items::bar_5px.create_sprite(-110,-28)),
+    _health_bar(bar.create_sprite(pos)),
+    _meter_pos(pos),
     _max(tracked_value) {
 
 }
 
-void health_hud_element::update(){
+void meter_hud_element::update(){
     hud_element::update();
     bn::fixed scale_factor = bn::fixed(_displayed) / bn::fixed(_max);
-    _health_bar.set_vertical_scale(scale_factor);
-    _health_bar.set_y(4 + (bn::fixed(-32)*scale_factor).floor_integer());
+    bn::fixed half_height = _health_bar.dimensions().height() * bn::fixed(0.5);
+
+
+    //GBA refuses to do anything with a scale factor of 0, so let's just make the bar
+    // invisible in this edge case
+    if(scale_factor != 0){
+        _health_bar.set_visible(true);
+        _health_bar.set_vertical_scale(scale_factor);
+    }else{
+        _health_bar.set_visible(false);
+    }
+    _health_bar.set_y(_meter_pos.y() + half_height - 
+        (half_height * scale_factor).floor_integer());
 }
 
 }

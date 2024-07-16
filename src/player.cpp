@@ -35,7 +35,7 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _jbuf_timer(0),
     _coyote_timer(0),
     _shoot_timer(0),
-    _hover_timer(0)
+    _hover_timer(PLAYER_HOVER_TIME)
 {
     _sprite.set_z_order(0);
 }

@@ -37,12 +37,16 @@ class text_hud_element : public hud_element {
         virtual void update();
 };
 
-class health_hud_element : public hud_element { 
+class meter_hud_element : public hud_element { 
     protected:
         bn::sprite_ptr _health_bar;
+        bn::fixed_point _meter_pos;
         uint16_t _max;
     public:
-        health_hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator);
+        meter_hud_element(const uint16_t &tracked_value, 
+            bn::sprite_text_generator &generator, const bn::sprite_item &bar, 
+            const bn::fixed_point &pos);
+
         virtual void set_visible(const bool &visible) 
             {_health_bar.set_visible(visible);}
         virtual void set_blending_enabled(const bool &enabled) 
@@ -52,8 +56,11 @@ class health_hud_element : public hud_element {
         virtual void update();
 };
 
+
+
 class hud { 
     private:
+        
         bn::vector<bn::sprite_ptr, 8>   _player_hp_label_text_sprites,
                                         _enemy_hp_label_text_sprites;
                                         
@@ -64,9 +71,8 @@ class hud {
             _displayed_enemy_hp, _target_enemy_hp, _max_enemy_hp;
 
         text_hud_element _currency_meter;
-        health_hud_element _player_hp;
+        meter_hud_element _player_hp_meter, _hover_meter;
 
-        //todo: refactor the target values into const references to the actual values
         uint16_t _ehp_visible_timer;
 
     public:
@@ -77,6 +83,7 @@ class hud {
         void update_currency(const uint16_t &crcy);
         void update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, 
             const uint8_t &current_hp, const uint8_t &max_hp);
+        void update_hover_time(const uint8_t &hover_time);
         void hide();
         void show();
         void set_blending_enabled(const bool &enabled);

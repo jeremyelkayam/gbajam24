@@ -20,11 +20,21 @@ void bullet::update(){
 }
 
 bool bullet::should_be_deleted() const{
-    BN_LOG("bullet hitbox: ", _hitbox.position().x(), ", ", _hitbox.position().y());
-    BN_LOG("bullet cell", (int)_level.cell_at(_hitbox.position()));
-    BN_LOG("bullet cell empty?", _level.tile_has_flag(_hitbox.position(), tile_flags::EMPTY));
-    //is this terrible??? YES! Let's refactor it at some point lol bc bugs are going to happen
+    //todo: maybe put this into its own function 
+    const bn::fixed cam_x = _sprite.camera().get()->x();
+    const bn::fixed cam_y = _sprite.camera().get()->x();
+    constexpr const bn::fixed half_height = 80;
+    constexpr const bn::fixed half_width = 120;
+    constexpr const bn::fixed tolerance = 30;
+
+    bool far_offscreen = (x() < cam_x - (half_width + tolerance)) ||
+        (x() > cam_x + (half_width + tolerance)) ||
+        (y() < cam_y - (half_height + tolerance)) ||
+        (y() > cam_y + (half_height + tolerance));
+
+
     return _hp == 0
+        || far_offscreen
         || _xspeed == 0
         || !(_level.tile_has_flag(_hitbox.position(), tile_flags::EMPTY) 
             || _level.tile_has_flag(_hitbox.position(), tile_flags::THIN_FLOOR));

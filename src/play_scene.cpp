@@ -33,6 +33,8 @@ bn::optional<scene_type> play_scene::update(){
     _player.update();
     _cam_mgr.update();
     _hud.update();
+    _hud.update_hover_time(_player.hover_time());
+    _hud.update_player_hp(_player.hp());
 
     return result;
 }
