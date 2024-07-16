@@ -4,6 +4,10 @@
 
 namespace aru 
 {
+    constexpr uint32_t MAX_UINT32 = 4294967295;
+    constexpr uint16_t MAX_UINT16 = 65535;
+    constexpr uint8_t MAX_UINT8 = 255;
+
     constexpr bn::fixed INVSQRT2 = bn::fixed(0.707107);
     constexpr bn::fixed INVSQRT54THS = bn::fixed(0.894421);
 

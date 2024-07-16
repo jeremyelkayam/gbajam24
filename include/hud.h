@@ -12,6 +12,7 @@ class hud_element {
     protected:
         bn::sprite_text_generator &_generator;
         uint16_t _displayed, _target, _delta;
+        uint8_t _time_since_updated;
 
     public:
         hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator);
@@ -39,7 +40,7 @@ class text_hud_element : public hud_element {
 
 class meter_hud_element : public hud_element { 
     protected:
-        bn::sprite_ptr _health_bar;
+        bn::sprite_ptr _bar;
         bn::fixed_point _meter_pos;
         uint16_t _max;
     public:
@@ -48,11 +49,18 @@ class meter_hud_element : public hud_element {
             const bn::fixed_point &pos);
 
         virtual void set_visible(const bool &visible) 
-            {_health_bar.set_visible(visible);}
+            {_bar.set_visible(visible);}
         virtual void set_blending_enabled(const bool &enabled) 
-            {_health_bar.set_blending_enabled(enabled);}
+            {_bar.set_blending_enabled(enabled);}
         virtual void set_mosaic_enabled(const bool &enabled) 
-            {_health_bar.set_mosaic_enabled(enabled);}
+            {_bar.set_mosaic_enabled(enabled);}
+        virtual void update();
+};
+
+class hover_meter_hud_element : public meter_hud_element {
+    public:
+        hover_meter_hud_element(const uint16_t &tracked_value, 
+            bn::sprite_text_generator &generator);
         virtual void update();
 };
 
@@ -71,7 +79,8 @@ class hud {
             _displayed_enemy_hp, _target_enemy_hp, _max_enemy_hp;
 
         text_hud_element _currency_meter;
-        meter_hud_element _player_hp_meter, _hover_meter;
+        meter_hud_element _player_hp_meter;
+        hover_meter_hud_element _hover_meter;
 
         uint16_t _ehp_visible_timer;
 

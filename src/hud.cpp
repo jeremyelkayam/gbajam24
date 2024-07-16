@@ -18,8 +18,7 @@ hud::hud(const uint16_t &crcy) :
     _currency_meter(crcy, _text_generator),
     _player_hp_meter(PLAYER_HP, _text_generator, 
         bn::sprite_items::bar_5px, bn::fixed_point(-110,-28)),
-    _hover_meter(PLAYER_HOVER_TIME, _text_generator, 
-        bn::sprite_items::bar_5px, bn::fixed_point(-110, 40))
+    _hover_meter(PLAYER_HOVER_TIME, _text_generator)
 {
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();
@@ -131,7 +130,8 @@ hud_element::hud_element(const uint16_t &tracked_value, bn::sprite_text_generato
     _generator(generator),
     _displayed(tracked_value),
     _target(tracked_value),
-    _delta(0) {    
+    _delta(0),
+    _time_since_updated(MAX_UINT8) {    
 }
 
 void hud_element::update(){
@@ -142,9 +142,15 @@ void hud_element::update(){
             _displayed = common_stuff::bounded_addition(_displayed, _delta, _target);
         }
     }
+    if(_time_since_updated < MAX_UINT8){
+        ++_time_since_updated;
+    }
+    
 }
 
 void hud_element::set_tracked_value(const uint16_t &tracked_value) {
+    if(_target != tracked_value) _time_since_updated = 0;
+
     _target = tracked_value;
     uint16_t diff = 0;
 
@@ -153,8 +159,11 @@ void hud_element::set_tracked_value(const uint16_t &tracked_value) {
     }else if(_displayed < _target){
         diff = _target - _displayed;
     }
-    //should take 2 seconds to change.
+    //should take 2 seconds to change max.
+    //if the delta is smaller than 1 don't bother with fractions, just go 1 per frame.
     _delta = (diff * bn::fixed(.01666666666)).ceil_integer();
+    
+
 }
 
 
@@ -188,7 +197,7 @@ meter_hud_element::meter_hud_element(const uint16_t &tracked_value,
         bn::sprite_text_generator &generator, const bn::sprite_item &bar, 
         const bn::fixed_point &pos) : 
     hud_element(tracked_value, generator),
-    _health_bar(bar.create_sprite(pos)),
+    _bar(bar.create_sprite(pos)),
     _meter_pos(pos),
     _max(tracked_value) {
 
@@ -197,19 +206,37 @@ meter_hud_element::meter_hud_element(const uint16_t &tracked_value,
 void meter_hud_element::update(){
     hud_element::update();
     bn::fixed scale_factor = bn::fixed(_displayed) / bn::fixed(_max);
-    bn::fixed half_height = _health_bar.dimensions().height() * bn::fixed(0.5);
+    bn::fixed half_height = _bar.dimensions().height() * bn::fixed(0.5);
 
 
     //GBA refuses to do anything with a scale factor of 0, so let's just make the bar
     // invisible in this edge case
     if(scale_factor != 0){
-        _health_bar.set_visible(true);
-        _health_bar.set_vertical_scale(scale_factor);
+        _bar.set_visible(true);
+        _bar.set_vertical_scale(scale_factor);
     }else{
-        _health_bar.set_visible(false);
+        _bar.set_visible(false);
     }
-    _health_bar.set_y(_meter_pos.y() + half_height - 
+    _bar.set_y(_meter_pos.y() + half_height - 
         (half_height * scale_factor).floor_integer());
+}
+
+void hover_meter_hud_element::update()
+{
+    if(_time_since_updated < 60){
+        meter_hud_element::update();
+    }else{
+        _bar.set_visible(false);
+    }
+}
+
+hover_meter_hud_element::hover_meter_hud_element(const uint16_t &tracked_value, 
+        bn::sprite_text_generator &generator) : 
+    meter_hud_element(tracked_value, generator, bn::sprite_items::bar_5px, 
+        bn::fixed_point(-110, 40))
+
+{
+    _bar.set_visible(false);
 }
 
 }
