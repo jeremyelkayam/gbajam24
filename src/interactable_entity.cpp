@@ -117,8 +117,10 @@ bn::deque<bn::unique_ptr<box>, 16> shoot_upgrader::interact_boxes(){
 
 slash_upgrader::slash_upgrader(const bn::camera_ptr &cam, 
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
-        interactable_entity(cam, x, y, 50,40,bn::sprite_items::sword_upgrade, cstuff)
+        interactable_entity(cam, x, y, 30,40,bn::sprite_items::sword_upgrade, cstuff)
 {
+    _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 6, 
+        bn::sprite_items::sword_upgrade.tiles_item(), 0, 1, 2, 1));
     _sprite.set_horizontal_flip(true);
 }
 

@@ -22,7 +22,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 450, 190, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 400, 112, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<shoot_upgrader>(new shoot_upgrader(_cam, 80, 209, _cstuff)));
-    _interactables.emplace_front(bn::unique_ptr<slash_upgrader>(new slash_upgrader(_cam, 110, 112, _cstuff)));
+    _interactables.emplace_front(bn::unique_ptr<slash_upgrader>(new slash_upgrader(_cam, 110, 116, _cstuff)));
     _interactables.emplace_front(bn::unique_ptr<warp_point>(new warp_point(_cam, 256, 192, _cstuff)));
 
     _player.update();
