@@ -30,7 +30,8 @@ namespace aru
 
     //how many invincibility frames you get after being hit
     constexpr uint8_t PLAYER_IFRAMES = 120;
-    constexpr uint8_t PLAYER_HOVER_TIME = 30;
+    //amount of time you can hover
+    constexpr uint8_t PLAYER_HOVER_TIME[3] = {30, 60, 120};
     
 
     

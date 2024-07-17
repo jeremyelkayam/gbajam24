@@ -10,12 +10,13 @@
 
 namespace aru {
 
-player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) : 
+player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, const common_stuff::saved_data &savefile) : 
     combat_entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, 
         PLAYER_JUMP_YSPEED, PLAYER_FALL_YSPEED,
         PLAYER_HP, PLAYER_CONTACT_DAMAGE, PLAYER_IFRAMES,level,bn::sprite_items::aru),
     _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
     _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
+    _savefile(savefile),
     _current_state(PSTATE::STAND),
     _idle(bn::create_sprite_animate_action_forever(_sprite, 10, 
         bn::sprite_items::aru.tiles_item(), 0, 1, 2, 1, 0, 1, 4, 1, 0, 1, 2, 1, 0, 1, 2, 1,
@@ -35,7 +36,7 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level) :
     _jbuf_timer(0),
     _coyote_timer(0),
     _shoot_timer(0),
-    _hover_timer(PLAYER_HOVER_TIME)
+    _hover_timer(PLAYER_HOVER_TIME[_savefile.hover_upgrade_lvl])
 {
     _sprite.set_z_order(0);
 }
@@ -127,7 +128,7 @@ void player::update(){
         
 
         if(_grounded){ 
-            _hover_timer = PLAYER_HOVER_TIME;
+            _hover_timer = PLAYER_HOVER_TIME[_savefile.hover_upgrade_lvl];
             
             if(bn::keypad::a_pressed() || _jbuf_timer){
                 _current_state = PSTATE::JUMPSQUAT;

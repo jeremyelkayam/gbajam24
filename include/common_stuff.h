@@ -9,14 +9,14 @@
 
 namespace aru {
 
-    struct saved_data {
-        bn::array<char, 8> format_tag;
-        uint16_t ultramatter, total_donated;
-        uint8_t hover_upgrade_lvl, shoot_upgrade_lvl, sword_upgrade_lvl, current_level;
-    };
-
     class common_stuff { 
         public:
+            struct saved_data {
+                bn::array<char, 8> format_tag;
+                uint16_t ultramatter, total_donated;
+                uint8_t hover_upgrade_lvl, shoot_upgrade_lvl, sword_upgrade_lvl, current_level;
+            }; 
+                   
             bn::sprite_text_generator text_generator;
             bn::random rand;
 

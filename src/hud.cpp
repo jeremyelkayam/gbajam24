@@ -10,16 +10,17 @@
 
 namespace aru {
 
-hud::hud(const uint16_t &crcy) : 
+hud::hud(common_stuff &cstuff) : 
     _text_generator(fixed_8x8_sprite_font),
     _enemy_hp(bn::sprite_items::bar_3px.create_sprite(90,72)),
     _displayed_enemy_hp(10),
     _target_enemy_hp(10),
     _max_enemy_hp(10),
-    _currency_meter(crcy, _text_generator),
+    _currency_meter(cstuff.savefile.ultramatter, _text_generator),
     _player_hp_meter(PLAYER_HP, _text_generator, 
         bn::sprite_items::bar_5px, bn::fixed_point(-110,-28)),
-    _hover_meter(PLAYER_HOVER_TIME, _text_generator)
+    _hover_meter(PLAYER_HOVER_TIME[cstuff.savefile.hover_upgrade_lvl], _text_generator),
+    _cstuff(cstuff)
 {
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();

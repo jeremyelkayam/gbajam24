@@ -81,12 +81,13 @@ class hud {
         text_hud_element _currency_meter;
         meter_hud_element _player_hp_meter;
         hover_meter_hud_element _hover_meter;
+        common_stuff &_cstuff;
 
         uint16_t _ehp_visible_timer;
 
     public:
 
-        hud(const uint16_t &crcy);
+        hud(common_stuff &cstuff);
         void update();
         void update_player_hp(const uint8_t &hp);
         void update_currency(const uint16_t &crcy);

@@ -60,7 +60,9 @@ bn::unique_ptr<box> upgrade_selection_box::next_box(){
         bn::string<64> result;
         bn::ostringstream stream(result);
         stream << _upgrade_type;
-        stream << " ability was upgraded.";
+        stream << " ability was upgraded to level ";
+        stream << _upgrade_lvl + 1;
+        stream << ".";
 
         return bn::unique_ptr<box>(new text_box(_text_generator, result.c_str(), true));
     }else if(_not_enough_money){

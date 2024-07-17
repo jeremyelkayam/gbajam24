@@ -2,6 +2,7 @@
 #include <bn_forward_list.h>
 #include "effect.h"
 #include "combat_entity.h"
+#include "common_stuff.h"
 #include "enemy.h"
 #include "bullet.h"
 
@@ -23,7 +24,8 @@ class player : public combat_entity
 {
 public: 
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference
-    player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level);
+    player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, 
+        const common_stuff::saved_data &savefile);
     virtual void update() override;
     virtual void jump() override;
     bool check_bullet_collision(enemy &enemy);
@@ -33,6 +35,7 @@ public:
 
 private:
     effect _jumpcloud, _sprintcloud;
+    const common_stuff::saved_data &_savefile;
     PSTATE _current_state;
     bn::sprite_animate_action<20> _idle;
     bn::sprite_animate_action<2> _jump;
