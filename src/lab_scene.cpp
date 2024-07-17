@@ -59,6 +59,9 @@ bn::optional<scene_type> lab_scene::update()
             bn::unique_ptr<box> next_box = _text_boxes.front()->next_box();
             _text_boxes.pop_front();
             if(next_box) _text_boxes.push_front(bn::move(next_box));
+
+            // if we upgraded our hover level, we can do that now
+            _hud.update_hover_level();
         }
         else if(bn::keypad::start_pressed())
         {

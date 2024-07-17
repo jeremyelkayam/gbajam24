@@ -84,7 +84,10 @@ void hud::update_currency(const uint16_t &crcy){
 
 void hud::update_hover_time(const uint8_t &hover_time){
     _hover_meter.set_tracked_value(hover_time);
-    BN_LOG("setting hover time to ", hover_time);
+}
+
+void hud::update_hover_level(){
+    _hover_meter.set_max(PLAYER_HOVER_TIME[_cstuff.savefile.hover_upgrade_lvl]);
 }
 
 void hud::hide(){
@@ -133,7 +136,8 @@ hud_element::hud_element(const uint16_t &tracked_value, bn::sprite_text_generato
     _displayed(tracked_value),
     _target(tracked_value),
     _delta(0),
-    _time_since_updated(MAX_UINT8) {    
+    _time_since_updated(MAX_UINT8),
+    _delta_factor(.01666666666) {    
 }
 
 void hud_element::update(){
@@ -163,7 +167,7 @@ void hud_element::set_tracked_value(const uint16_t &tracked_value) {
     }
     //should take 2 seconds to change max.
     //if the delta is smaller than 1 don't bother with fractions, just go 1 per frame.
-    _delta = (diff * bn::fixed(.01666666666)).ceil_integer();
+    _delta = (diff * _delta_factor).ceil_integer();
     
 
 }
@@ -238,6 +242,7 @@ hover_meter_hud_element::hover_meter_hud_element(const uint16_t &tracked_value,
         bn::fixed_point(-116, 62))
 
 {
+    _delta_factor *= 4;
     _bar.set_visible(false);
 }
 

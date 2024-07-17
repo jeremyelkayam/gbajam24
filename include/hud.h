@@ -13,6 +13,7 @@ class hud_element {
         bn::sprite_text_generator &_generator;
         uint16_t _displayed, _target, _delta;
         uint8_t _time_since_updated;
+        bn::fixed _delta_factor;
 
     public:
         hud_element(const uint16_t &tracked_value, bn::sprite_text_generator &generator);
@@ -55,6 +56,7 @@ class meter_hud_element : public hud_element {
         virtual void set_mosaic_enabled(const bool &enabled) 
             {_bar.set_mosaic_enabled(enabled);}
         virtual void update();
+        void set_max(uint16_t new_max) {_max = new_max;}
 };
 
 class hover_meter_hud_element : public meter_hud_element {
@@ -94,6 +96,7 @@ class hud {
         void update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, 
             const uint8_t &current_hp, const uint8_t &max_hp);
         void update_hover_time(const uint8_t &hover_time);
+        void update_hover_level();
         void hide();
         void show();
         void set_blending_enabled(const bool &enabled);
