@@ -20,8 +20,15 @@ public:
     bn::fixed_rect hitbox() const {return _hitbox;}
 
     bool facing_right() const {return _sprite.horizontal_flip();}
-    virtual void set_blending_enabled(bool enabled){_sprite.set_blending_enabled(enabled);}
-    virtual void set_mosaic_enabled(bool enabled){_sprite.set_mosaic_enabled(enabled);}
+
+    virtual void set_blending_enabled(bool enabled)
+        { _sprite.set_blending_enabled(enabled); }
+
+    virtual void set_mosaic_enabled(bool enabled)
+        { _sprite.set_mosaic_enabled(enabled); }
+
+    void set_palette(const bn::sprite_palette_item &pal)
+        { _sprite.set_palette(pal); }
 
 protected:
     bn::fixed_rect _hitbox;

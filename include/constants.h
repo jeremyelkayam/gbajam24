@@ -1,6 +1,9 @@
 #pragma once
 #include <bn_fixed.h>
 #include <bn_string.h>
+#include "bn_sprite_items_aru_palette_green.h"
+#include "bn_sprite_items_aru_palette_purple.h"
+#include "bn_sprite_items_aru_palette_orange.h"
 
 namespace aru 
 {
@@ -31,8 +34,12 @@ namespace aru
     //how many invincibility frames you get after being hit
     constexpr uint8_t PLAYER_IFRAMES = 120;
     //amount of time you can hover
-    constexpr uint8_t PLAYER_HOVER_TIME[3] = {30, 60, 120};
-    
+    constexpr uint8_t PLAYER_HOVER_TIME[3] = {30, 60, 90};
+    constexpr const bn::sprite_palette_item PLAYER_PALETTE[3] = {
+        bn::sprite_items::aru_palette_orange.palette_item(),
+        bn::sprite_items::aru_palette_green.palette_item(),
+        bn::sprite_items::aru_palette_purple.palette_item(),
+    };
 
     
     constexpr bn::fixed BULLET_WIDTH = 6;

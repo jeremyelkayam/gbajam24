@@ -38,6 +38,7 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, cons
     _shoot_timer(0),
     _hover_timer(PLAYER_HOVER_TIME[_savefile.hover_upgrade_lvl])
 {
+    _sprite.set_palette(PLAYER_PALETTE[_savefile.hover_upgrade_lvl]);
     _sprite.set_z_order(0);
 }
 

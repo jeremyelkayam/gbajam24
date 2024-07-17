@@ -62,6 +62,7 @@ bn::optional<scene_type> lab_scene::update()
 
             // if we upgraded our hover level, we can do that now
             _hud.update_hover_level();
+            _player.set_palette(PLAYER_PALETTE[_cstuff.savefile.hover_upgrade_lvl]);
         }
         else if(bn::keypad::start_pressed())
         {

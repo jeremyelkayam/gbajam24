@@ -25,7 +25,7 @@ hud::hud(common_stuff &cstuff) :
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();
     _text_generator.generate(-110, -72, "HP", _player_hp_label_text_sprites);  
-    
+    update_hover_level();
 }
 
 void hud::update(){
@@ -88,6 +88,7 @@ void hud::update_hover_time(const uint8_t &hover_time){
 
 void hud::update_hover_level(){
     _hover_meter.set_max(PLAYER_HOVER_TIME[_cstuff.savefile.hover_upgrade_lvl]);
+    _hover_meter.set_palette(PLAYER_PALETTE[_cstuff.savefile.hover_upgrade_lvl]);
 }
 
 void hud::hide(){

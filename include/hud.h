@@ -56,7 +56,10 @@ class meter_hud_element : public hud_element {
         virtual void set_mosaic_enabled(const bool &enabled) 
             {_bar.set_mosaic_enabled(enabled);}
         virtual void update();
-        void set_max(uint16_t new_max) {_max = new_max;}
+        void set_max(uint16_t new_max) 
+            { _max = new_max; }
+        void set_palette(const bn::sprite_palette_item &pal)
+            { _bar.set_palette(pal); }
 };
 
 class hover_meter_hud_element : public meter_hud_element {
