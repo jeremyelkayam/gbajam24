@@ -43,9 +43,7 @@ void text_box::setup_text_sprites(){
 }
 
 void text_box::update(){
-    if(!_box){
-        init();
-    }
+    box::update();
 
     if(bn::keypad::a_pressed()){
         advance();
@@ -94,8 +92,9 @@ void text_box::set_visible(bool visible){
 //todo: CHANGE ALL GRAPHICAL RESOURCES TO OPTIONAL AND SET THEM UP IN THE INIT FUNCTION
 
 void text_box::init(){
-    _box = bn::regular_bg_items::textbox.create_bg_optional(0, _top_box ? -104 : 0);
-    _box->set_priority(2);
+    box::init();
+    if(_top_box) _box->set_y(-104);
+    
     setup_text_sprites();
     _next_prompt = bn::sprite_items::downarrow.create_sprite_optional(TB_ARROW_X,TB_ARROW_Y);
     _next_prompt->set_bg_priority(0);

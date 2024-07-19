@@ -94,9 +94,17 @@ hover_upgrader::hover_upgrader(const bn::camera_ptr &cam,
 
 bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
-    result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
-            _cstuff.text_generator, _cstuff.savefile.hover_upgrade_lvl,
-            _cstuff.savefile.ultramatter, 1000, "HOVER")));
+    if(_cstuff.savefile.hover_upgrade_lvl == 2){
+        result.push_back(bn::unique_ptr<text_box>(
+                new text_box(_cstuff.text_generator,
+                "No more hover upgrades are available at this time. Have a nice day!", 
+                true)));
+    }else{
+        result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
+                _cstuff.text_generator, _cstuff.savefile.hover_upgrade_lvl,
+                _cstuff.savefile.ultramatter, 1000, "HOVER")));
+
+    }
     return result;
 }
 
@@ -119,7 +127,7 @@ slash_upgrader::slash_upgrader(const bn::camera_ptr &cam,
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
         interactable_entity(cam, x, y, 30,40,bn::sprite_items::sword_upgrade, cstuff)
 {
-    _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 6, 
+    _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 9, 
         bn::sprite_items::sword_upgrade.tiles_item(), 0, 1, 2, 1));
     _sprite.set_horizontal_flip(true);
 }

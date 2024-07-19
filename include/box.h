@@ -6,6 +6,7 @@
 #include <bn_unique_ptr.h>
 #include <bn_string.h>
 #include <bn_sprite_actions.h>
+#include <bn_regular_bg_animate_actions.h>
 
 namespace aru { 
     class box {
@@ -13,6 +14,7 @@ namespace aru {
             bn::sprite_text_generator &_text_generator;
             bn::vector<bn::sprite_ptr, 256> _text_sprites;
             bn::optional<bn::regular_bg_ptr> _box;
+            bn::optional<bn::regular_bg_cached_animate_action<4>> _anim;
             bool _done;
             uint8_t _anim_index;
 
@@ -30,7 +32,7 @@ namespace aru {
             box(bn::sprite_text_generator &text_generator, uint8_t anim_index = 0);
             virtual ~box() {return;} //ayy, oracle vm where u at
             virtual bool done() {return _done;}
-            virtual void update()=0;
+            virtual void update(){if(!_box) init(); if(_anim) _anim->update();}
             virtual void set_visible(bool visible);
             virtual bn::unique_ptr<box> next_box();
             uint8_t anim_index() const {return _anim_index;}

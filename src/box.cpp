@@ -88,6 +88,8 @@ bn::unique_ptr<box> box::next_box(){
 void box::init(){
     _box = bn::regular_bg_items::textbox.create_bg_optional(0, 0);
     _box->set_priority(2);
+    _anim.emplace(bn::create_regular_bg_cached_animate_action_forever(
+        *_box, 6, bn::regular_bg_items::textbox.map_item(), 0, 1, 2, 3));
 }
 
 }

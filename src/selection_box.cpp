@@ -15,9 +15,7 @@ selection_box::selection_box(bn::sprite_text_generator &text_generator, const bn
     _selected_option(0) {
 }
 void selection_box::update(){
-    if(!_box){
-        init();
-    }
+    box::update();
 
     bn::fixed xcor = _option_sprites.at(_selected_option).x() - 20;
     bn::fixed ycor = _option_sprites.at(_selected_option).y();

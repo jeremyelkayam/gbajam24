@@ -19,9 +19,7 @@ donation_box::donation_box(common_stuff &cstuff) :
 }
 
 void donation_box::update(){
-    if(!_box){
-        init();
-    }
+    box::update();
 
     if(bn::keypad::left_pressed() && _place < 4){
         ++_place;
