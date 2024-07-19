@@ -25,8 +25,9 @@ void camera_manager::update(){
             _y_ease.set_target(-50);
         break;
         case PSTATE::FALL:
-            //todo: have it start after a certain amount of time between state changes
-            _y_ease.set_target(50);
+            if(_player.time_since_state_change() > 30){
+                _y_ease.set_target(50);
+            }
         break;
         case PSTATE::JUMP:
         break;
@@ -45,9 +46,7 @@ void camera_manager::update(){
 
     //don't go past the top row of tiles
     if(new_y < 88) new_y = 88;
-    BN_LOG("new y: ", new_y);
     if(new_y > (_level.height() - 80)) new_y = _level.height() - 80;
-    BN_LOG("new y: ", new_y);
     _cam.set_position(new_x, new_y);
 }
 

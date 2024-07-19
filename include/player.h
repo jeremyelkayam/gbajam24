@@ -33,6 +33,7 @@ public:
     void clear_target();
     uint8_t hover_time() const {return _hover_timer;}
     PSTATE state() const {return _current_state;}
+    uint16_t time_since_state_change() const {return _state_change_timer;}
 
 private:
     effect _jumpcloud, _sprintcloud;
@@ -53,12 +54,14 @@ private:
     const bn::fixed _DUSTCLOUD_OFFSET;
 
     uint8_t _jbuf_timer, _coyote_timer, _shoot_timer, _hover_timer;
+    uint16_t _state_change_timer;
 
     virtual bool on_thin_ground() const override;
     virtual bool apply_gravity() const override;
     void shoot();
     virtual void land();
     void start_anim(bn::isprite_animate_action &anim);
+    void set_state(const PSTATE &state);
     
 };
 

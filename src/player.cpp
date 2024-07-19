@@ -36,13 +36,15 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, cons
     _jbuf_timer(0),
     _coyote_timer(0),
     _shoot_timer(0),
-    _hover_timer(PLAYER_HOVER_TIME[_savefile.hover_upgrade_lvl])
+    _hover_timer(PLAYER_HOVER_TIME[_savefile.hover_upgrade_lvl]),
+    _state_change_timer(0)
 {
     _sprite.set_palette(PLAYER_PALETTE[_savefile.hover_upgrade_lvl]);
     _sprite.set_z_order(0);
 }
 
 void player::update(){
+    ++_state_change_timer;
 
     if(_current_state == PSTATE::JUMPSQUAT){
         if(_jumpsquat.done()){
@@ -87,13 +89,13 @@ void player::update(){
         //todo: less c/p'd code here
         if(-_MAX_XSPEED < (*_target_xcor - x()) && (*_target_xcor - x()) < _MAX_XSPEED ){
             _target_xspeed = 0;
-            _current_state = PSTATE::STAND;
+            set_state(PSTATE::STAND);
             _sprite.set_horizontal_flip(_face_right_after_moving);
         }
     }else{
 
         if((bn::keypad::left_held() || bn::keypad::right_held()) && _current_state == PSTATE::STAND){
-            _current_state = PSTATE::RUN;
+            set_state(PSTATE::RUN);
             start_anim(_run);
         }
 
@@ -123,7 +125,7 @@ void player::update(){
             _target_xspeed = 0;
             if(_current_state == PSTATE::RUN){
                 start_anim(_idle);
-                _current_state = PSTATE::STAND;
+                set_state(PSTATE::STAND);
             }
         }
         
@@ -132,18 +134,18 @@ void player::update(){
             _hover_timer = PLAYER_HOVER_TIME[_savefile.hover_upgrade_lvl];
             
             if(bn::keypad::a_pressed() || _jbuf_timer){
-                _current_state = PSTATE::JUMPSQUAT;
+                set_state(PSTATE::JUMPSQUAT);
                 start_anim(_jumpsquat);
             }
         }else{
             if(bn::keypad::a_pressed()){
                 if(_coyote_timer){
-                    _current_state = PSTATE::JUMPSQUAT;
+                    set_state(PSTATE::JUMPSQUAT);
                     start_anim(_jumpsquat);
                 }
             }
             if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
-                _current_state = PSTATE::HOVER;
+                set_state(PSTATE::HOVER);
                 start_anim(_hover);
             }
 
@@ -155,12 +157,12 @@ void player::update(){
                 }
 
                 if(_hover_timer == 0 || bn::keypad::a_released()){
-                _current_state = PSTATE::JUMP;
+                    set_state(PSTATE::JUMP);
                 }
             }
 
             if(_current_state != PSTATE::FALL && _current_state != PSTATE::HOVER && _yspeed > 0){ 
-                _current_state = PSTATE::FALL;
+                set_state(PSTATE::FALL);
                 start_anim(_fall);
             }
 
@@ -200,12 +202,12 @@ void player::jump(){
     _jbuf_timer = 0;
     _jumpcloud.start(_hitbox.x(), _hitbox.y() + 8);
     start_anim(_jump);
-    _current_state = PSTATE::JUMP;
+    set_state(PSTATE::JUMP);
 }
 
 void player::move_to(const bn::fixed &xcor, const bool &face_right){
     _target_xcor.emplace(xcor);
-    _current_state = PSTATE::RUN;
+    set_state(PSTATE::RUN);
     _face_right_after_moving = face_right;
     start_anim(_run);
 }
@@ -247,13 +249,17 @@ bool player::check_bullet_collision(enemy &enemy){
 void player::land(){
     combat_entity::land();
     start_anim(_idle);
-    _current_state = PSTATE::STAND;
+    set_state(PSTATE::STAND);
 }
 
 void player::start_anim(bn::isprite_animate_action &anim){
     anim.reset();
     anim.update();
+}
 
+void player::set_state(const PSTATE &state){
+    _current_state = state;
+    _state_change_timer = 0;
 }
 
 }
