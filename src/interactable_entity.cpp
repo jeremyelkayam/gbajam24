@@ -110,10 +110,11 @@ bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
 
 shoot_upgrader::shoot_upgrader(const bn::camera_ptr &cam, 
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
-        interactable_entity(cam, x, y, 50,40,bn::sprite_items::gun_upgrade, cstuff)
+        interactable_entity(cam, x, y, 30,40,bn::sprite_items::gun_upgrade, cstuff)
 {
-    _sprite.set_horizontal_flip(true);
-}
+    _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 9, 
+        bn::sprite_items::gun_upgrade.tiles_item(), 0, 1, 2, 1));
+    _sprite.set_horizontal_flip(true);}
 
 bn::deque<bn::unique_ptr<box>, 16> shoot_upgrader::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
@@ -142,8 +143,10 @@ bn::deque<bn::unique_ptr<box>, 16> slash_upgrader::interact_boxes(){
 
 warp_point::warp_point(const bn::camera_ptr &cam, 
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
-        interactable_entity(cam, x, y, 50,40,bn::sprite_items::warp, cstuff)
+        interactable_entity(cam, x, y, 50,50,bn::sprite_items::warp, cstuff)
 {
+    _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 6, 
+        bn::sprite_items::warp.tiles_item(), 0, 1, 2));
 }
 
 bn::deque<bn::unique_ptr<box>, 16> warp_point::interact_boxes(){

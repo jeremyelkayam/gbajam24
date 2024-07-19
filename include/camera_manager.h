@@ -11,6 +11,22 @@ private:
         bn::camera_ptr _cam;
         const level &_level;
         const player &_player;
+
+        class easer {
+            private:
+                const uint8_t _ease_time;
+                uint8_t _timer;
+                bn::fixed _start, _target;
+            public:
+                easer(const bn::fixed &start, const bn::fixed &target, 
+                    const uint8_t &ease_time);
+                void set_target(const bn::fixed &target);
+                void update();
+                bn::fixed current();
+        };
+
+        easer _x_ease, _y_ease;
+
 public:
     camera_manager(bn::camera_ptr cam, const level &lv, const player &pl);
     void update();    
