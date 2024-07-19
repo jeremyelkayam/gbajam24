@@ -17,6 +17,10 @@ private:
                 const uint8_t _ease_time;
                 uint8_t _timer;
                 bn::fixed _start, _target;
+                bn::fixed quadratic_ease_in_out(const bn::fixed &p);
+                bn::fixed sine_ease_out(const bn::fixed &p);
+                bn::fixed bezier_ease_in_out(const bn::fixed &p);
+
             public:
                 easer(const bn::fixed &start, const bn::fixed &target, 
                     const uint8_t &ease_time);

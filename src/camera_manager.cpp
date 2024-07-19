@@ -2,6 +2,7 @@
 
 #include <bn_keypad.h>
 #include <bn_log.h>
+#include <bn_math.h>
 
 namespace aru {
 
@@ -9,8 +10,8 @@ camera_manager::camera_manager(bn::camera_ptr cam, const level &lv, const player
     _cam(cam),
     _level(lv),
     _player(pl),
-    _x_ease(_cam.x() - _player.x(), 50 * (_player.facing_right() ? 1 : -1), 30),
-    _y_ease(_cam.x() - _player.x(), _cam.x() - _player.x(), 30) {
+    _x_ease(_cam.x() - _player.x(), 50 * (_player.facing_right() ? 1 : -1), 60),
+    _y_ease(_cam.x() - _player.x(), _cam.x() - _player.x(), 120) {
 
 }
 
@@ -19,10 +20,18 @@ void camera_manager::update(){
     _x_ease.set_target(50 * (_player.facing_right() ? 1 : -1));
 
 
-    if(_player.on_flat_ground()){
-        
-    }else{
-
+    switch(_player.state()){
+        case PSTATE::HOVER:
+            _y_ease.set_target(-50);
+        break;
+        case PSTATE::FALL:
+            //todo: have it start after a certain amount of time between state changes
+            _y_ease.set_target(50);
+        break;
+        case PSTATE::JUMP:
+        break;
+        default:
+            _y_ease.set_target(-30);
     }
 
 
@@ -33,8 +42,12 @@ void camera_manager::update(){
     bn::fixed new_y = _player.y() + _y_ease.current();
     if(new_x < 120) new_x = 120;
     if(new_x > (_level.width() - 120)) new_x = _level.width() - 120;
+
+    //don't go past the top row of tiles
     if(new_y < 88) new_y = 88;
+    BN_LOG("new y: ", new_y);
     if(new_y > (_level.height() - 80)) new_y = _level.height() - 80;
+    BN_LOG("new y: ", new_y);
     _cam.set_position(new_x, new_y);
 }
 
@@ -59,12 +72,36 @@ void camera_manager::easer::set_target(const bn::fixed &target)
 
 void camera_manager::easer::update()
 {
-    if(_timer < _ease_time) ++_timer;
+    if(_timer < _ease_time){
+        ++_timer;
+        BN_LOG(current());
+    }
 }
 
 bn::fixed camera_manager::easer::current(){
-    return _start + (_target - _start) * (bn::fixed(_timer) / bn::fixed(_ease_time));
+    return _start + (_target - _start) * sine_ease_out(bn::fixed(_timer) / bn::fixed(_ease_time));
 }
 
+bn::fixed camera_manager::easer::quadratic_ease_in_out(const bn::fixed &p)
+{
+	if(p < 0.5)
+	{
+		return 2 * p * p;
+	}
+	else
+	{
+		return (-2 * p * p) + (4 * p) - 1;
+	}
+}
+
+bn::fixed camera_manager::easer::bezier_ease_in_out(const bn::fixed &p)
+{
+	return p * p * (bn::fixed(3) - bn::fixed(2) * p);
+}
+
+bn::fixed camera_manager::easer::sine_ease_out(const bn::fixed &p)
+{
+	return bn::degrees_sin(p * 90);
+}
 
 }
