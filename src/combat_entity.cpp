@@ -58,7 +58,6 @@ void combat_entity::update(){
             tile_flags::UP_SLOPE | tile_flags:: DOWN_SLOPE | 
             tile_flags::UP_HALFSLOPE_A | tile_flags:: UP_HALFSLOPE_B | 
             tile_flags::DOWN_HALFSLOPE_A | tile_flags:: DOWN_HALFSLOPE_B)){
-            // BN_LOG("ur on an up slope");
             sloped_ground_ytile = ytile;
             sloped_ground_type = tile_type;
             break;

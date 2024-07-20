@@ -263,4 +263,9 @@ void player::set_state(const PSTATE &state){
     _state_change_timer = 0;
 }
 
+bool player::on_flat_ground() const{
+    return combat_entity::on_flat_ground() && _current_state != PSTATE::JUMP && 
+        _current_state != PSTATE::HOVER;
+}
+
 }

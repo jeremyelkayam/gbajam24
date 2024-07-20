@@ -34,6 +34,7 @@ public:
     uint8_t hover_time() const {return _hover_timer;}
     PSTATE state() const {return _current_state;}
     uint16_t time_since_state_change() const {return _state_change_timer;}
+    virtual bool on_flat_ground() const;
 
 private:
     effect _jumpcloud, _sprintcloud;

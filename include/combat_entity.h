@@ -22,7 +22,7 @@ public:
     virtual void update();
     bn::fixed xspeed() const {return _xspeed;}
 
-    bool on_flat_ground() const;
+    virtual bool on_flat_ground() const;
     bool facing_wall() const;
     int left_tile() const {return (_hitbox.left() * bn::fixed(0.125)).floor_integer();}
     int right_tile() const {return (_hitbox.right() * bn::fixed(0.125)).floor_integer();}
