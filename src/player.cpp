@@ -58,12 +58,10 @@ void player::update(){
             break;
         case PSTATE::JUMP:
             _jump.set_wait_updates(bn::abs((_MAX_UP_SPEED - _yspeed - 2)).ceil_integer());
-            BN_LOG("wait updates for jumping anim: ", _jump.wait_updates());
             _jump.update();
             break;
         case PSTATE::FALL:
             _fall.set_wait_updates((_MAX_DOWN_SPEED - _yspeed + 2).ceil_integer());
-            BN_LOG("wait updates for falling anim: ", _fall.wait_updates());
             _fall.update();
             break;
         case PSTATE::STAND:
@@ -259,6 +257,12 @@ void player::start_anim(bn::isprite_animate_action &anim){
 }
 
 void player::set_state(const PSTATE &state){
+    if(state == PSTATE::FALL){
+        BN_LOG("starting to fall...");
+        BN_LOG("xcor: ", x());
+        BN_LOG("ycor: ", y());
+        BN_LOG("grounded? ", _grounded);
+    }
     _current_state = state;
     _state_change_timer = 0;
 }

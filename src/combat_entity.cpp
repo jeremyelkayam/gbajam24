@@ -50,7 +50,7 @@ void combat_entity::update(){
     }
 
     for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
-            ytile < current_foot_tile + 1; ++ytile){
+            ytile < current_foot_tile + 2; ++ytile){
         
         bn::regular_bg_map_cell tile_type = _level.cell_at(center_xtile, ytile);
 
