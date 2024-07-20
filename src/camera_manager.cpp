@@ -73,7 +73,6 @@ void camera_manager::easer::update()
 {
     if(_timer < _ease_time){
         ++_timer;
-        BN_LOG(current());
     }
 }
 

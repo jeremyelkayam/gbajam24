@@ -151,9 +151,10 @@ void player::update(){
 
             if(_current_state == PSTATE::HOVER){
                 --_hover_timer;
-                _yspeed -= 0.5;
-                if(_yspeed < -1){
-                    _yspeed = -1;
+                _yspeed -= 0.4;
+                BN_LOG("yspeed: ", _yspeed);
+                if(_yspeed < -2){
+                    _yspeed = -2;
                 }
 
                 if(_hover_timer == 0 || bn::keypad::a_released()){

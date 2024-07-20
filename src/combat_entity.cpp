@@ -46,7 +46,7 @@ void combat_entity::update(){
         _yspeed = _MAX_DOWN_SPEED;
     }
     if(_yspeed < _MAX_UP_SPEED){
-        _yspeed = -_MAX_UP_SPEED;
+        _yspeed = _MAX_UP_SPEED;
     }
 
     for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
