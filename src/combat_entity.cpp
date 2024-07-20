@@ -93,8 +93,6 @@ void combat_entity::update(){
     //collide with walls
     if((_xspeed != 0) && facing_wall()){
         _xspeed = 0;
-        BN_LOG("HIT WALL!");
-        BN_LOG("facing right: ", facing_right());
     }
 
     //collide with ceilings

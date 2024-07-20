@@ -2,7 +2,6 @@
 
 #include <bn_keypad.h>
 #include <bn_log.h>
-#include <bn_math.h>
 
 namespace aru {
 
@@ -77,7 +76,7 @@ void camera_manager::easer::update()
 }
 
 bn::fixed camera_manager::easer::current(){
-    return _start + (_target - _start) * sine_ease_out(bn::fixed(_timer) / bn::fixed(_ease_time));
+    return _start + (_target - _start) * common_stuff::sine_ease_out(bn::fixed(_timer) / bn::fixed(_ease_time));
 }
 
 bn::fixed camera_manager::easer::quadratic_ease_in_out(const bn::fixed &p)
@@ -95,11 +94,6 @@ bn::fixed camera_manager::easer::quadratic_ease_in_out(const bn::fixed &p)
 bn::fixed camera_manager::easer::bezier_ease_in_out(const bn::fixed &p)
 {
 	return p * p * (bn::fixed(3) - bn::fixed(2) * p);
-}
-
-bn::fixed camera_manager::easer::sine_ease_out(const bn::fixed &p)
-{
-	return bn::degrees_sin(p * 90);
 }
 
 }

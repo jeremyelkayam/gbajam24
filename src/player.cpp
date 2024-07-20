@@ -149,8 +149,8 @@ void player::update(){
 
             if(_current_state == PSTATE::HOVER){
                 --_hover_timer;
+                //perhaps ease toward the max speed
                 _yspeed -= 0.4;
-                BN_LOG("yspeed: ", _yspeed);
                 if(_yspeed < -2){
                     _yspeed = -2;
                 }
@@ -257,12 +257,6 @@ void player::start_anim(bn::isprite_animate_action &anim){
 }
 
 void player::set_state(const PSTATE &state){
-    if(state == PSTATE::FALL){
-        BN_LOG("starting to fall...");
-        BN_LOG("xcor: ", x());
-        BN_LOG("ycor: ", y());
-        BN_LOG("grounded? ", _grounded);
-    }
     _current_state = state;
     _state_change_timer = 0;
 }

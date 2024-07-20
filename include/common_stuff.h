@@ -6,6 +6,7 @@
 #include <bn_sprite_ptr.h>
 #include <bn_vector.h>
 #include <bn_string.h>
+#include <bn_math.h>
 
 namespace aru {
 
@@ -33,6 +34,10 @@ namespace aru {
                 const uint16_t &subtractor,  const uint16_t &min);
             [[nodiscard]] static uint16_t bounded_addition(const uint16_t &first, 
                 const uint16_t &second,  const uint16_t &max);
+
+            [[nodiscard]] static bn::fixed sine_ease_out(const bn::fixed &p)
+                {return bn::degrees_sin(p * 90);}
+
 
         private:
 
