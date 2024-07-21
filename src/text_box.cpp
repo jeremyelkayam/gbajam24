@@ -35,7 +35,7 @@ void text_box::setup_text_sprites(){
     _text_generator.set_one_sprite_per_character(true);
     for(uint8_t i = _current_line; (i < _current_line+3) && (i < _text.size()); i++ ){    
 
-        _text_generator.generate(_box->x() - 112,_box->y() + 38 + (i - _current_line)*14 - (_top_box ? 3 : 0), _text.at(i), _text_sprites);
+        _text_generator.generate(_box->x() - 111,_box->y() + 39 + (i - _current_line)*14 - (_top_box ? 3 : 0), _text.at(i), _text_sprites);
     }
     for(bn::sprite_ptr &sprite : _text_sprites){
         sprite.set_visible(false);
