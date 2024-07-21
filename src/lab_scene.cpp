@@ -109,7 +109,7 @@ bn::optional<scene_type> lab_scene::update()
             _interact_icon.set_position(ent->x(), ent->hitbox().top() - 16);
             can_interact = true;
 
-            if(bn::keypad::a_pressed()){
+            if(bn::keypad::b_pressed()){
                 _text_boxes = ent->interact_boxes();
                 _player.move_to(ent->x() + (ent->facing_right() ? 35 : -35), !ent->facing_right());
                 _interacting_with = ent.get();
@@ -121,7 +121,7 @@ bn::optional<scene_type> lab_scene::update()
     _interact_icon.set_visible(can_interact);
     _interact_icon_anim.update();
 
-    if(!result && !(can_interact && bn::keypad::a_pressed())) result = play_scene::update();
+    if(!result && !(can_interact && bn::keypad::b_pressed())) result = play_scene::update();
     
 
     if(old_currency != _cstuff.savefile.ultramatter){
