@@ -11,7 +11,6 @@
 
 #include "bn_regular_bg_items_testbg.h"
 #include "bn_regular_bg_items_testmap.h"
-#include "bn_sprite_items_portrait.h"
 #include "hud.h"
 #include "lab_scene.h"
 #include "menu_scene.h"

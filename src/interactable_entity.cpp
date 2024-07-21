@@ -1,6 +1,6 @@
 #include "interactable_entity.h"
 #include "bn_sprite_items_slung.h"
-#include "bn_sprite_items_portrait.h"
+#include "bn_sprite_items_slung_portrait_neutral.h"
 #include "bn_sprite_items_gun_upgrade.h"
 #include "bn_sprite_items_hover_upgrade.h"
 #include "bn_sprite_items_sword_upgrade.h"
@@ -67,7 +67,7 @@ bn::deque<bn::unique_ptr<box>, 16> slung::interact_boxes(){
     stream << _cstuff.savefile.total_donated;
     stream << " power. Anything you can give helps.\nWhile you're here, I can also record the progress we've made thus far.";
     result.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
-        text.c_str(), bn::sprite_items::portrait, true, true, 1)));         
+        text.c_str(), bn::sprite_items::slung_portrait_neutral, true, true, 1)));         
     result.push_back(bn::unique_ptr<save_selection_box>(new save_selection_box(_cstuff, 2)));
     return result;
 }

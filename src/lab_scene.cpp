@@ -4,7 +4,7 @@
 #include <bn_blending.h>
 #include <bn_music_items.h>
 #include "bn_sprite_items_a_button_prompt.h"
-#include "bn_sprite_items_portrait.h"
+#include "bn_sprite_items_slung_portrait_neutral.h"
 #include "selection_box.h"
 #include "lab_scene.h"
 
@@ -34,7 +34,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
             anim_index = 2;
         }
         _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
-            line, bn::sprite_items::portrait, true, false, anim_index)));
+            line, bn::sprite_items::slung_portrait_neutral, true, false, anim_index)));
     }
 
     for(bn::unique_ptr<interactable_entity> &ent : _interactables){

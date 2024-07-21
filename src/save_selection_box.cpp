@@ -2,7 +2,7 @@
 #include "text_box.h"
 #include <bn_keypad.h>
 #include <bn_log.h>
-#include "bn_sprite_items_portrait.h"
+#include "bn_sprite_items_slung_portrait_neutral.h"
 
 namespace aru {
 
@@ -36,7 +36,7 @@ bn::unique_ptr<box> save_selection_box::next_box(){
     BN_ASSERT(_done);
     return bn::unique_ptr<box>(new text_box(_cstuff.text_generator, 
             _next_text.c_str(), 
-            bn::sprite_items::portrait, true, true, 1));
+            bn::sprite_items::slung_portrait_neutral, true, true, 1));
     
 
 }
