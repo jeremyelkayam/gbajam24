@@ -28,16 +28,11 @@ bool bullet::should_be_deleted() const{
     constexpr const bn::fixed half_width = 120;
     constexpr const bn::fixed tolerance = 30;
 
-    BN_LOG("camera coords: ", cam_x, ", ", cam_y);
-    BN_LOG("bullet coords: ", x(), ", ", y());
-
     bool far_offscreen = (x() < cam_x - (half_width + tolerance)) ||
         (x() > cam_x + (half_width + tolerance)) ||
         (y() < cam_y - (half_height + tolerance)) ||
         (y() > cam_y + (half_height + tolerance));
 
-
-    BN_LOG("far enough offscreen?", far_offscreen);
 
     return _hp == 0
         || far_offscreen

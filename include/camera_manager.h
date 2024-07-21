@@ -9,6 +9,7 @@ class camera_manager {
 
 private:
         bn::camera_ptr _cam;
+        bn::fixed_rect _view;
         const level &_level;
         const player &_player;
 
@@ -32,6 +33,7 @@ private:
 
 public:
     camera_manager(bn::camera_ptr cam, const level &lv, const player &pl);
+    bool on_screen(bn::fixed_rect &hitbox);
     void update();    
 
 };

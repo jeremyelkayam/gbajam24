@@ -11,7 +11,7 @@ level_scene::level_scene(common_stuff &cstuff) :
         if(e.enemy_type == 0) break;
         //enemies should only really spawn when they're close to being onscreen...
         // _enemy_data.emplace_back(e);
-        // _enemies.emplace_front(new enemy(_cam, e.coords.x(), e.coords.y(), _level));
+        _enemies.emplace_front(new enemy(_cam, e.coords.x(), e.coords.y(), _level));
         BN_LOG("enemy type: ", e.enemy_type);
     }
 

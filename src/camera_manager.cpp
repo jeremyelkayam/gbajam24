@@ -7,6 +7,7 @@ namespace aru {
 
 camera_manager::camera_manager(bn::camera_ptr cam, const level &lv, const player &pl) :
     _cam(cam),
+    _view(cam.x(), cam.y(), 240, 160),
     _level(lv),
     _player(pl),
     _x_ease(_cam.x() - _player.x(), 50 * (_player.facing_right() ? 1 : -1), 60),
@@ -47,6 +48,7 @@ void camera_manager::update(){
     if(new_y < 88) new_y = 88;
     if(new_y > (_level.height() - 80)) new_y = _level.height() - 80;
     _cam.set_position(new_x, new_y);
+    _view.set_position(new_x, new_y);
 }
 
 camera_manager::easer::easer(const bn::fixed &start, const bn::fixed &target, 
@@ -94,6 +96,10 @@ bn::fixed camera_manager::easer::quadratic_ease_in_out(const bn::fixed &p)
 bn::fixed camera_manager::easer::bezier_ease_in_out(const bn::fixed &p)
 {
 	return p * p * (bn::fixed(3) - bn::fixed(2) * p);
+}
+
+bool camera_manager::on_screen(bn::fixed_rect &hitbox){
+    return _view.intersects(hitbox);
 }
 
 }
