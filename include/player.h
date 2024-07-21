@@ -28,7 +28,7 @@ public:
         const common_stuff::saved_data &savefile);
     virtual void update() override;
     virtual void jump() override;
-    bool check_bullet_collision(enemy &enemy);
+    bool check_bullet_collision(combat_entity &enemy);
     void move_to(const bn::fixed &xcor, const bool &face_right);
     void clear_target();
     uint8_t hover_time() const {return _hover_timer;}

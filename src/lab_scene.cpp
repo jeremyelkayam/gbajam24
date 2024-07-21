@@ -19,15 +19,14 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _interact_icon.set_camera(_cam);
     _interacting_with = new slung(_cam, 350, 208, _cstuff);
     _interactables.emplace_front(bn::unique_ptr<slung>((slung*)_interacting_with));
-    _interactables.emplace_front(bn::unique_ptr<vax_mchn>(new vax_mchn(_cam, 450, 190, _cstuff)));
-    _interactables.emplace_front(bn::unique_ptr<hover_upgrader>(new hover_upgrader(_cam, 400, 112, _cstuff)));
-    _interactables.emplace_front(bn::unique_ptr<shoot_upgrader>(new shoot_upgrader(_cam, 80, 204, _cstuff)));
-    _interactables.emplace_front(bn::unique_ptr<slash_upgrader>(new slash_upgrader(_cam, 110, 116, _cstuff)));
-    _interactables.emplace_front(bn::unique_ptr<warp_point>(new warp_point(_cam, 256, 192, _cstuff)));
+    _interactables.emplace_front(new vax_mchn(_cam, 450, 190, _cstuff));
+    _interactables.emplace_front(new hover_upgrader(_cam, 400, 112, _cstuff));
+    _interactables.emplace_front(new shoot_upgrader(_cam, 80, 204, _cstuff));
+    _interactables.emplace_front(new slash_upgrader(_cam, 110, 116, _cstuff));
+    _interactables.emplace_front(new warp_point(_cam, 256, 192, _cstuff));
 
     _player.update();
     _player.move_to(315, true);
-    _cam.set_position(315,150);
     for(const char *line : LV1_CUTSCENE_DIALOGUE){
         uint8_t anim_index = 1;
         if(bn::string<256>(line) == bn::string<256>("...")){

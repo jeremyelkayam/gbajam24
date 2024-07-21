@@ -232,7 +232,7 @@ void player::shoot(){
     _bullets.emplace_front(*_sprite.camera().get(), x(), y(), _level, facing_right());
 }
 
-bool player::check_bullet_collision(enemy &enemy){
+bool player::check_bullet_collision(combat_entity &enemy){
     bool result = false;
     for(bullet &bullet : _bullets){
         if(enemy.hitbox().intersects(bullet.hitbox())){
