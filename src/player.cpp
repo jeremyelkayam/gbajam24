@@ -235,6 +235,7 @@ void player::shoot(){
 bool player::check_bullet_collision(combat_entity &enemy){
     bool result = false;
     for(bullet &bullet : _bullets){
+        BN_LOG("checking bullet...");
         if(enemy.hitbox().intersects(bullet.hitbox())){
             bn::fixed hori_kb = 6 * (bullet.facing_right() ? 1 : -1); 
             enemy.hit(bullet.contact_damage(),hori_kb,-3);
