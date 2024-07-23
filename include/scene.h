@@ -7,7 +7,7 @@ namespace aru {
 
 enum class scene_type
 {
-    GJ24,
+    LOGOS,
     TITLE,
     LEVEL,
     LAB,

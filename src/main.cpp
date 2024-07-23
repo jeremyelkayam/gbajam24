@@ -13,6 +13,7 @@
 #include "bn_regular_bg_items_testmap.h"
 #include "hud.h"
 #include "lab_scene.h"
+#include "logos_scene.h"
 #include "menu_scene.h"
 #include "level_scene.h"
 #include "common_stuff.h"
@@ -25,16 +26,16 @@ int main()
     bn::core::init();
     constexpr uint8_t transition_time = 20;
 
-    bn::bg_palettes::set_transparent_color(bn::color(25, 25, 25));
+    bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     // bn::camera_ptr cam = bn::camera_ptr::create(128,128);
 
     bn::unique_ptr<aru::scene> scene;
     aru::Transition transition(aru::Transition::Types::FADE, 
         aru::Transition::Direction::IN, transition_time * 2);
     transition.Init();
-    bn::optional<aru::scene_type> next_scene = aru::scene_type::MENU;
+    bn::optional<aru::scene_type> next_scene;
     bn::blending::set_white_fade_color();
-    scene.reset(new aru::menu_scene());
+    scene.reset(new aru::logos_scene());
 
     aru::common_stuff cstuff;
     aru::Transition::Types fade_and_mosaic = aru::Transition::Types::FADE 
@@ -62,6 +63,7 @@ int main()
             if(next_scene){
 
                 if(transition.GetDirection() == aru::Transition::Direction::OUT){
+                    bn::bg_palettes::set_transparent_color(bn::color(26, 26, 26));
                     //fading out is done, let's instantiate the transition and fade in
                     switch(*next_scene){
                         case aru::scene_type::LAB: { 
@@ -74,6 +76,10 @@ int main()
                         }
                         case aru::scene_type::LEVEL: { 
                             scene.reset(new aru::level_scene(cstuff));
+                            break;
+                        }
+                        case aru::scene_type::LOGOS: { 
+                            scene.reset(new aru::logos_scene());
                             break;
                         }
                         default: { 
@@ -95,48 +101,6 @@ int main()
             }
         
         }
-
-
-    // while(true)
-    // {
-    //     if(!box){
-    //         bool was_facing_right = player.facing_right();
-
-    //         if(enemy){
-    //             uint8_t old_hp = enemy->hp();
-    //             if(!player.in_iframes() && player.hitbox().intersects(enemy->hitbox())){
-    //                 bn::fixed hori_kb = 6 * (player.facing_right() ? 1 : -1); 
-    //                 enemy->hit(player.contact_damage(),hori_kb,-3);
-    //                 hud.update_enemy_hp("GLOBLIN", old_hp, enemy->hp(), enemy->max_hp());
-    //             }
-    //             if(enemy->hitbox().intersects(player.hitbox())){
-    //                 bn::fixed hori_kb = 6 * (player.facing_right() ? -1 : 1); 
-    //                 player.hit(enemy->contact_damage(),hori_kb,-3);
-    //             }
-    //             if(player.check_bullet_collision(*enemy.get())){
-    //                 hud.update_enemy_hp("GLOBLIN", old_hp, enemy->hp(), enemy->max_hp());
-    //             }
-    //             enemy->update();
-    //             if(enemy->delete_me()){
-    //                 enemy.reset();
-    //             }
-    //         }
-
-    //         hud.update_player_hp(player.hp());
-    //         if(player.hp() == 0){
-    //             //you died
-    //             bn::core::reset();
-    //         }
-    //         player.update();
-    //         hud.update();
-            
-
-    //         if(was_facing_right != player.facing_right()){
-    //             //this means they changed direction
-    //             direction_timer = 120;
-    //         }
-    //     }
-    //     }
 
         bn::core::update();
 
