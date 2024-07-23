@@ -26,11 +26,15 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, cons
     _jumpsquat(bn::create_sprite_animate_action_once(_sprite, 2, 
         bn::sprite_items::aru.tiles_item(), 5, 6)),
     _fall(bn::create_sprite_animate_action_forever(_sprite, 8, 
-        bn::sprite_items::aru.tiles_item(), 17, 18)),
+        bn::sprite_items::aru.tiles_item(), 19, 18)),
     _hover(bn::create_sprite_animate_action_forever(_sprite, 8, 
-        bn::sprite_items::aru.tiles_item(), 19, 20)),
+        bn::sprite_items::aru.tiles_item(), 21, 20)),
     _run(bn::create_sprite_animate_action_forever(_sprite, 4, 
-        bn::sprite_items::aru.tiles_item(), 9, 10, 11, 12, 13, 14, 15, 16)),
+        bn::sprite_items::aru.tiles_item(), 9, 10, 11, 12, 13, 14, 15, 16, 17)),
+    _shoot(bn::create_sprite_animate_action_forever(_sprite, 4, 
+        bn::sprite_items::aru.tiles_item(), 25, 26, 27, 28, 29, 30, 22, 23, 24)),
+    _shoot_run(bn::create_sprite_animate_action_forever(_sprite, 4, 
+        bn::sprite_items::aru.tiles_item(), 34, 35, 36, 37, 38, 39, 31, 32, 33)),
     _face_right_after_moving(false),
     _DUSTCLOUD_OFFSET(20),
     _jbuf_timer(0),
@@ -65,10 +69,18 @@ void player::update(){
             _fall.update();
             break;
         case PSTATE::STAND:
-            _idle.update();
+            if(bn::keypad::b_held() || _shoot_timer){
+                _shoot.update();
+            }else{
+                _idle.update();
+            }
             break;
         case PSTATE::RUN:
-            _run.update();
+            if(bn::keypad::b_held() || _shoot_timer){
+                _shoot_run.update();
+            }else{
+                _run.update();
+            }
             break;
         case PSTATE::JUMPSQUAT:
             _jumpsquat.update();
@@ -227,8 +239,10 @@ bool player::apply_gravity() const{
 }
 
 void player::shoot(){
+    //BASE IT ON CURRENT SPRITE INDEX... 
     BN_ASSERT(_shoot_timer == 0, "player can only shoot once shoot timer has fully cooled down");
-    _shoot_timer = 12;
+    _shoot_timer = 20;
+    bn::fixed xoffset = facing_right() ? 10 : -10;
     _bullets.emplace_front(*_sprite.camera().get(), x(), y(), _level, facing_right());
 }
 

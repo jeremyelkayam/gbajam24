@@ -45,7 +45,9 @@ private:
     bn::sprite_animate_action<2> _jumpsquat;
     bn::sprite_animate_action<2> _fall;
     bn::sprite_animate_action<2> _hover;
-    bn::sprite_animate_action<8> _run;
+    bn::sprite_animate_action<9> _run;
+    bn::sprite_animate_action<9> _shoot;
+    bn::sprite_animate_action<9> _shoot_run;
     bn::forward_list<bullet, 8> _bullets;
     bn::optional<bn::fixed> _target_xcor;
     bool _face_right_after_moving;

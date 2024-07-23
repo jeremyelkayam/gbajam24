@@ -3,7 +3,7 @@
 #include <bn_bg_palettes.h>
 #include <bn_blending.h>
 #include <bn_music_items.h>
-#include "bn_sprite_items_a_button_prompt.h"
+#include "bn_sprite_items_b_button_prompt.h"
 #include "bn_sprite_items_slung_portrait_neutral.h"
 #include "selection_box.h"
 #include "lab_scene.h"
@@ -12,8 +12,8 @@ namespace aru {
 
 lab_scene::lab_scene(common_stuff &cstuff) :
     play_scene(cstuff, lab_data),
-    _interact_icon(bn::sprite_items::a_button_prompt.create_sprite(0, 0)),
-    _interact_icon_anim(bn::create_sprite_animate_action_forever(_interact_icon, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1))
+    _interact_icon(bn::sprite_items::b_button_prompt.create_sprite(0, 0)),
+    _interact_icon_anim(bn::create_sprite_animate_action_forever(_interact_icon, 30, bn::sprite_items::b_button_prompt.tiles_item(), 0, 1))
 {
     _interact_icon.set_visible(false);
     _interact_icon.set_camera(_cam);

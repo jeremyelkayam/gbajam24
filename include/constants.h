@@ -52,7 +52,7 @@ namespace aru
     constexpr uint8_t BULLET_IFRAMES = 0;
 
     constexpr bn::fixed TB_ARROW_X = 110;
-    constexpr bn::fixed TB_ARROW_Y = 68;
+    constexpr bn::fixed TB_ARROW_Y = 64;
     constexpr bn::fixed TB_ARROW_INC_PER_FRAME = 0.25;
     constexpr uint8_t TB_ARROW_OTIME = 25;
 
