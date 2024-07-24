@@ -44,7 +44,7 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, cons
     _state_change_timer(0)
 {
     _sprite.set_palette(PLAYER_PALETTE[_savefile.hover_upgrade_lvl]);
-    _sprite.set_z_order(0);
+    _sprite.set_z_order(1);
 }
 
 void player::update(){
@@ -71,6 +71,7 @@ void player::update(){
         case PSTATE::STAND:
             if(bn::keypad::b_held() || _shoot_timer){
                 _shoot.update();
+                BN_LOG(_shoot.current_index());
             }else{
                 _idle.update();
             }
@@ -179,8 +180,19 @@ void player::update(){
 
         }
 
+        if(bn::keypad::b_pressed()){
+            _shoot_run.reset();
+            _shoot.reset();
+        }
+
         if(bn::keypad::b_held() && (_shoot_timer == 0)){
-            shoot();
+            if(_current_state == PSTATE::STAND && 
+                (_shoot.current_index() == 1 || _shoot.current_index() == 5)){
+                shoot();
+            }else if(_current_state == PSTATE::RUN && 
+                (_shoot_run.current_index() == 1 || _shoot_run.current_index() == 5)){
+                shoot();
+            }
         }
 
     }
@@ -239,11 +251,11 @@ bool player::apply_gravity() const{
 }
 
 void player::shoot(){
-    //BASE IT ON CURRENT SPRITE INDEX... 
     BN_ASSERT(_shoot_timer == 0, "player can only shoot once shoot timer has fully cooled down");
     _shoot_timer = 20;
-    bn::fixed xoffset = facing_right() ? 10 : -10;
-    _bullets.emplace_front(*_sprite.camera().get(), x(), y(), _level, facing_right());
+    BN_LOG("current index: ", _shoot.current_index());
+    bn::fixed xoffset = facing_right() ? 12 : -12;
+    _bullets.emplace_front(*_sprite.camera().get(), x() + xoffset, y() - 3, _level, facing_right());
 }
 
 bool player::check_bullet_collision(combat_entity &enemy){
@@ -277,7 +289,7 @@ void player::set_state(const PSTATE &state){
 
 bool player::on_flat_ground() const{
     return combat_entity::on_flat_ground() && _current_state != PSTATE::JUMP && 
-        _current_state != PSTATE::HOVER;
+        !(_current_state == PSTATE::HOVER &&  _yspeed < 0);
 }
 
 }

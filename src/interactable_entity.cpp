@@ -20,6 +20,7 @@ interactable_entity::interactable_entity(const bn::camera_ptr &cam,
         _current_anim(0),
         _cstuff(cstuff)
 {
+    _sprite.set_z_order(2);
     
 }
 

@@ -12,6 +12,7 @@ bullet::bullet(const bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level
     _xspeed = _MAX_XSPEED * (facing_right ? 1 : -1);
     _target_xspeed = _xspeed;
     _sprite.set_horizontal_flip(facing_right);
+    _sprite.set_z_order(0);
 
 }
 
