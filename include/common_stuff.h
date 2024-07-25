@@ -36,6 +36,9 @@ namespace aru {
             [[nodiscard]] static uint16_t bounded_addition(const uint16_t &first, 
                 const uint16_t &second,  const uint16_t &max);
 
+            static bn::string<256> append(const char *str, 
+                const uint16_t &num);
+
             [[nodiscard]] static bn::fixed sine_ease_out(const bn::fixed &p)
                 {return bn::degrees_sin(p * 90);}
 

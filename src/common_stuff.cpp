@@ -63,5 +63,15 @@ uint16_t common_stuff::bounded_addition(const uint16_t &first, const uint16_t &s
     return addition_result;
 }
 
+bn::string<256> common_stuff::append(const char *str, 
+    const uint16_t &num)
+{
+    bn::string<256> text;
+    bn::ostringstream stream(text);
+    stream << str;
+    stream << num;
+    return text;
+}
+
 
 }
