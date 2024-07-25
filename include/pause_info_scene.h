@@ -9,7 +9,7 @@ class pause_info_scene : public scene{
 protected:
 
     bn::vector<bn::sprite_ptr, 64> _text_sprites;
-    // bn::regular_bg_ptr _bg;
+    bn::regular_bg_ptr _bg;
  
 public:
     pause_info_scene(bn::sprite_text_generator &generator,

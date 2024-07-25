@@ -2,6 +2,7 @@
 #include <bn_log.h>
 #include <bn_sprite_text_generator.h>
 #include "common_variable_8x16_sprite_font.h"
+#include "bn_regular_bg_items_pause_info_bg.h"
 
 #include "pause_info_scene.h"
 
@@ -9,8 +10,10 @@ namespace aru {
 
 pause_info_scene::pause_info_scene(
     bn::sprite_text_generator &generator, 
-    const common_stuff::saved_data &savefile) 
+    const common_stuff::saved_data &savefile) : 
+    _bg(bn::regular_bg_items::pause_info_bg.create_bg(0,0)) 
 {
+    _bg.set_priority(0);
     generator.set_center_alignment();
 
     generator.generate(0, -65, "AUTOMATED RETRIEVAL UNIT", 
@@ -43,7 +46,9 @@ pause_info_scene::pause_info_scene(
             common_stuff::append("DONATED TO VACCINE: ", 
             savefile.total_donated), 
         _text_sprites);
-
+    for(bn::sprite_ptr &sprite : _text_sprites){
+        sprite.set_bg_priority(0);
+    }
 }
 
 void pause_info_scene::set_transition_effects_enabled(bool enabled){
