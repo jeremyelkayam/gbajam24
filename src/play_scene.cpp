@@ -41,4 +41,14 @@ bn::optional<scene_type> play_scene::update(){
     return result;
 }
 
+void play_scene::show_pause_info(){
+    BN_ASSERT(!_pause_info);
+    _pause_info.emplace(_cstuff.rising_text_generator, _cstuff.savefile);
+}
+
+void play_scene::hide_pause_info(){
+    BN_ASSERT(_pause_info);
+    _pause_info.reset();
+}
+
 }

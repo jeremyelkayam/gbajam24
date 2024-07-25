@@ -10,12 +10,9 @@ protected:
 
     bn::vector<bn::sprite_ptr, 64> _text_sprites;
     // bn::regular_bg_ptr _bg;
-    // uint8_t _timer;
-    scene_type _last_scene;
  
 public:
-    pause_info_scene(bn::sprite_text_generator &generator, 
-        scene_type last_scene, 
+    pause_info_scene(bn::sprite_text_generator &generator,
         const common_stuff::saved_data &savefile);
     [[nodiscard]] virtual bn::optional<scene_type> update();
 };

@@ -7,6 +7,7 @@
 #include "camera_manager.h"
 #include "hud.h"
 #include "level_data.h"
+#include "pause_info_scene.h"
 
 namespace aru{
 
@@ -21,10 +22,13 @@ protected:
 
 
     bn::regular_bg_ptr _bg;
+    bn::optional<pause_info_scene> _pause_info;
  
 public:
     play_scene(common_stuff &cstuff, const level_data &ld);
     [[nodiscard]] virtual bn::optional<scene_type> update();
+    void show_pause_info();
+    void hide_pause_info();
 };
 
 }
