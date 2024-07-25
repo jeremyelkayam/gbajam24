@@ -17,7 +17,7 @@ private:
 public:
     level_scene(common_stuff &cstuff);
     [[nodiscard]] virtual bn::optional<scene_type> update_scene_components() override final;
-
+    virtual void set_transition_effects_enabled(bool enabled);
 };
 
 }

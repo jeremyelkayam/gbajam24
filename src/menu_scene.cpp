@@ -30,12 +30,13 @@ menu_scene::menu_scene() :
 
     _selector.set_blending_enabled(true);
     _selector.set_mosaic_enabled(true);
+}
+
+void menu_scene::set_transition_effects_enabled(bool enabled){
     for(bn::sprite_ptr &sprite : _text_sprites){
-        sprite.set_blending_enabled(true);
-        sprite.set_mosaic_enabled(true);
-    }
-
-
+        sprite.set_blending_enabled(enabled);
+        sprite.set_mosaic_enabled(enabled);
+    }    
 }
 
 bn::optional<scene_type> menu_scene::update(){

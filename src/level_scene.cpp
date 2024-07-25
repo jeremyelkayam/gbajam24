@@ -16,7 +16,15 @@ level_scene::level_scene(common_stuff &cstuff) :
             _cstuff.rising_text_generator));
         BN_LOG("enemy type: ", e.enemy_type);
     }
+}
 
+void level_scene::set_transition_effects_enabled(bool enabled)
+{
+    play_scene::set_transition_effects_enabled(enabled);
+    for(bn::unique_ptr<combat_entity> &e : _enemies){
+        e->set_blending_enabled(enabled);
+        e->set_mosaic_enabled(enabled);
+    }
 }
 
 bn::optional<scene_type> level_scene::update_scene_components()

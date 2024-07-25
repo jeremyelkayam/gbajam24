@@ -33,6 +33,7 @@ int main()
     bn::optional<aru::scene_type> next_scene;
     bn::blending::set_white_fade_color();
     scene.reset(new aru::logos_scene());
+    scene->set_transition_effects_enabled(true);
 
     aru::common_stuff cstuff;
     aru::Transition::Types fade_and_mosaic = aru::Transition::Types::FADE 
@@ -84,12 +85,14 @@ int main()
                             break;
                         }
                     }
+                    scene->set_transition_effects_enabled(true);
                     transition.Set(fade_and_mosaic, aru::Transition::Direction::IN,
                          transition_time);
                     transition.Init();
                     BN_LOG("fade in on new scene");
                 }else{
                     //we need to fade out
+                    scene->set_transition_effects_enabled(true);
                     bn::blending::set_black_fade_color();
                     transition.Set(fade_and_mosaic, aru::Transition::Direction::OUT, 
                         transition_time);

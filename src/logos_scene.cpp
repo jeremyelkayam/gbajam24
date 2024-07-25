@@ -24,12 +24,13 @@ logos_scene::logos_scene() :
     gen.generate(-5, -20, bn::string<32>("version ") + BN_VERSION_STRING, _text_sprites);
 
     gen.generate(0, 12, "for", _text_sprites);
+}
 
+void logos_scene::set_transition_effects_enabled(bool enabled){
     for(bn::sprite_ptr &sprite : _text_sprites){
-        sprite.set_blending_enabled(true);
-        sprite.set_mosaic_enabled(true);
-    }
-
+        sprite.set_blending_enabled(enabled);
+        sprite.set_mosaic_enabled(enabled);
+    }    
 }
 
 bn::optional<scene_type> logos_scene::update(){

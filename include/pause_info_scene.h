@@ -15,6 +15,7 @@ public:
     pause_info_scene(bn::sprite_text_generator &generator,
         const common_stuff::saved_data &savefile);
     [[nodiscard]] virtual bn::optional<scene_type> update();
+    virtual void set_transition_effects_enabled(bool enabled);
 };
 
 }

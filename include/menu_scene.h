@@ -15,6 +15,7 @@ private:
 public:
     menu_scene();
     [[nodiscard]] virtual bn::optional<scene_type> update() final;
+    virtual void set_transition_effects_enabled(bool enabled);
 };
 
 }

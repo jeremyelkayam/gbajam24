@@ -15,6 +15,7 @@ protected:
 public:
     logos_scene();
     [[nodiscard]] virtual bn::optional<scene_type> update();
+    virtual void set_transition_effects_enabled(bool enabled);
 };
 
 }

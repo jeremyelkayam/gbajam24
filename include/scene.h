@@ -20,6 +20,7 @@ class scene {
         virtual ~scene() = default;
 
         [[nodiscard]] virtual bn::optional<scene_type> update() = 0;
+        virtual void set_transition_effects_enabled(bool enabled) = 0;
 
     protected:
         scene() = default;

@@ -44,11 +44,13 @@ pause_info_scene::pause_info_scene(
             savefile.total_donated), 
         _text_sprites);
 
+}
 
-    // for(bn::sprite_ptr &sprite : _text_sprites){
-    //     sprite.set_blending_enabled(true);
-    //     sprite.set_mosaic_enabled(true);
-    // }
+void pause_info_scene::set_transition_effects_enabled(bool enabled){
+    for(bn::sprite_ptr &sprite : _text_sprites){
+        sprite.set_blending_enabled(enabled);
+        sprite.set_mosaic_enabled(enabled);
+    }
 }
 
 bn::optional<scene_type> pause_info_scene::update(){

@@ -32,15 +32,23 @@ lab_scene::lab_scene(common_stuff &cstuff) :
         _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
             line.text, line.portrait, true, false, line.anim_index)));
     }
-
-    for(bn::unique_ptr<interactable_entity> &ent : _interactables){
-        ent->set_blending_enabled(true);
-        ent->set_mosaic_enabled(true);
-    }
     bn::music_items::test_song.play(1.0);
 }
 
+
+void lab_scene::set_transition_effects_enabled(bool enabled)
+{
+    play_scene::set_transition_effects_enabled(enabled);
+    for(bn::unique_ptr<interactable_entity> &ent : _interactables){
+        ent->set_blending_enabled(enabled);
+        ent->set_mosaic_enabled(enabled);
+    }
+}
+
 bn::optional<scene_type> lab_scene::update_scene_components(){
+    if(_bg.blending_enabled()){
+        set_transition_effects_enabled(false);
+    }
     bn::optional<scene_type> result;
     uint16_t old_currency = _cstuff.savefile.ultramatter;
     bool text_box_frame = false;
@@ -82,7 +90,6 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
             }else if(bn::keypad::a_pressed()){
                 selection_box *warp_sel_box = (selection_box *) _text_boxes.front().get();
                 if(warp_sel_box->selected() == bn::string<8>("Yes")){
-                    // result = scene_type::LEVEL;
                     _warping.emplace(_player.sprite());
                 }
                 _text_boxes.pop_front();
@@ -122,6 +129,9 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
 
     if(_warping){
         _warping->update();
+        if(_warping->done()){
+            result = scene_type::LEVEL;
+        }
     }
     
 

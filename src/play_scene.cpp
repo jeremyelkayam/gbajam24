@@ -16,17 +16,20 @@ play_scene::play_scene(common_stuff &cstuff, const level_data &ld) :
     _bg(ld.backdrop.create_bg(0,0)) {
 
     _bg.set_z_order(1);
-    _bg.set_blending_enabled(true);
-    _player.set_blending_enabled(true);
-    _level.set_blending_enabled(true);
-    _hud.set_blending_enabled(true);
-
-
-    _bg.set_mosaic_enabled(true);
-    _player.set_mosaic_enabled(true);
-    _level.set_mosaic_enabled(true);
-    _hud.set_mosaic_enabled(true);
     _cam_mgr.update();
+}
+
+void play_scene::set_transition_effects_enabled(bool enabled){
+    _bg.set_blending_enabled(enabled);
+    _player.set_blending_enabled(enabled);
+    _level.set_blending_enabled(enabled);
+    _hud.set_blending_enabled(enabled);
+
+
+    _bg.set_mosaic_enabled(enabled);
+    _player.set_mosaic_enabled(enabled);
+    _level.set_mosaic_enabled(enabled);
+    _hud.set_mosaic_enabled(enabled);    
 }
 
 bn::optional<scene_type> play_scene::update_scene_components(){

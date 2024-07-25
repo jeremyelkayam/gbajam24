@@ -39,10 +39,6 @@ namespace aru {
             static bn::string<256> append(const char *str, 
                 const uint16_t &num);
 
-            [[nodiscard]] static bn::fixed sine_ease_out(const bn::fixed &p)
-                {return bn::degrees_sin(p * 90);}
-
-
         private:
 
     };

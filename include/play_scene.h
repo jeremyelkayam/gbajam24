@@ -28,6 +28,7 @@ public:
     play_scene(common_stuff &cstuff, const level_data &ld);
     [[nodiscard]] virtual bn::optional<scene_type> update();
     [[nodiscard]] virtual bn::optional<scene_type> update_scene_components();
+    virtual void set_transition_effects_enabled(bool enabled);
 
     void show_pause_info();
     void hide_pause_info();
