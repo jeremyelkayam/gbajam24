@@ -16,7 +16,8 @@ private:
  
 public:
     level_scene(common_stuff &cstuff);
-    [[nodiscard]] virtual bn::optional<scene_type> update() final;
+    [[nodiscard]] virtual bn::optional<scene_type> update_scene_components() override final;
+
 };
 
 }

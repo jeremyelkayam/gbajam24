@@ -19,49 +19,45 @@ level_scene::level_scene(common_stuff &cstuff) :
 
 }
 
-bn::optional<scene_type> level_scene::update()
+bn::optional<scene_type> level_scene::update_scene_components()
 {
     bn::optional<scene_type> result;
     
-    if(_pause_info){
-        if(_pause_info->update()){
-            hide_pause_info();
+    for(bn::unique_ptr<combat_entity> &e : _enemies){
+        uint8_t old_hp = e->hp();
+
+        //todo: refactor this to be less terrible and have less repeated code!
+        if(!_player.in_iframes() && _player.hitbox().intersects(e->hitbox())){
+            bn::fixed hori_kb = 6 * (_player.facing_right() ? 1 : -1); 
+            e->hit(_player.contact_damage(),hori_kb,-3);
+            _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
         }
-    }else{
-
-        for(bn::unique_ptr<combat_entity> &e : _enemies){
-            uint8_t old_hp = e->hp();
-
-            //todo: refactor this to be less terrible and have less repeated code!
-            if(!_player.in_iframes() && _player.hitbox().intersects(e->hitbox())){
-                bn::fixed hori_kb = 6 * (_player.facing_right() ? 1 : -1); 
-                e->hit(_player.contact_damage(),hori_kb,-3);
-                _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
-            }
-            if(e->hitbox().intersects(_player.hitbox())){
-                bn::fixed hori_kb = 6 * (_player.facing_right() ? -1 : 1); 
-                _player.hit(e->contact_damage(),hori_kb,-3);
-            }
-            if(_player.check_bullet_collision(*e.get())){
-                _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
-            }
-            e->update();
+        if(e->hitbox().intersects(_player.hitbox())){
+            bn::fixed hori_kb = 6 * (_player.facing_right() ? -1 : 1); 
+            _player.hit(e->contact_damage(),hori_kb,-3);
         }
-        _enemies.remove_if(enemy_deletable);
-
-
-        if(_player.hp() == 0){
-            BN_LOG("you died.");
-            //todo: death animation
-            return scene_type::LEVEL;
+        if(_player.check_bullet_collision(*e.get())){
+            _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
         }
-        if(bn::keypad::start_pressed()){
-            show_pause_info();
-        }
-
-        return play_scene::update();
+        e->update();
     }
+    _enemies.remove_if(enemy_deletable);
+
+    result = play_scene::update_scene_components();
+
+
+    if(_player.hp() == 0){
+        BN_LOG("you died.");
+        //todo: death animation
+        result = scene_type::LEVEL;
+    }
+    if(bn::keypad::start_pressed()){
+        show_pause_info();
+    }
+
+
     return result;
+
 }
 
 }

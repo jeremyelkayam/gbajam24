@@ -40,9 +40,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     bn::music_items::test_song.play(1.0);
 }
 
-bn::optional<scene_type> lab_scene::update()
-{
-
+bn::optional<scene_type> lab_scene::update_scene_components(){
     bn::optional<scene_type> result;
     uint16_t old_currency = _cstuff.savefile.ultramatter;
     bool text_box_frame = false;
@@ -69,6 +67,9 @@ bn::optional<scene_type> lab_scene::update()
         text_box_frame = true;
     }else{
         _player.clear_target();
+        if(bn::keypad::start_pressed()){
+            show_pause_info();
+        }
     }
 
     bool can_interact = false;
@@ -116,15 +117,12 @@ bn::optional<scene_type> lab_scene::update()
     _interact_icon.set_visible(can_interact);
     _interact_icon_anim.update();
 
-    if(!result && !(can_interact && bn::keypad::b_pressed())) result = play_scene::update();
+    if(!result && !(can_interact && bn::keypad::b_pressed())) result = play_scene::update_scene_components();
     
 
     if(old_currency != _cstuff.savefile.ultramatter){
         _hud.update_currency(_cstuff.savefile.ultramatter);
     }
-
-
-
     return result;
 }
 

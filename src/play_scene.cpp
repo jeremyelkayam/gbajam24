@@ -29,7 +29,7 @@ play_scene::play_scene(common_stuff &cstuff, const level_data &ld) :
     _cam_mgr.update();
 }
 
-bn::optional<scene_type> play_scene::update(){
+bn::optional<scene_type> play_scene::update_scene_components(){
     bn::optional<scene_type> result;
 
     _player.update();
@@ -39,6 +39,20 @@ bn::optional<scene_type> play_scene::update(){
     _hud.update_player_hp(_player.hp());
 
     return result;
+}
+
+bn::optional<scene_type> play_scene::update()
+{
+
+    if(_pause_info){
+        if(_pause_info->update()){
+            hide_pause_info();
+        }
+    }else{
+        return update_scene_components();
+    }
+
+    return bn::optional<scene_type>();
 }
 
 void play_scene::show_pause_info(){
