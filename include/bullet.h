@@ -8,7 +8,8 @@ class bullet : public combat_entity
 {
 public: 
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference
-    bullet(const bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, bool facing_right);
+    bullet(const bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level,
+        bool facing_right, bn::sprite_text_generator &rising_text_generator);
     virtual void update() override;
     bool should_be_deleted() const;
 

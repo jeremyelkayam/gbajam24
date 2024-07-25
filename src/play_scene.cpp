@@ -9,7 +9,8 @@ play_scene::play_scene(common_stuff &cstuff, const level_data &ld) :
     _cstuff(cstuff),
     _cam(bn::camera_ptr::create(256,192)),
     _level(_cam, ld.map),
-    _player(_cam,ld.spawnpoint.x(),ld.spawnpoint.y(),_level, cstuff.savefile),
+    _player(_cam,ld.spawnpoint.x(),ld.spawnpoint.y(),_level, cstuff.savefile, 
+        cstuff.rising_text_generator),
     _cam_mgr(_cam, _level, _player),
     _hud(_cstuff),
     _bg(ld.backdrop.create_bg(0,0)) {

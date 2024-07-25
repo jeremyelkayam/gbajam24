@@ -25,7 +25,8 @@ class player : public combat_entity
 public: 
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference
     player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, 
-        const common_stuff::saved_data &savefile);
+        const common_stuff::saved_data &savefile, 
+        bn::sprite_text_generator &rising_text_generator);
     virtual void update() override;
     virtual void jump() override;
     bool check_bullet_collision(combat_entity &enemy);

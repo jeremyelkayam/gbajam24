@@ -9,7 +9,8 @@ class enemy : public combat_entity
 {
 public: 
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference
-    enemy(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level);
+    enemy(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, 
+        bn::sprite_text_generator &rising_text_generator);
     virtual void update() override;
 
 private:

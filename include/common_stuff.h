@@ -19,6 +19,7 @@ namespace aru {
             }; 
                    
             bn::sprite_text_generator text_generator;
+            bn::sprite_text_generator rising_text_generator;
             bn::random rand;
 
             saved_data savefile;

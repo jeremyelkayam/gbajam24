@@ -4,9 +4,11 @@
 #include <bn_sprite_ptr.h>
 #include <bn_fixed_rect.h>
 #include <bn_camera_ptr.h>
+#include <bn_deque.h>
 #include "constants.h"
 #include "level.h"
 #include "entity.h"
+#include "rising_text.h"
 
 namespace aru
 {
@@ -18,7 +20,8 @@ public:
         const bn::fixed &width, const bn::fixed &height, const bn::fixed &max_xspeed, 
         const bn::fixed &max_up_speed, const bn::fixed &max_down_speed, 
         const uint8_t &hp, const uint8_t &contact_damage, const uint8_t &iframes, 
-        level &level, const bn::sprite_item &spritem);
+        level &level, const bn::sprite_item &spritem, 
+        bn::sprite_text_generator &rising_text_generator);
     virtual void update();
     bn::fixed xspeed() const {return _xspeed;}
 
@@ -39,6 +42,9 @@ public:
 protected:
     level &_level;
     bn::optional<bn::sprite_animate_action<6>> _explosion_anim;
+    bn::deque<rising_text, 4> _rising_text;
+    bn::sprite_text_generator &_rising_text_generator;
+
     const bn::fixed _MAX_XSPEED, _MAX_UP_SPEED, _MAX_DOWN_SPEED, _ACCEL, _G;
     const uint8_t _HIT_IFRAMES;
     bn::fixed _xspeed, _target_xspeed, _yspeed;
@@ -54,7 +60,7 @@ protected:
     bool on_thick_ground() const;
     virtual bool apply_gravity() const;
     void die();
-
+    static bool rising_text_deletable(const rising_text &r) {return r.delete_me();}
 };
 
 }

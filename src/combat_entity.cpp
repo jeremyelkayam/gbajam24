@@ -9,9 +9,11 @@ combat_entity::combat_entity(const bn::camera_ptr &cam, const bn::fixed &x,
         const bn::fixed &max_xspeed, const bn::fixed &max_up_speed, 
         const bn::fixed &max_down_speed, const uint8_t &hp, 
         const uint8_t &contact_damage, const uint8_t &iframes, level &level, 
-        const bn::sprite_item &spritem): 
+        const bn::sprite_item &spritem, 
+        bn::sprite_text_generator &rising_text_generator): 
     entity(cam, x, y, width, height, spritem),
     _level(level),
+    _rising_text_generator(rising_text_generator),
     _MAX_XSPEED(max_xspeed),
     _MAX_UP_SPEED(max_up_speed),
     _MAX_DOWN_SPEED(max_down_speed),
@@ -179,6 +181,12 @@ void combat_entity::update(){
 
     if(_explosion_anim) _explosion_anim->update();
 
+    for(rising_text &r : _rising_text){
+        r.update();
+    }
+    
+    bn::erase_if(_rising_text, rising_text_deletable);
+
 }
 
 bool combat_entity::facing_wall() const{
@@ -259,6 +267,14 @@ void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
             _xspeed += x_push;
 
             _yspeed += y_push;
+
+            if(_rising_text.full()){
+                //kill the oldest if we're really hurting for text entities
+                _rising_text.pop_back();
+            }
+            _rising_text.emplace_front(*_sprite.camera().get(), _rising_text_generator, 
+                -damage, x(), y());
+
         }else{
             _hp = 0;
             die();

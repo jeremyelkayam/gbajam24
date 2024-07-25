@@ -10,38 +10,41 @@
 
 namespace aru {
 
-player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, const common_stuff::saved_data &savefile) : 
-    combat_entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, 
-        PLAYER_JUMP_YSPEED, PLAYER_FALL_YSPEED,
-        PLAYER_HP, PLAYER_CONTACT_DAMAGE, PLAYER_IFRAMES,level,bn::sprite_items::aru),
-    _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
-    _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
-    _savefile(savefile),
-    _current_state(PSTATE::STAND),
-    _idle(bn::create_sprite_animate_action_forever(_sprite, 10, 
-        bn::sprite_items::aru.tiles_item(), 0, 1, 2, 1, 0, 1, 4, 1, 0, 1, 2, 1, 0, 1, 2, 1,
-        3, 1, 2, 1)),
-    _jump(bn::create_sprite_animate_action_forever(_sprite, 8, 
-        bn::sprite_items::aru.tiles_item(), 7, 8)),
-    _jumpsquat(bn::create_sprite_animate_action_once(_sprite, 2, 
-        bn::sprite_items::aru.tiles_item(), 5, 6)),
-    _fall(bn::create_sprite_animate_action_forever(_sprite, 8, 
-        bn::sprite_items::aru.tiles_item(), 19, 18)),
-    _hover(bn::create_sprite_animate_action_forever(_sprite, 8, 
-        bn::sprite_items::aru.tiles_item(), 21, 20)),
-    _run(bn::create_sprite_animate_action_forever(_sprite, 4, 
-        bn::sprite_items::aru.tiles_item(), 9, 10, 11, 12, 13, 14, 15, 16, 17)),
-    _shoot(bn::create_sprite_animate_action_forever(_sprite, 4, 
-        bn::sprite_items::aru.tiles_item(), 25, 26, 27, 28, 29, 30, 22, 23, 24)),
-    _shoot_run(bn::create_sprite_animate_action_forever(_sprite, 4, 
-        bn::sprite_items::aru.tiles_item(), 34, 35, 36, 37, 38, 39, 31, 32, 33)),
-    _face_right_after_moving(false),
-    _DUSTCLOUD_OFFSET(20),
-    _jbuf_timer(0),
-    _coyote_timer(0),
-    _shoot_timer(0),
-    _hover_timer(PLAYER_HOVER_TIME[_savefile.hover_upgrade_lvl]),
-    _state_change_timer(0)
+player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, 
+    const common_stuff::saved_data &savefile, 
+    bn::sprite_text_generator &rising_text_generator) : 
+        combat_entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, 
+            PLAYER_JUMP_YSPEED, PLAYER_FALL_YSPEED,
+            PLAYER_HP, PLAYER_CONTACT_DAMAGE, PLAYER_IFRAMES,level,
+            bn::sprite_items::aru, rising_text_generator),
+        _jumpcloud(cam,x,y,bn::sprite_items::jumpcloud,6),
+        _sprintcloud(cam,x,y,bn::sprite_items::sprintcloud,9),
+        _savefile(savefile),
+        _current_state(PSTATE::STAND),
+        _idle(bn::create_sprite_animate_action_forever(_sprite, 10, 
+            bn::sprite_items::aru.tiles_item(), 0, 1, 2, 1, 0, 1, 4, 1, 0, 1, 2, 1, 0, 1, 2, 1,
+            3, 1, 2, 1)),
+        _jump(bn::create_sprite_animate_action_forever(_sprite, 8, 
+            bn::sprite_items::aru.tiles_item(), 7, 8)),
+        _jumpsquat(bn::create_sprite_animate_action_once(_sprite, 2, 
+            bn::sprite_items::aru.tiles_item(), 5, 6)),
+        _fall(bn::create_sprite_animate_action_forever(_sprite, 8, 
+            bn::sprite_items::aru.tiles_item(), 19, 18)),
+        _hover(bn::create_sprite_animate_action_forever(_sprite, 8, 
+            bn::sprite_items::aru.tiles_item(), 21, 20)),
+        _run(bn::create_sprite_animate_action_forever(_sprite, 4, 
+            bn::sprite_items::aru.tiles_item(), 9, 10, 11, 12, 13, 14, 15, 16, 17)),
+        _shoot(bn::create_sprite_animate_action_forever(_sprite, 4, 
+            bn::sprite_items::aru.tiles_item(), 25, 26, 27, 28, 29, 30, 22, 23, 24)),
+        _shoot_run(bn::create_sprite_animate_action_forever(_sprite, 4, 
+            bn::sprite_items::aru.tiles_item(), 34, 35, 36, 37, 38, 39, 31, 32, 33)),
+        _face_right_after_moving(false),
+        _DUSTCLOUD_OFFSET(20),
+        _jbuf_timer(0),
+        _coyote_timer(0),
+        _shoot_timer(0),
+        _hover_timer(PLAYER_HOVER_TIME[_savefile.hover_upgrade_lvl]),
+        _state_change_timer(0)
 {
     _sprite.set_palette(PLAYER_PALETTE[_savefile.hover_upgrade_lvl]);
     _sprite.set_z_order(1);
@@ -255,7 +258,8 @@ void player::shoot(){
     _shoot_timer = 20;
     BN_LOG("current index: ", _shoot.current_index());
     bn::fixed xoffset = facing_right() ? 12 : -12;
-    _bullets.emplace_front(*_sprite.camera().get(), x() + xoffset, y() - 3, _level, facing_right());
+    _bullets.emplace_front(*_sprite.camera().get(), x() + xoffset, y() - 3, 
+        _level, facing_right(), _rising_text_generator);
 }
 
 bool player::check_bullet_collision(combat_entity &enemy){
