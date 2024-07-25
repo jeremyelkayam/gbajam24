@@ -44,8 +44,8 @@ void text_box::setup_text_sprites(){
 
 void text_box::update(){
     box::update();
-
-    if(bn::keypad::a_pressed()){
+    
+    if(bn::keypad::a_pressed() || bn::keypad::b_pressed()){
         advance();
     }
     

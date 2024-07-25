@@ -7,8 +7,6 @@
 #include <bn_keypad.h>
 #include <bn_music.h>
 
-//copyrat90 demo imports
-
 #include "bn_regular_bg_items_testbg.h"
 #include "bn_regular_bg_items_testmap.h"
 #include "hud.h"
@@ -27,8 +25,7 @@ int main()
     constexpr uint8_t transition_time = 20;
 
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
-    // bn::camera_ptr cam = bn::camera_ptr::create(128,128);
-
+    
     bn::unique_ptr<aru::scene> scene;
     aru::Transition transition(aru::Transition::Types::FADE, 
         aru::Transition::Direction::IN, transition_time * 2);

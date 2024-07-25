@@ -27,13 +27,10 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 
     _player.update();
     _player.move_to(315, true);
-    for(const char *line : LV1_CUTSCENE_DIALOGUE){
-        uint8_t anim_index = 1;
-        if(bn::string<256>(line) == bn::string<256>("...")){
-            anim_index = 2;
-        }
+
+    for(const line_info &line : LV1_CUTSCENE_DIALOGUE) {
         _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
-            line, bn::sprite_items::slung_portrait_neutral, true, false, anim_index)));
+            line.text, line.portrait, true, false, line.anim_index)));
     }
 
     for(bn::unique_ptr<interactable_entity> &ent : _interactables){
@@ -81,8 +78,7 @@ bn::optional<scene_type> lab_scene::update()
         if(!_text_boxes.empty()){
             if(bn::keypad::b_pressed()){
                 _text_boxes.pop_front();
-            }
-            if(bn::keypad::a_pressed()){
+            }else if(bn::keypad::a_pressed()){
                 selection_box *warp_sel_box = (selection_box *) _text_boxes.front().get();
                 if(warp_sel_box->selected() == bn::string<8>("Yes")){
                     result = scene_type::LEVEL;
