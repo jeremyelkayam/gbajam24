@@ -30,6 +30,8 @@ public:
     void set_palette(const bn::sprite_palette_item &pal)
         { _sprite.set_palette(pal); }
 
+    bn::sprite_ptr &sprite(){return _sprite;}
+
 protected:
     bn::fixed_rect _hitbox;
     bn::sprite_ptr _sprite;

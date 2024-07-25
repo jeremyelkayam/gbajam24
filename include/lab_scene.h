@@ -7,6 +7,7 @@
 #include "interactable_entity.h"
 #include "play_scene.h"
 #include "donation_box.h"
+#include "warp_effect.h"
 
 namespace aru{
 
@@ -18,6 +19,7 @@ private:
     bn::sprite_ptr _interact_icon;
     bn::sprite_animate_action<2> _interact_icon_anim;
     bn::deque<bn::unique_ptr<box>, 32> _text_boxes;
+    bn::optional<warp_effect> _warping;
     interactable_entity *_interacting_with;
  
 public:
