@@ -65,10 +65,8 @@ void warp_effect::update()
     if(percent == 1){
         _sprite.set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
     }else{
-        BN_LOG("setting fade alpha for aru sprite", percent);
         bn::blending::set_fade_alpha(percent);
     }
-
     _horizontal_position_hbe.reload_deltas_ref();
     
 }
