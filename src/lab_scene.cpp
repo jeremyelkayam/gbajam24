@@ -91,6 +91,7 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
                 selection_box *warp_sel_box = (selection_box *) _text_boxes.front().get();
                 if(warp_sel_box->selected() == bn::string<8>("Yes")){
                     _warping.emplace(_player.sprite(), false);
+                    _player.squat();
                 }
                 _text_boxes.pop_front();
             }
@@ -115,7 +116,14 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
 
             if(bn::keypad::b_pressed()){
                 _text_boxes = ent->interact_boxes();
-                _player.move_to(ent->x() + (ent->facing_right() ? 35 : -35), !ent->facing_right());
+                bn::fixed xtarget = ent->x();
+
+                //stand next to anyone EXCEPT the warp point
+                if(ent != _interactables.front()){
+                    xtarget += (ent->facing_right() ? 35 : -35);
+                }
+
+                _player.move_to(xtarget, !ent->facing_right());
                 _interacting_with = ent.get();
             }
 

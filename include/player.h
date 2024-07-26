@@ -5,6 +5,7 @@
 #include "common_stuff.h"
 #include "enemy.h"
 #include "bullet.h"
+#include "bn_sprite_items_aru.h"
 
 namespace aru
 {
@@ -36,6 +37,7 @@ public:
     PSTATE state() const {return _current_state;}
     uint16_t time_since_state_change() const {return _state_change_timer;}
     virtual bool on_flat_ground() const;
+    void squat() {_sprite.set_item(bn::sprite_items::aru, 6);}
 
 private:
     effect _jumpcloud, _sprintcloud;

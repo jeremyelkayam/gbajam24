@@ -4,7 +4,6 @@
 
 
 #include "player.h"
-#include "bn_sprite_items_aru.h"
 #include "bn_sprite_items_jumpcloud.h"
 #include "bn_sprite_items_sprintcloud.h"
 

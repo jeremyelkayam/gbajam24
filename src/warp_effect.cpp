@@ -13,7 +13,7 @@ warp_effect::warp_effect(bn::sprite_ptr &sprite, bool reverse) :
     _speed(4),
     _base_degrees_angle(0),
     _horizontal_position_hbe(bn::sprite_position_hbe_ptr::create_horizontal(sprite, _horizontal_deltas)),
-    _amplitude_ease(reverse ? 100 : 0, reverse ? 0 : 100, reverse ? 120 : 240, reverse ? easer::sine_ease_out : easer::sine_ease_in),
+    _amplitude_ease(reverse ? 100 : 0, reverse ? 0 : 100, reverse ? 120 : 240, reverse ? easer::sine_ease_in : easer::sine_ease_out),
     _sprite(sprite)
 {
     sprite.set_blending_enabled(true);
