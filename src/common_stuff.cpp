@@ -73,5 +73,15 @@ bn::string<256> common_stuff::append(const char *str,
     return text;
 }
 
+bn::sprite_palette_ptr common_stuff::monochrome_palette(const bn::color &color){
+
+    bn::color colors[16];
+    for(bn::color &element : colors){
+        element = color;
+    }
+
+    return bn::sprite_palette_ptr::create(bn::sprite_palette_item(bn::span(colors), bn::bpp_mode::BPP_4));
+}
+
 
 }

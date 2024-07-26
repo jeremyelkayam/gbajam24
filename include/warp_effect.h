@@ -13,6 +13,7 @@ class warp_effect{
         bn::array<bn::fixed, bn::display::height()> _horizontal_deltas;
         bn::sprite_position_hbe_ptr _horizontal_position_hbe;
         easer _amplitude_ease;
+        bn::sprite_ptr &_sprite;
 
     public:
         warp_effect(bn::sprite_ptr &sprite, bool reverse);
