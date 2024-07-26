@@ -8,6 +8,7 @@
 #include "hud.h"
 #include "level_data.h"
 #include "pause_info_scene.h"
+#include "warp_effect.h"
 
 namespace aru{
 
@@ -23,6 +24,7 @@ protected:
 
     bn::regular_bg_ptr _bg;
     bn::optional<pause_info_scene> _pause_info;
+    bn::optional<warp_effect> _warping;
  
 public:
     play_scene(common_stuff &cstuff, const level_data &ld);

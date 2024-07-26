@@ -90,7 +90,7 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
             }else if(bn::keypad::a_pressed()){
                 selection_box *warp_sel_box = (selection_box *) _text_boxes.front().get();
                 if(warp_sel_box->selected() == bn::string<8>("Yes")){
-                    _warping.emplace(_player.sprite());
+                    _warping.emplace(_player.sprite(), false);
                 }
                 _text_boxes.pop_front();
             }
@@ -125,19 +125,15 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
     _interact_icon.set_visible(can_interact);
     _interact_icon_anim.update();
 
-    if(!_warping && !result && !(can_interact && bn::keypad::b_pressed())) result = play_scene::update_scene_components();
-
-    if(_warping){
-        _warping->update();
-        if(_warping->done()){
-            result = scene_type::LEVEL;
-        }
-    }
-    
+    if(!result && !(can_interact && bn::keypad::b_pressed())) result = play_scene::update_scene_components();
 
     if(old_currency != _cstuff.savefile.ultramatter){
         _hud.update_currency(_cstuff.savefile.ultramatter);
     }
+    if(_warping && _warping->done()){
+        result = scene_type::LEVEL;
+    }
+
     return result;
 }
 

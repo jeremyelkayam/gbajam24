@@ -8,13 +8,14 @@ namespace aru{
 
 class warp_effect{ 
     private:
+        bool _reverse;
         bn::fixed _frequency, _speed, _base_degrees_angle;
         bn::array<bn::fixed, bn::display::height()> _horizontal_deltas;
         bn::sprite_position_hbe_ptr _horizontal_position_hbe;
         easer _amplitude_ease;
 
     public:
-        warp_effect(bn::sprite_ptr &sprite);
+        warp_effect(bn::sprite_ptr &sprite, bool reverse);
 
         void update();
 

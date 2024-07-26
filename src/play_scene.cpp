@@ -35,11 +35,17 @@ void play_scene::set_transition_effects_enabled(bool enabled){
 bn::optional<scene_type> play_scene::update_scene_components(){
     bn::optional<scene_type> result;
 
-    _player.update();
-    _cam_mgr.update();
-    _hud.update();
-    _hud.update_hover_time(_player.hover_time());
-    _hud.update_player_hp(_player.hp());
+
+    if(_warping){
+        _warping->update();
+    }else{
+        _player.update();
+        _cam_mgr.update();
+        _hud.update();
+        _hud.update_hover_time(_player.hover_time());
+        _hud.update_player_hp(_player.hp());
+    }
+    
 
     return result;
 }

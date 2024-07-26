@@ -16,6 +16,8 @@ level_scene::level_scene(common_stuff &cstuff) :
             _cstuff.rising_text_generator));
         BN_LOG("enemy type: ", e.enemy_type);
     }
+    _warping.emplace(_player.sprite(), true);
+    _warping->update();
 }
 
 void level_scene::set_transition_effects_enabled(bool enabled)
@@ -29,6 +31,13 @@ void level_scene::set_transition_effects_enabled(bool enabled)
 
 bn::optional<scene_type> level_scene::update_scene_components()
 {
+    if(_bg.blending_enabled()){
+        set_transition_effects_enabled(false);
+    }
+    if(_warping && _warping->done()){
+        _warping.reset();
+    }
+
     bn::optional<scene_type> result;
     
     for(bn::unique_ptr<combat_entity> &e : _enemies){
