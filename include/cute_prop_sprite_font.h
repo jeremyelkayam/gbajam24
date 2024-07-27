@@ -107,7 +107,7 @@ constexpr int8_t cute_prop_sprite_font_character_widths[] = {
     6,  // 121 y
     6,  // 122 z
     5,  // 123 {
-    2,  // 124 |
+    1,  // 124 |
     5,  // 125 }
     6,  // 126 ~
 };

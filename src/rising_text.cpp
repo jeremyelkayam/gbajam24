@@ -19,7 +19,7 @@ rising_text::rising_text(const bn::camera_ptr &cam,
         stream << '+';
     }
     stream << num;
-    stream << " ";
+    stream << "|";
 
     text_generator.generate(x,y, text, _text_sprites);
 

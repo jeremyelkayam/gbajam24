@@ -11,7 +11,7 @@
 namespace aru {
 
 hud::hud(common_stuff &cstuff) : 
-    _text_generator(fixed_8x8_sprite_font),
+    _text_generator(cstuff.rising_text_generator),
     _enemy_hp(bn::sprite_items::bar_3px.create_sprite(90,72)),
     _displayed_enemy_hp(10),
     _target_enemy_hp(10),
@@ -127,6 +127,7 @@ void text_hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const u
     bn::string<8> text_str;
     bn::ostringstream text_stream(text_str);
     text_stream << integer;
+    text_stream << "|";
     _generator.set_one_sprite_per_character(false);
     _generator.set_left_alignment();
     _generator.generate(x, y, text_str, sprites); 
