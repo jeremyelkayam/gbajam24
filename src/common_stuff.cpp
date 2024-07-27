@@ -1,13 +1,13 @@
 #include "common_stuff.h"
 #include "cute_prop_sprite_font.h"
-#include "common_fixed_8x8_sprite_font.h"
+#include "small_numbers_sprite_font.h"
 #include "bn_log.h"
 namespace aru { 
 
 
 common_stuff::common_stuff() : 
     text_generator(cute_prop_sprite_font),
-    rising_text_generator(fixed_8x8_sprite_font) { 
+    rising_text_generator(small_numbers_sprite_font) { 
 
     //DEFAULT format tag
     bn::array<char, 8> default_format_tag;
