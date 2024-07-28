@@ -31,6 +31,9 @@ class easer {
         static bn::fixed bounce_ease_out(const bn::fixed &p);
         static bn::fixed bounce_ease_in(const bn::fixed &p)
             {return 1 - bounce_ease_out(1 - p);}
+        static bn::fixed back_ease_in(const bn::fixed &p)
+            {return p * p * p - p * bn::degrees_sin(p * 180);}
+        static bn::fixed back_ease_out(const bn::fixed &p);
 };
 
 }

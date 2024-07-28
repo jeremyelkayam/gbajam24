@@ -13,7 +13,7 @@ class warp_effect{
         bn::fixed _frequency, _speed, _base_degrees_angle;
         bn::array<bn::fixed, bn::display::height()> _horizontal_deltas;
         bn::sprite_position_hbe_ptr _horizontal_position_hbe;
-        easer _amplitude_ease;
+        easer _amplitude_ease, _height_ease;
         player &_player;
 
     public:
@@ -21,7 +21,7 @@ class warp_effect{
 
         void update();
 
-        bool done() {return _amplitude_ease.done();}
+        bool done() {return _amplitude_ease.done() && _height_ease.done();}
 
 };
 

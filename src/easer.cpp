@@ -74,5 +74,11 @@ bn::fixed easer::bounce_ease_out(const bn::fixed &p)
 	}
 }
 
+bn::fixed easer::back_ease_out(const bn::fixed &p)
+{
+	bn::fixed f = (1 - p);
+	return 1 - (f * f * f - f * degrees_sin(f * 180));
+}
+
 
 } // namespace aru

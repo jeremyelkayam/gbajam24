@@ -3,6 +3,7 @@
 #include <bn_math.h>
 #include <bn_blending.h>
 #include <bn_log.h>
+#include <bn_sprite_double_size_mode.h>
 #include "bn_sprite_items_aru.h"
 
 namespace aru {
@@ -14,9 +15,11 @@ warp_effect::warp_effect(player &player, bool reverse) :
     _base_degrees_angle(0),
     _horizontal_position_hbe(bn::sprite_position_hbe_ptr::create_horizontal(player.sprite(), _horizontal_deltas)),
     _amplitude_ease(reverse ? 100 : 0, reverse ? 0 : 100, reverse ? 120 : 240, reverse ? easer::sine_ease_in : easer::sine_ease_out),
+    _height_ease(reverse ? 4 : 1, reverse ? 1 : 4, reverse ? 120 : 240, reverse ? easer::back_ease_out : easer::back_ease_in),
     _player(player)
 {
     _player.sprite().set_blending_enabled(true);
+    _player.sprite().set_double_size_mode(bn::sprite_double_size_mode::AUTO);
     if(reverse){
         _player.sprite().set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
     }
@@ -25,6 +28,7 @@ warp_effect::warp_effect(player &player, bool reverse) :
 void warp_effect::update()
 {
     _amplitude_ease.update();
+    _height_ease.update();
     _base_degrees_angle += _speed;
 
     if(_base_degrees_angle >= 360)
@@ -48,6 +52,12 @@ void warp_effect::update()
         _horizontal_deltas[(bn::display::height() / 2) + index] = desp;
         _horizontal_deltas[(bn::display::height() / 2) - index - 1] = desp;
     }
+
+    bn::fixed vscale = _height_ease.current();
+    if(vscale < 0.5) vscale = 0.5;
+
+
+    _player.sprite().set_vertical_scale(vscale);
 
     bn::fixed percent = _amplitude_ease.ease_pct();
     if(_reverse){
