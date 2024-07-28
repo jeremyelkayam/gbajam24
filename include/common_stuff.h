@@ -29,6 +29,9 @@ namespace aru {
             common_stuff();
             static void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, 
                 const bool &visible);
+            
+            static void set_sprite_arr_effects_enabled(bn::ivector<bn::sprite_ptr> &sprites, 
+                const bool &enabled);
 
             [[nodiscard]] static uint16_t bound(const uint16_t &num, const uint16_t &min, 
                 const uint16_t &max);
@@ -36,10 +39,9 @@ namespace aru {
                 const uint16_t &subtractor,  const uint16_t &min);
             [[nodiscard]] static uint16_t bounded_addition(const uint16_t &first, 
                 const uint16_t &second,  const uint16_t &max);
-            [[nodiscard]] static uint16_t loop_subtraction(const uint16_t &subtractee, 
-                const uint16_t &subtractor,  const uint16_t &min, const uint16_t &max);
-            [[nodiscard]] static uint16_t loop_addition(const uint16_t &first, 
-                const uint16_t &second,  const uint16_t &min, const uint16_t &max);
+
+            [[nodiscard]] static uint16_t loop_addition(const int16_t &current, 
+                const int16_t &additive,  const int16_t &min, const int16_t &max);
 
             static bn::string<256> append(const char *str, 
                 const uint16_t &num);

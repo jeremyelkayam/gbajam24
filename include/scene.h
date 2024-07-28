@@ -11,7 +11,8 @@ enum class scene_type
     TITLE,
     LEVEL,
     LAB,
-    MENU
+    MENU,
+    BACK
 };
 
 class scene {

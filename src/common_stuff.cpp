@@ -35,6 +35,14 @@ void common_stuff::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, 
     }
 }
 
+void common_stuff::set_sprite_arr_effects_enabled(bn::ivector<bn::sprite_ptr> &sprites, 
+        const bool &enabled) {
+    for(bn::sprite_ptr &sprite : sprites) {
+        sprite.set_blending_enabled(enabled);
+        sprite.set_mosaic_enabled(enabled);
+    }
+}
+
 uint16_t common_stuff::bound(const uint16_t &num, const uint16_t &min, const uint16_t &max){
     BN_ASSERT(min < max);
     if(num < min){
@@ -63,24 +71,18 @@ uint16_t common_stuff::bounded_addition(const uint16_t &first, const uint16_t &s
     return addition_result;
 }
 
-//todo: full implementation of this 
-uint16_t common_stuff::loop_subtraction(const uint16_t &subtractee, 
-    const uint16_t &subtractor, const uint16_t &min, const uint16_t &max){
-    if(subtractee < subtractor){
-        return min;
+uint16_t common_stuff::loop_addition(const int16_t &current, const int16_t &additive,  
+    const int16_t &min, const int16_t &max){
+    BN_ASSERT(additive < max);
+    if(additive > 0){
+        return min + ((current + additive) % (max - min));
     }else{
-        uint16_t sub_result = subtractee - subtractor;
-        if(sub_result < min) return min;
-        return sub_result;
+        int16_t result = current + additive;
+        if(result < min){
+            result += max;
+        }
+        return result;
     }
-}
-
-uint16_t common_stuff::loop_addition(const uint16_t &first, const uint16_t &second,  
-    const uint16_t &min, const uint16_t &max){
-    if(65535 - first < second) return max;
-    uint16_t addition_result = first + second;
-    if(addition_result > max) return max;
-    return addition_result;
 }
 
 bn::string<256> common_stuff::append(const char *str, 

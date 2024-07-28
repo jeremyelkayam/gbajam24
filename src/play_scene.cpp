@@ -58,8 +58,13 @@ bn::optional<scene_type> play_scene::update()
             hide_pause_info();
         }
     }else if(_pause_menu){
-        if(_pause_menu->update()){
-            hide_pause_menu();
+        bn::optional<scene_type> result = _pause_menu->update();
+        if(result){
+            if(result == scene_type::BACK){
+                hide_pause_menu();
+            }else{
+                return result;
+            }
         }
     }else{
         return update_scene_components();
@@ -83,12 +88,14 @@ void play_scene::hide_pause_info(){
 void play_scene::show_pause_menu(){
     BN_ASSERT(!_pause_info);
     BN_ASSERT(!_pause_menu);
+    set_transition_effects_enabled(true);
     _pause_menu.emplace(_cstuff.text_generator);
 }
 
 void play_scene::hide_pause_menu(){
     BN_ASSERT(!_pause_info);
     BN_ASSERT(_pause_menu);
+    set_transition_effects_enabled(false);
     _pause_menu.reset();
 }
 
