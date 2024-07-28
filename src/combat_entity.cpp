@@ -179,7 +179,7 @@ void combat_entity::update(){
     _sprite.set_x(_hitbox.x());
     _sprite.set_y(_hitbox.y());
 
-    if(_explosion_anim) _explosion_anim->update();
+    if(_explosion_anim && !_explosion_anim->done()) _explosion_anim->update();
 
     for(rising_text &r : _rising_text){
         r.update();
@@ -251,7 +251,7 @@ bool combat_entity::apply_gravity() const{
 }
 
 void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
-    if(!_iframes){
+    if(!_iframes && !_explosion_anim){
 
         if(_hp > damage){
             _hp -= damage;
@@ -288,7 +288,7 @@ void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
 void combat_entity::die(){
     _sprite.set_item(bn::sprite_items::explosion);
     _sprite.set_scale(2);
-    _explosion_anim.emplace(bn::create_sprite_animate_action_once(_sprite, 4, bn::sprite_items::explosion.tiles_item(), 0, 1, 2, 3, 4, 5));
+    _explosion_anim.emplace(bn::create_sprite_animate_action_once(_sprite, 4, bn::sprite_items::explosion.tiles_item(), 0, 1, 2, 3, 4, 5, 6));
 }
 
 

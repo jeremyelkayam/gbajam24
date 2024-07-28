@@ -36,12 +36,12 @@ public:
     uint8_t hp() const {return _hp;}
     uint8_t max_hp() const {return _max_hp;}
     bool in_iframes() const {return _iframes;}
-    bool delete_me() const {return _explosion_anim && _explosion_anim->done();}
+    bool delete_me() const {return _explosion_anim && _explosion_anim->done() && _rising_text.empty();}
 
 
 protected:
     level &_level;
-    bn::optional<bn::sprite_animate_action<6>> _explosion_anim;
+    bn::optional<bn::sprite_animate_action<7>> _explosion_anim;
     bn::deque<rising_text, 4> _rising_text;
     bn::sprite_text_generator &_rising_text_generator;
 
