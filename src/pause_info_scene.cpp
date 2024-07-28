@@ -15,6 +15,7 @@ pause_info_scene::pause_info_scene(
 {
     _bg.set_priority(0);
     generator.set_center_alignment();
+    generator.set_one_sprite_per_character(false);
 
     generator.generate(0, -65, "AUTOMATED RETRIEVAL UNIT", 
         _text_sprites);

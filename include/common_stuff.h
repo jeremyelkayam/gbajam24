@@ -36,6 +36,10 @@ namespace aru {
                 const uint16_t &subtractor,  const uint16_t &min);
             [[nodiscard]] static uint16_t bounded_addition(const uint16_t &first, 
                 const uint16_t &second,  const uint16_t &max);
+            [[nodiscard]] static uint16_t loop_subtraction(const uint16_t &subtractee, 
+                const uint16_t &subtractor,  const uint16_t &min, const uint16_t &max);
+            [[nodiscard]] static uint16_t loop_addition(const uint16_t &first, 
+                const uint16_t &second,  const uint16_t &min, const uint16_t &max);
 
             static bn::string<256> append(const char *str, 
                 const uint16_t &num);

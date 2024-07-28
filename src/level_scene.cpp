@@ -70,8 +70,9 @@ bn::optional<scene_type> level_scene::update_scene_components()
     }
     if(bn::keypad::start_pressed()){
         show_pause_info();
+    }else if(bn::keypad::select_pressed()){
+        show_pause_menu();
     }
-
 
     return result;
 

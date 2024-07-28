@@ -57,6 +57,10 @@ bn::optional<scene_type> play_scene::update()
         if(_pause_info->update()){
             hide_pause_info();
         }
+    }else if(_pause_menu){
+        if(_pause_menu->update()){
+            hide_pause_menu();
+        }
     }else{
         return update_scene_components();
     }
@@ -66,12 +70,26 @@ bn::optional<scene_type> play_scene::update()
 
 void play_scene::show_pause_info(){
     BN_ASSERT(!_pause_info);
-    _pause_info.emplace(_cstuff.rising_text_generator, _cstuff.savefile);
+    BN_ASSERT(!_pause_menu);
+    _pause_info.emplace(_cstuff.text_generator, _cstuff.savefile);
 }
 
 void play_scene::hide_pause_info(){
     BN_ASSERT(_pause_info);
+    BN_ASSERT(!_pause_menu);
     _pause_info.reset();
+}
+
+void play_scene::show_pause_menu(){
+    BN_ASSERT(!_pause_info);
+    BN_ASSERT(!_pause_menu);
+    _pause_menu.emplace(_cstuff.text_generator);
+}
+
+void play_scene::hide_pause_menu(){
+    BN_ASSERT(!_pause_info);
+    BN_ASSERT(_pause_menu);
+    _pause_menu.reset();
 }
 
 }

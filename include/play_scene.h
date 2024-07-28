@@ -36,6 +36,8 @@ public:
 
     void show_pause_info();
     void hide_pause_info();
+    void show_pause_menu();
+    void hide_pause_menu();
 };
 
 }

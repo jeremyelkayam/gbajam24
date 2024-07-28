@@ -63,6 +63,26 @@ uint16_t common_stuff::bounded_addition(const uint16_t &first, const uint16_t &s
     return addition_result;
 }
 
+//todo: full implementation of this 
+uint16_t common_stuff::loop_subtraction(const uint16_t &subtractee, 
+    const uint16_t &subtractor, const uint16_t &min, const uint16_t &max){
+    if(subtractee < subtractor){
+        return min;
+    }else{
+        uint16_t sub_result = subtractee - subtractor;
+        if(sub_result < min) return min;
+        return sub_result;
+    }
+}
+
+uint16_t common_stuff::loop_addition(const uint16_t &first, const uint16_t &second,  
+    const uint16_t &min, const uint16_t &max){
+    if(65535 - first < second) return max;
+    uint16_t addition_result = first + second;
+    if(addition_result > max) return max;
+    return addition_result;
+}
+
 bn::string<256> common_stuff::append(const char *str, 
     const uint16_t &num)
 {

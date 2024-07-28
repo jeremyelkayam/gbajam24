@@ -77,6 +77,8 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
         _player.clear_target();
         if(bn::keypad::start_pressed()){
             show_pause_info();
+        }else if(bn::keypad::select_pressed()){
+            show_pause_menu();
         }
     }
 
