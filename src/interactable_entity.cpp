@@ -1,9 +1,8 @@
 #include "interactable_entity.h"
 #include "bn_sprite_items_slung.h"
 #include "bn_sprite_items_slung_portrait_neutral.h"
-#include "bn_sprite_items_gun_upgrade.h"
+#include "bn_sprite_items_upgrades.h"
 #include "bn_sprite_items_hover_upgrade.h"
-#include "bn_sprite_items_sword_upgrade.h"
 #include "bn_sprite_items_dummy_sprite.h"
 #include "bn_sprite_items_warp.h"
 #include "text_box.h"
@@ -111,10 +110,10 @@ bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
 
 shoot_upgrader::shoot_upgrader(const bn::camera_ptr &cam, 
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
-        interactable_entity(cam, x, y, 30,40,bn::sprite_items::gun_upgrade, cstuff)
+        interactable_entity(cam, x, y, 30,40,bn::sprite_items::upgrades, cstuff)
 {
     _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 9, 
-        bn::sprite_items::gun_upgrade.tiles_item(), 0, 1, 2, 1));
+        bn::sprite_items::upgrades.tiles_item(), 3, 4, 5, 3));
     _sprite.set_horizontal_flip(true);}
 
 bn::deque<bn::unique_ptr<box>, 16> shoot_upgrader::interact_boxes(){
@@ -127,10 +126,10 @@ bn::deque<bn::unique_ptr<box>, 16> shoot_upgrader::interact_boxes(){
 
 slash_upgrader::slash_upgrader(const bn::camera_ptr &cam, 
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
-        interactable_entity(cam, x, y, 30,40,bn::sprite_items::sword_upgrade, cstuff)
+        interactable_entity(cam, x, y, 30,40,bn::sprite_items::upgrades, cstuff)
 {
     _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 9, 
-        bn::sprite_items::sword_upgrade.tiles_item(), 0, 1, 2, 1));
+        bn::sprite_items::upgrades.tiles_item(), 0, 1, 2, 1));
     _sprite.set_horizontal_flip(true);
 }
 
