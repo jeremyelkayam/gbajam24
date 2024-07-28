@@ -3,6 +3,7 @@
 #include <bn_sprite_position_hbe_ptr.h>
 #include <bn_display.h>
 #include "easer.h"
+#include "player.h"
 
 namespace aru{
 
@@ -13,10 +14,10 @@ class warp_effect{
         bn::array<bn::fixed, bn::display::height()> _horizontal_deltas;
         bn::sprite_position_hbe_ptr _horizontal_position_hbe;
         easer _amplitude_ease;
-        bn::sprite_ptr &_sprite;
+        player &_player;
 
     public:
-        warp_effect(bn::sprite_ptr &sprite, bool reverse);
+        warp_effect(player &player, bool reverse);
 
         void update();
 

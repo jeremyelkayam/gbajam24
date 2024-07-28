@@ -7,18 +7,18 @@
 
 namespace aru {
 
-warp_effect::warp_effect(bn::sprite_ptr &sprite, bool reverse) : 
+warp_effect::warp_effect(player &player, bool reverse) : 
     _reverse(reverse),
     _frequency(16),
     _speed(4),
     _base_degrees_angle(0),
-    _horizontal_position_hbe(bn::sprite_position_hbe_ptr::create_horizontal(sprite, _horizontal_deltas)),
+    _horizontal_position_hbe(bn::sprite_position_hbe_ptr::create_horizontal(player.sprite(), _horizontal_deltas)),
     _amplitude_ease(reverse ? 100 : 0, reverse ? 0 : 100, reverse ? 120 : 240, reverse ? easer::sine_ease_in : easer::sine_ease_out),
-    _sprite(sprite)
+    _player(player)
 {
-    sprite.set_blending_enabled(true);
+    _player.sprite().set_blending_enabled(true);
     if(reverse){
-        sprite.set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
+        _player.sprite().set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
     }
 }
 
@@ -58,12 +58,12 @@ void warp_effect::update()
     if(_amplitude_ease.time_elapsed() == 2){
         bn::blending::set_white_fade_color();
         //todo: this will not necessarily be the right palette
-        _sprite.set_palette(bn::sprite_items::aru.palette_item());
-        _sprite.set_blending_enabled(true);
+        _player.update_palette();
+        _player.sprite().set_blending_enabled(true);
     }    
 
     if(percent == 1){
-        _sprite.set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
+        _player.sprite().set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
     }else{
         bn::blending::set_fade_alpha(percent);
     }

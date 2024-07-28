@@ -64,7 +64,7 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
 
             // if we upgraded our hover level, we can do that now
             _hud.update_hover_level();
-            _player.set_palette(PLAYER_PALETTE[_cstuff.savefile.hover_upgrade_lvl]);
+            _player.update_palette();
         }
         else if(bn::keypad::start_pressed())
         {
@@ -92,7 +92,7 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
             }else if(bn::keypad::a_pressed()){
                 selection_box *warp_sel_box = (selection_box *) _text_boxes.front().get();
                 if(warp_sel_box->selected() == bn::string<8>("Yes")){
-                    _warping.emplace(_player.sprite(), false);
+                    _warping.emplace(_player, false);
                     _player.squat();
                 }
                 _text_boxes.pop_front();

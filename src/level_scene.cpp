@@ -16,7 +16,7 @@ level_scene::level_scene(common_stuff &cstuff) :
             _cstuff.rising_text_generator));
         BN_LOG("enemy type: ", e.enemy_type);
     }
-    _warping.emplace(_player.sprite(), true);
+    _warping.emplace(_player, true);
     _warping->update();
 }
 

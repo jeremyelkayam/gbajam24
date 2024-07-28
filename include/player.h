@@ -38,6 +38,7 @@ public:
     uint16_t time_since_state_change() const {return _state_change_timer;}
     virtual bool on_flat_ground() const;
     void squat() {_sprite.set_item(bn::sprite_items::aru, 6);}
+    void update_palette() {_sprite.set_palette(PLAYER_PALETTE[_savefile.hover_upgrade_lvl]);}
 
 private:
     effect _jumpcloud, _sprintcloud;
@@ -68,7 +69,7 @@ private:
     virtual void land();
     void start_anim(bn::isprite_animate_action &anim);
     void set_state(const PSTATE &state);
-    
+ 
 };
 
 }

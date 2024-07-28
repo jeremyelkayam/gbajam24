@@ -6,7 +6,7 @@ namespace aru
 rising_text::rising_text(const bn::camera_ptr &cam, 
     bn::sprite_text_generator &text_generator, const int8_t &num, 
     const bn::fixed &x, const bn::fixed &y) : 
-        _timer(120)
+        _timer(90)
 {
     //todo: maybe color code this based on player vs enemy
     text_generator.set_bg_priority(0);
