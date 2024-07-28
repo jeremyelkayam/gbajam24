@@ -8,19 +8,19 @@
 
 namespace aru {
 
-warp_effect::warp_effect(player &player, bool reverse) : 
-    _reverse(reverse),
+warp_effect::warp_effect(player &player, const direction &dir) : 
+    _dir(dir),
     _frequency(16),
     _speed(4),
     _base_degrees_angle(0),
     _horizontal_position_hbe(bn::sprite_position_hbe_ptr::create_horizontal(player.sprite(), _horizontal_deltas)),
-    _amplitude_ease(reverse ? 100 : 0, reverse ? 0 : 100, reverse ? 120 : 240, reverse ? easer::sine_ease_in : easer::sine_ease_out),
-    _height_ease(reverse ? 4 : 1, reverse ? 1 : 4, reverse ? 120 : 240, reverse ? easer::back_ease_out : easer::back_ease_in),
+    _amplitude_ease(warp_in() ? 100 : 0, warp_in() ? 0 : 100, warp_in() ? 120 : 240, warp_in() ? easer::sine_ease_in : easer::sine_ease_out),
+    _height_ease(warp_in() ? 4 : 1, warp_in() ? 1 : 4, warp_in() ? 120 : 240, warp_in() ? easer::back_ease_out : easer::back_ease_in),
     _player(player)
 {
     _player.sprite().set_blending_enabled(true);
     _player.sprite().set_double_size_mode(bn::sprite_double_size_mode::AUTO);
-    if(reverse){
+    if(warp_in()){
         _player.sprite().set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
     }
 }
@@ -60,7 +60,7 @@ void warp_effect::update()
     _player.sprite().set_vertical_scale(vscale);
 
     bn::fixed percent = _amplitude_ease.ease_pct();
-    if(_reverse){
+    if(warp_in()){
         percent = 1 - percent;
     }else{
 

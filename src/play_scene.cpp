@@ -17,6 +17,9 @@ play_scene::play_scene(common_stuff &cstuff, const level_data &ld) :
 
     _bg.set_z_order(1);
     _cam_mgr.update();
+
+    _warping.emplace(_player, warp_effect::direction::IN);
+    _warping->update();
 }
 
 void play_scene::set_transition_effects_enabled(bool enabled){
@@ -38,6 +41,12 @@ bn::optional<scene_type> play_scene::update_scene_components(){
 
     if(_warping){
         _warping->update();
+        if(_warping->done()){
+            if(_warping->get_direction() == warp_effect::direction::OUT){
+                result = scene_type::LEVEL;
+            }
+            _warping.reset();
+        }        
     }else{
         _player.update();
         _cam_mgr.update();
