@@ -17,8 +17,14 @@ public:
     bool delete_me() const {return _timer == 0;}
 
 private:
+    uint16_t text_width(const bn::string<256> &text, const int8_t *char_widths) const;
+
+    bn::fixed _xcor;
+
     bn::vector<bn::sprite_ptr, 1> _text_sprites;
-    uint8_t _timer;
+    uint8_t _timer, _sprite_width, _string_width;
+
+    static constexpr const uint8_t TOTAL_TIME_VISIBLE = 90;
 
 };
 
