@@ -89,11 +89,13 @@ level::level(const bn::camera_ptr &cam, const bn::regular_bg_item &bg) :
 bn::regular_bg_map_cell level::cell_at(const bn::fixed_point &coords) const{
     //FLOOR INTEGER IS NOT ADEQUATE FOR THIS. 
     //NEEDS TO BE CEILING INTEGER FOR TOP LEFT, FLOOR INTEGER FOR BOTTOM RIGHT.
-    return cell_at((coords.x() * bn::fixed(0.125)).floor_integer(),(coords.y() * bn::fixed(0.125)).floor_integer());
+    if(0 <= coords.x() && coords.x() < width() && 0 <= coords.y() && coords.y() <= height() ){
+        return cell_at((coords.x() * bn::fixed(0.125)).floor_integer(),(coords.y() * bn::fixed(0.125)).floor_integer());
+    }else return cell_at(0,0);
 }
 
-bn::regular_bg_map_cell level::cell_at(const unsigned short &xtile, const unsigned short &ytile) const{
-    if(xtile <= _COLUMNS && ytile <= _ROWS){
+bn::regular_bg_map_cell level::cell_at(const short &xtile, const short &ytile) const{
+    if(0 <= xtile && xtile <= _COLUMNS && 0 <= ytile && ytile <= _ROWS){
         return _bg.map_item().cell(xtile, ytile);
     } else return _bg.map_item().cell(0,0);
 }

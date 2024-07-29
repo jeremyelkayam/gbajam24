@@ -51,21 +51,26 @@ void combat_entity::update(){
         _yspeed = _MAX_UP_SPEED;
     }
 
-    for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
-            ytile < current_foot_tile + 2; ++ytile){
-        
-        bn::regular_bg_map_cell tile_type = _level.cell_at(center_xtile, ytile);
+    bool fgrounded = false;
 
-        if(_level.tile_has_flag(tile_type, 
-            tile_flags::UP_SLOPE | tile_flags:: DOWN_SLOPE | 
-            tile_flags::UP_HALFSLOPE_A | tile_flags:: UP_HALFSLOPE_B | 
-            tile_flags::DOWN_HALFSLOPE_A | tile_flags:: DOWN_HALFSLOPE_B)){
-            sloped_ground_ytile = ytile;
-            sloped_ground_type = tile_type;
-            break;
+    if(0 <= x() && x() <= _level.width() && 0 <= y() && y() <= _level.height() ){
+        for(uint16_t ytile = (_hitbox.top() * bn::fixed(0.125)).floor_integer(); 
+                ytile < current_foot_tile + 2; ++ytile){
+            
+            bn::regular_bg_map_cell tile_type = _level.cell_at(center_xtile, ytile);
+
+            if(_level.tile_has_flag(tile_type, 
+                tile_flags::UP_SLOPE | tile_flags:: DOWN_SLOPE | 
+                tile_flags::UP_HALFSLOPE_A | tile_flags:: UP_HALFSLOPE_B | 
+                tile_flags::DOWN_HALFSLOPE_A | tile_flags:: DOWN_HALFSLOPE_B)){
+                sloped_ground_ytile = ytile;
+                sloped_ground_type = tile_type;
+                break;
+            }
         }
+        fgrounded = on_flat_ground();    
     }
-    bool fgrounded = on_flat_ground();    
+
     
     //Accelerate if necessary to reach target speed.
     if(_xspeed > _target_xspeed) {

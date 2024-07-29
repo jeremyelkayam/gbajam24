@@ -51,7 +51,7 @@ public:
 
 
     bn::regular_bg_map_cell cell_at(const bn::fixed_point &coords) const;
-    bn::regular_bg_map_cell cell_at(const unsigned short &xtile, const unsigned short &ytile) const;
+    bn::regular_bg_map_cell cell_at(const short &xtile, const short &ytile) const;
 
     bool tile_has_flag(const bn::regular_bg_map_cell &tile_index, 
         const tile_flags &flags) const;
