@@ -194,9 +194,12 @@ void player::update(){
             }else if(_current_state == PSTATE::RUN && 
                 (_shoot_run.current_index() == 1 || _shoot_run.current_index() == 5)){
                 shoot();
+            }else if(_current_state == PSTATE::JUMP || _current_state == PSTATE::FALL || 
+                    _current_state == PSTATE::HOVER){
+                //TODO: maybe make animations for this!
+                shoot();
             }
         }
-
     }
 
     if(_jbuf_timer){
