@@ -18,22 +18,30 @@ camera_manager::camera_manager(bn::camera_ptr cam, const level &lv, const player
 
 void camera_manager::update(){
 
-    _x_ease.set_target(50 * (_player.facing_right() ? 1 : -1));
+    if(_fixed_target){
+        _x_ease.set_target(_player.x() - _fixed_target->x());
+        _y_ease.set_target(_player.y() - _fixed_target->y());
+    }else{
+
+    
+
+        _x_ease.set_target(50 * (_player.facing_right() ? 1 : -1));
 
 
-    switch(_player.state()){
-        case PSTATE::HOVER:
-            _y_ease.set_target(-50);
-        break;
-        case PSTATE::FALL:
-            if(_player.time_since_state_change() > 30){
-                _y_ease.set_target(50);
-            }
-        break;
-        case PSTATE::JUMP:
-        break;
-        default:
-            _y_ease.set_target(-30);
+        switch(_player.state()){
+            case PSTATE::HOVER:
+                _y_ease.set_target(-50);
+            break;
+            case PSTATE::FALL:
+                if(_player.time_since_state_change() > 30){
+                    _y_ease.set_target(50);
+                }
+            break;
+            case PSTATE::JUMP:
+            break;
+            default:
+                _y_ease.set_target(-30);
+        }
     }
 
 
@@ -54,6 +62,10 @@ void camera_manager::update(){
 
 bool camera_manager::on_screen(bn::fixed_rect &hitbox){
     return _view.intersects(hitbox);
+}
+
+void camera_manager::set_fixed_target(const bn::fixed_point &target){
+    _fixed_target = target;
 }
 
 }

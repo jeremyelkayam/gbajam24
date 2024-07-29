@@ -16,10 +16,13 @@ private:
 
         easer _x_ease, _y_ease;
 
+        bn::optional<bn::fixed_point> _fixed_target;
+
 public:
     camera_manager(bn::camera_ptr cam, const level &lv, const player &pl);
     bool on_screen(bn::fixed_rect &hitbox);
     void update();    
+    void set_fixed_target(const bn::fixed_point &target);
 
 };
 
