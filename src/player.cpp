@@ -221,7 +221,6 @@ void player::update(){
     }
     _bullets.remove_if(bullet_deletable);
 
-    //todo: there is a bit of jank where you fall in the tile for a frame... let's fix that  
     combat_entity::update();
 }
 

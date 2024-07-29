@@ -273,17 +273,17 @@ void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
 
             _yspeed += y_push;
 
-            if(_rising_text.full()){
-                //kill the oldest if we're really hurting for text entities
-                _rising_text.pop_back();
-            }
-            _rising_text.emplace_front(*_sprite.camera().get(), _rising_text_generator, 
-                -damage, x(), y());
-
         }else{
             _hp = 0;
             die();
         }
+
+        if(_rising_text.full()){
+            _rising_text.pop_back();
+        }
+        _rising_text.emplace_front(*_sprite.camera().get(), _rising_text_generator, 
+            -damage, x(), y());        
+
         _iframes = _HIT_IFRAMES;
     }
 
