@@ -13,8 +13,7 @@ rising_text::rising_text(const bn::camera_ptr &cam,
         _timer(TOTAL_TIME_VISIBLE),
         _string_width(0)
 {
-    //todo: maybe color code this based on player vs enemy
-    text_generator.set_bg_priority(0);
+    //todo: maybe color code this based on player vs enemy or heal vs hurt
     text_generator.set_center_alignment();
     text_generator.set_one_sprite_per_character(false);
 
