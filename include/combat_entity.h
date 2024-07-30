@@ -42,7 +42,8 @@ public:
 
     virtual void set_blending_enabled(bool enabled);
 
-    virtual void set_mosaic_enabled(bool enabled);    
+    virtual void set_mosaic_enabled(bool enabled);   
+    void clear_rising_text() {_rising_text.clear();} 
 
 protected:
     level &_level;

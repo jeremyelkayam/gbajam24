@@ -8,7 +8,8 @@ death_anim::death_anim(player &player) :
     _player(player)
 {
     _fade_action.emplace(30, 1);
-
+    _player.clear_rising_text();
+    _player.set_visible(true);
     bn::blending::set_black_fade_color();
 
 }
@@ -33,13 +34,13 @@ bool death_anim::done() const
     return false;
 }
 
-animated_sprite::animated_sprite(const bn::sprite_item &spritem, const bn::fixed &x, const bn::fixed &y) : 
+animated_sprite::animated_sprite(bn::camera_ptr &cam, const bn::sprite_item &spritem, const bn::fixed &x, const bn::fixed &y) : 
     _sprite(spritem.create_sprite(x, y)),
     _anim(bn::create_sprite_animate_action_once(
         _sprite, 4, spritem.tiles_item(), 0, 1, 2, 3, 4, 5, 6)
     )
 {
-
+    _sprite.set_camera(cam);
 }
 
 void animated_sprite::reset(const bn::fixed &x, const bn::fixed &y)

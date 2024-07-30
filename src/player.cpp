@@ -299,8 +299,8 @@ bool player::on_flat_ground() const{
 
 void player::die()
 {
-    _jumpsquat.reset();
-    _jumpsquat.update();
+    _sprite.set_item(bn::sprite_items::aru, 5);
+    _sprite.set_visible(true);
 }
 
 void player::set_blending_enabled(bool enabled)

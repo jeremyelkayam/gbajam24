@@ -9,7 +9,7 @@ namespace aru{
 class animated_sprite
 {
     public: 
-        animated_sprite(const bn::sprite_item &spritem, const bn::fixed &x, const bn::fixed &y);
+        animated_sprite(bn::camera_ptr &cam, const bn::sprite_item &spritem, const bn::fixed &x, const bn::fixed &y);
         bool done(){return _anim.done();}
         void reset(const bn::fixed &x, const bn::fixed &y);
         void update(){_anim.update();}

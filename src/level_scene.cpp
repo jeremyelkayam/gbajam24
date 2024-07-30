@@ -67,7 +67,6 @@ bn::optional<scene_type> level_scene::update_scene_components()
 
 
         if(_player.hp() == 0){
-            BN_LOG("you died.");
             _dying.emplace(_player);
             _cam_mgr.set_fixed_target(_player.pos());
             set_transition_effects_enabled(true);
