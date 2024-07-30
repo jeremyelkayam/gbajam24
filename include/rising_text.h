@@ -16,6 +16,12 @@ public:
     void update();
     bool delete_me() const {return _timer == 0;}
 
+    void set_blending_enabled(bool enabled)
+        { _text_sprites.at(0).set_blending_enabled(enabled); }
+
+    void set_mosaic_enabled(bool enabled)
+        { _text_sprites.at(0).set_mosaic_enabled(enabled); }
+
 private:
     uint16_t text_width(const bn::string<256> &text, const int8_t *char_widths) const;
 

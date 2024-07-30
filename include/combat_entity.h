@@ -39,6 +39,11 @@ public:
     bool delete_me() const {return _explosion_anim && _explosion_anim->done() && _rising_text.empty();}
 
 
+
+    virtual void set_blending_enabled(bool enabled);
+
+    virtual void set_mosaic_enabled(bool enabled);    
+
 protected:
     level &_level;
     bn::optional<bn::sprite_animate_action<7>> _explosion_anim;

@@ -66,4 +66,6 @@ uint16_t rising_text::text_width(const bn::string<256> &text, const int8_t *char
     return width;
 }
 
+
+
 }
