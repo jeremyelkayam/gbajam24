@@ -4,6 +4,21 @@
 
 namespace aru{
 
+
+
+class animated_sprite
+{
+    public: 
+        animated_sprite(const bn::sprite_item &spritem, const bn::fixed &x, const bn::fixed &y);
+        bool done(){return _anim.done();}
+        void reset(const bn::fixed &x, const bn::fixed &y);
+        void update(){_anim.update();}
+
+    private:
+        bn::sprite_ptr _sprite;
+        bn::sprite_animate_action<7> _anim;
+};
+
 class death_anim{ 
 
     public:
@@ -17,11 +32,8 @@ class death_anim{
     private:
         player &_player;
 
-        bn::vector<bn::sprite_ptr, 3> _explosions;
-        bn::vector<bn::sprite_animate_action<7>, 3> _explosion_anims;
-        bn::blending_fade_alpha_to_action _fade_action;
-
-
+        bn::vector<animated_sprite, 3> _explosions;
+        bn::optional<bn::blending_fade_alpha_to_action> _fade_action;
 
 };
 

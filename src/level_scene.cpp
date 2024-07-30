@@ -33,8 +33,6 @@ bn::optional<scene_type> level_scene::update_scene_components()
 
     if(_dying){
         _cam_mgr.update();
-        set_transition_effects_enabled(true);
-        _player.set_blending_enabled(false);
         if(_dying->done()){
             result = scene_type::LEVEL;
         }
@@ -72,6 +70,8 @@ bn::optional<scene_type> level_scene::update_scene_components()
             BN_LOG("you died.");
             _dying.emplace(_player);
             _cam_mgr.set_fixed_target(_player.pos());
+            set_transition_effects_enabled(true);
+            _player.set_blending_enabled(false);
         }
         if(bn::keypad::start_pressed()){
             show_pause_info();

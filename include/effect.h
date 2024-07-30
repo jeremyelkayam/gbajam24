@@ -16,6 +16,13 @@ public:
     void start(const bn::fixed &x, const bn::fixed &y);
     void set_horizontal_flip(const bool &flip) {_sprite.set_horizontal_flip(flip);}
     bool visible(){return _sprite.visible();}
+
+    void set_blending_enabled(bool enabled)
+        { _sprite.set_blending_enabled(enabled); }
+
+    void set_mosaic_enabled(bool enabled)
+        { _sprite.set_mosaic_enabled(enabled); }
+
 private:
     uint16_t gfxindices_arr[10];
     bn::sprite_ptr _sprite;

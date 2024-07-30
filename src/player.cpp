@@ -297,4 +297,24 @@ bool player::on_flat_ground() const{
         !(_current_state == PSTATE::HOVER &&  _yspeed < 0);
 }
 
+void player::die()
+{
+    _jumpsquat.reset();
+    _jumpsquat.update();
+}
+
+void player::set_blending_enabled(bool enabled)
+{
+    combat_entity::set_blending_enabled(enabled);
+    _jumpcloud.set_blending_enabled(enabled);
+    _sprintcloud.set_blending_enabled(enabled);
+}
+
+void player::set_mosaic_enabled(bool enabled)
+{
+    combat_entity::set_mosaic_enabled(enabled);
+    _jumpcloud.set_mosaic_enabled(enabled);
+    _sprintcloud.set_mosaic_enabled(enabled);
+}
+
 }

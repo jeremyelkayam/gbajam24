@@ -59,7 +59,7 @@ protected:
     virtual bool on_thin_ground() const;
     bool on_thick_ground() const;
     virtual bool apply_gravity() const;
-    void die();
+    virtual void die();
     static bool rising_text_deletable(const rising_text &r) {return r.delete_me();}
 };
 

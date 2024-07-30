@@ -5,32 +5,48 @@ namespace aru
 {
 
 death_anim::death_anim(player &player) : 
-    _player(player),
-    _fade_action(30, 1)
+    _player(player)
 {
-    for(uint8_t z  = 0; z < _explosions.max_size(); ++z)
-    {
-        _explosions.emplace_back(bn::sprite_items::explosion.create_sprite(z* 10, z* 10));
-        _explosion_anims.emplace_back(
-            bn::create_sprite_animate_action_once(_explosions.at(z), 4, 
-            bn::sprite_items::explosion.tiles_item(), 0, 1, 2, 3, 4, 5, 6));
-    }
+    _fade_action.emplace(30, 1);
+
+    bn::blending::set_black_fade_color();
+
 }
 
 void death_anim::update()
 {
-    if(!_fade_action.done()){
-        _fade_action.update();
-    }else if(!_explosion_anims.at(0).done()){
-        for(auto &anim : _explosion_anims){
-            anim.update();
+    if(_fade_action){
+        _fade_action->update();
+        if(_fade_action->done()){
+            // _explosions.emplace_back(bn::sprite_items::explosion, -6, -10);
+            // _explosions.emplace_back(bn::sprite_items::explosion, 15, 15);
+            _fade_action.reset();
         }
+    }
+    for(auto &splosion : _explosions) {
+        splosion.update();
     }
 }
 
 bool death_anim::done() const
 {
-    return _explosion_anims.at(0).done();
+    return false;
 }
+
+animated_sprite::animated_sprite(const bn::sprite_item &spritem, const bn::fixed &x, const bn::fixed &y) : 
+    _sprite(spritem.create_sprite(x, y)),
+    _anim(bn::create_sprite_animate_action_once(
+        _sprite, 4, spritem.tiles_item(), 0, 1, 2, 3, 4, 5, 6)
+    )
+{
+
+}
+
+void animated_sprite::reset(const bn::fixed &x, const bn::fixed &y)
+{
+    _sprite.set_position(x, y);
+    _anim.reset();
+}
+
 }
 
