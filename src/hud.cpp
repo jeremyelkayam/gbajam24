@@ -109,6 +109,7 @@ void hud::set_blending_enabled(const bool &enabled){
     _enemy_hp.set_blending_enabled(enabled);
     _currency_meter.set_blending_enabled(enabled);
     _player_hp_meter.set_blending_enabled(enabled);
+    _hover_meter.set_blending_enabled(enabled);
 }
 
 void hud::set_mosaic_enabled(const bool &enabled){
@@ -121,6 +122,7 @@ void hud::set_mosaic_enabled(const bool &enabled){
     _enemy_hp.set_mosaic_enabled(enabled);
     _currency_meter.set_mosaic_enabled(enabled);
     _player_hp_meter.set_mosaic_enabled(enabled);
+    _hover_meter.set_mosaic_enabled(enabled);
 }
 
 void text_hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y){
