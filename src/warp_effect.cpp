@@ -21,7 +21,7 @@ warp_effect::warp_effect(player &player, const direction &dir) :
     _player.sprite().set_blending_enabled(true);
     _player.sprite().set_double_size_mode(bn::sprite_double_size_mode::AUTO);
     if(warp_in()){
-        _player.sprite().set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
+        _player.sprite().set_palette(common_stuff::monochrome_sprite_palette(bn::color(31,31,31)));
     }
 }
 
@@ -73,7 +73,7 @@ void warp_effect::update()
     }    
 
     if(percent == 1){
-        _player.sprite().set_palette(common_stuff::monochrome_palette(bn::color(31,31,31)));
+        _player.sprite().set_palette(common_stuff::monochrome_sprite_palette(bn::color(31,31,31)));
     }else{
         bn::blending::set_fade_alpha(percent);
     }

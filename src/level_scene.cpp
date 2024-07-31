@@ -51,6 +51,9 @@ bn::optional<scene_type> level_scene::update_scene_components()
             set_visible(false);
             _player.set_visible(true);
             _player.set_effects_visible(false);
+            _bg.set_visible(true);
+            _bg.set_palette(common_stuff::monochrome_bg_palette(bn::color(0,0,0)));
+            _bg.set_blending_enabled(false);
         }
     }else{
         if(_bg.blending_enabled()){

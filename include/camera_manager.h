@@ -13,6 +13,7 @@ private:
         bn::fixed_rect _view;
         const level &_level;
         const player &_player;
+        uint8_t _shake_timer;
 
         easer _x_ease, _y_ease;
 
@@ -23,6 +24,7 @@ public:
     bool on_screen(bn::fixed_rect &hitbox);
     void update();    
     void set_fixed_target(const bn::fixed_point &target);
+    void set_screen_shake(const bool &enabled) {_shake_timer = enabled ? 1 : 0;}
 
 };
 

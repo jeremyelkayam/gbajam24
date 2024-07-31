@@ -10,9 +10,11 @@ camera_manager::camera_manager(bn::camera_ptr cam, const level &lv, const player
     _view(cam.x(), cam.y(), 240, 160),
     _level(lv),
     _player(pl),
+    _shake_timer(0),
     _x_ease(_cam.x() - _player.x(), 50 * (_player.facing_right() ? 1 : -1), 60,
         easer::sine_ease_out),
-    _y_ease(_cam.x() - _player.x(), _cam.x() - _player.x(), 120, easer::sine_ease_out) {
+    _y_ease(_cam.x() - _player.x(), _cam.x() - _player.x(), 120, easer::sine_ease_out) 
+{
 
 }
 
@@ -56,6 +58,17 @@ void camera_manager::update(){
     //don't go past the top row of tiles
     if(new_y < 88) new_y = 88;
     if(new_y > (_level.height() - 80)) new_y = _level.height() - 80;
+
+    if(_shake_timer != 0){
+        ++_shake_timer;
+        if(_shake_timer == 2){
+            new_y += 1;
+            _shake_timer = 1;
+        }else{
+            new_y -= 1;
+        }
+    }
+
     _cam.set_position(new_x, new_y);
     _view.set_position(new_x, new_y);
 }

@@ -62,7 +62,7 @@ void pause_menu::update_colors(){
     for(uint8_t z = 0; z < _option_text_sprites.size(); ++z){
         bn::sprite_palette_ptr pal = _text_sprites.at(0).palette();
         if(z == _selected){
-            pal = common_stuff::monochrome_palette(bn::color(10, 31, 10));
+            pal = common_stuff::monochrome_sprite_palette(bn::color(10, 31, 10));
         }
         for(bn::sprite_ptr &sprite : _option_text_sprites.at(z)){
             sprite.set_palette(pal);
