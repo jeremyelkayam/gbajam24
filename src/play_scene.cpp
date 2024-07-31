@@ -35,6 +35,13 @@ void play_scene::set_transition_effects_enabled(bool enabled){
     _hud.set_mosaic_enabled(enabled);    
 }
 
+void play_scene::set_visible(bool visible){
+    _bg.set_visible(visible);
+    _player.set_visible(visible);
+    _level.set_visible(visible);
+    _hud.set_visible(visible);
+}
+
 bn::optional<scene_type> play_scene::update_scene_components(){
     bn::optional<scene_type> result;
 

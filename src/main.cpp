@@ -61,7 +61,7 @@ int main()
             if(next_scene){
 
                 if(transition.GetDirection() == aru::Transition::Direction::OUT){
-                    bn::bg_palettes::set_transparent_color(bn::color(26, 26, 26));
+                    // bn::bg_palettes::set_transparent_color(bn::color(0,0,0));
                     //fading out is done, let's instantiate the transition and fade in
                     switch(*next_scene){
                         case aru::scene_type::LAB: { 

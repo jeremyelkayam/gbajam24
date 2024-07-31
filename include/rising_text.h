@@ -22,6 +22,9 @@ public:
     void set_mosaic_enabled(bool enabled)
         { _text_sprites.at(0).set_mosaic_enabled(enabled); }
 
+    void set_visible(const bool &visible)
+        { _text_sprites.at(0).set_visible(visible); }
+
 private:
     uint16_t text_width(const bn::string<256> &text, const int8_t *char_widths) const;
 

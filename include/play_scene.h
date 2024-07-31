@@ -33,6 +33,7 @@ public:
     [[nodiscard]] virtual bn::optional<scene_type> update();
     [[nodiscard]] virtual bn::optional<scene_type> update_scene_components();
     virtual void set_transition_effects_enabled(bool enabled);
+    virtual void set_visible(bool visible);
 
     void show_pause_info();
     void hide_pause_info();

@@ -314,4 +314,13 @@ void combat_entity::set_mosaic_enabled(bool enabled)
     }
 }
 
+void combat_entity::set_visible(const bool &visible)
+{
+    entity::set_visible(visible);
+    for(auto &text : _rising_text)
+    {
+        text.set_visible(visible);
+    }
+}
+
 }

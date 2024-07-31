@@ -27,6 +27,16 @@ void level_scene::set_transition_effects_enabled(bool enabled)
     }
 }
 
+void level_scene::set_visible(bool visible)
+{
+    play_scene::set_visible(visible);
+    for(bn::unique_ptr<combat_entity> &e : _enemies){
+        e->set_visible(visible);
+        e->set_visible(visible);
+    }
+}
+
+
 bn::optional<scene_type> level_scene::update_scene_components()
 {
     bn::optional<scene_type> result;
@@ -37,6 +47,11 @@ bn::optional<scene_type> level_scene::update_scene_components()
             result = scene_type::LEVEL;
         }
         _dying->update();
+        if(_dying->initial_fade_done()){
+            set_visible(false);
+            _player.set_visible(true);
+            _player.set_effects_visible(false);
+        }
     }else{
         if(_bg.blending_enabled()){
             set_transition_effects_enabled(false);
@@ -67,10 +82,11 @@ bn::optional<scene_type> level_scene::update_scene_components()
 
 
         if(_player.hp() == 0){
-            _dying.emplace(_player);
+            _dying.emplace(_player, _cam);
             _cam_mgr.set_fixed_target(_player.pos());
             set_transition_effects_enabled(true);
             _player.set_blending_enabled(false);
+            _player.set_effects_blending_enabled(true);
         }
         if(bn::keypad::start_pressed()){
             show_pause_info();

@@ -5,6 +5,7 @@
 #include <bn_sprite_item.h>
 #include <bn_unique_ptr.h>
 #include <bn_sprite_animate_actions.h>
+#include <bn_log.h>
 
 namespace aru
 {
@@ -16,9 +17,11 @@ public:
     void start(const bn::fixed &x, const bn::fixed &y);
     void set_horizontal_flip(const bool &flip) {_sprite.set_horizontal_flip(flip);}
     bool visible(){return _sprite.visible();}
+    void set_visible(const bool &visible)
+        {_sprite.set_visible(visible);}
 
     void set_blending_enabled(bool enabled)
-        { _sprite.set_blending_enabled(enabled); }
+        {_sprite.set_blending_enabled(enabled); }
 
     void set_mosaic_enabled(bool enabled)
         { _sprite.set_mosaic_enabled(enabled); }

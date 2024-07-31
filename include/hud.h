@@ -104,6 +104,7 @@ class hud {
         void show();
         void set_blending_enabled(const bool &enabled);
         void set_mosaic_enabled(const bool &enabled);
+        void set_visible(const bool &visible);
 };
 
 }

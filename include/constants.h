@@ -29,7 +29,7 @@ namespace aru
     //basically you know how you can hold a for a higher jump like in mario? 
     //This is how long you can hold a 
     constexpr uint8_t PLAYER_JUMP_HOLD_A_CAP = 6;
-    constexpr uint8_t PLAYER_HP = 50;
+    constexpr uint8_t PLAYER_HP = 5;
 
     //how much damage when someone comes into contact with the player
     constexpr uint8_t PLAYER_CONTACT_DAMAGE = 2;

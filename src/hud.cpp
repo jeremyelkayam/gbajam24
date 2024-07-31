@@ -125,6 +125,19 @@ void hud::set_mosaic_enabled(const bool &enabled){
     _hover_meter.set_mosaic_enabled(enabled);
 }
 
+void hud::set_visible(const bool &visible){
+    for(bn::sprite_ptr &sprite : _player_hp_label_text_sprites){
+        sprite.set_visible(visible);
+    }
+    for(bn::sprite_ptr &sprite : _enemy_hp_label_text_sprites){
+        sprite.set_visible(visible);
+    }    
+    _enemy_hp.set_visible(visible);
+    _currency_meter.set_visible(visible);
+    _player_hp_meter.set_visible(visible);
+    _hover_meter.set_visible(visible);
+}
+
 void text_hud_element::int_to_text(bn::ivector<bn::sprite_ptr> &sprites, const uint16_t &integer, bn::fixed x, bn::fixed y){
     bn::string<8> text_str;
     bn::ostringstream text_stream(text_str);

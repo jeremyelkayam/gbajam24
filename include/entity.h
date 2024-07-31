@@ -21,7 +21,7 @@ public:
 
     bool facing_right() const {return _sprite.horizontal_flip();}
 
-    void set_visible(const bool &visible) {_sprite.set_visible(visible);}
+    virtual void set_visible(const bool &visible) {_sprite.set_visible(visible);}
 
     virtual void set_blending_enabled(bool enabled)
         { _sprite.set_blending_enabled(enabled); }

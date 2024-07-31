@@ -306,8 +306,25 @@ void player::die()
 void player::set_blending_enabled(bool enabled)
 {
     combat_entity::set_blending_enabled(enabled);
+    set_effects_blending_enabled(enabled);
+}
+
+void player::set_effects_blending_enabled(bool enabled)
+{
     _jumpcloud.set_blending_enabled(enabled);
     _sprintcloud.set_blending_enabled(enabled);
+}
+
+void player::set_effects_visible(const bool &visible)
+{
+    _jumpcloud.set_visible(visible);
+    _sprintcloud.set_visible(visible);
+}
+
+void player::set_visible(const bool &visible)
+{
+    combat_entity::set_visible(visible);
+    set_effects_visible(visible);
 }
 
 void player::set_mosaic_enabled(bool enabled)

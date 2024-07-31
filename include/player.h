@@ -41,7 +41,10 @@ public:
     void update_palette() {_sprite.set_palette(PLAYER_PALETTE[_savefile.hover_upgrade_lvl]);}
 
     virtual void set_blending_enabled(bool enabled);
+    void set_effects_blending_enabled(bool enabled);
+    void set_effects_visible(const bool &visible);
     virtual void set_mosaic_enabled(bool enabled);
+    virtual void set_visible(const bool &visible);
 
 private:
     effect _jumpcloud, _sprintcloud;
