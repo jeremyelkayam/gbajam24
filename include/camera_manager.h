@@ -24,7 +24,7 @@ public:
     bool on_screen(bn::fixed_rect &hitbox);
     void update();    
     void set_fixed_target(const bn::fixed_point &target);
-    void set_screen_shake(const bool &enabled) {_shake_timer = enabled ? 1 : 0;}
+    void set_screen_shake(const bool &enabled);
 
 };
 

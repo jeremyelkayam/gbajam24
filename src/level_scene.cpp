@@ -54,6 +54,7 @@ bn::optional<scene_type> level_scene::update_scene_components()
             _bg.set_visible(true);
             _bg.set_palette(common_stuff::monochrome_bg_palette(bn::color(0,0,0)));
             _bg.set_blending_enabled(false);
+            _cam_mgr.set_screen_shake(true);
         }
     }else{
         if(_bg.blending_enabled()){
@@ -102,5 +103,6 @@ bn::optional<scene_type> level_scene::update_scene_components()
     return result;
 
 }
+
 
 }

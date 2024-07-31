@@ -36,7 +36,7 @@ void death_anim::update()
             bn::blending::set_white_fade_color();
             bn::blending::set_fade_alpha(0);
             _player.set_blending_enabled(true);
-            _fade_action.emplace(180, 1);
+            _fade_action.emplace(90, 1);
         }
     }else{
         if(_fade_action && !_fade_action->done()){
@@ -55,12 +55,35 @@ void death_anim::update()
             }
         }
         bn::erase_if(_explosions, anim_spr_done);
+        if(_explosion_coords.empty() && !_trans_alpha_action){
+            _player.set_palette(
+                common_stuff::monochrome_sprite_palette(bn::color(31,31,31)));
+            bn::blending::set_fade_alpha(0);
+            _trans_alpha_action.emplace(40, 0);
+            _hscale_action.emplace(_player.sprite(), 40, 2);
+            _vscale_action.emplace(_player.sprite(), 40, 2);
+            _mosaic_action.emplace(40, 1);
+        }
+
+        if(_trans_alpha_action){
+            if(!_trans_alpha_action->done()){
+                _trans_alpha_action->update();
+                _hscale_action->update();
+                _vscale_action->update();
+                _mosaic_action->update();
+            }
+            if(_trans_alpha_action->done()){
+                bn::blending::set_transparency_alpha(1);
+                _player.set_palette(
+                    common_stuff::monochrome_sprite_palette(bn::color(0,0,0)));
+            }
+        }
     }
 }
 
 bool death_anim::done() const
 {
-    return _explosions.empty() && _explosion_coords.empty();
+    return _trans_alpha_action && _trans_alpha_action->done();
 }
 
 animated_sprite::animated_sprite(bn::camera_ptr &cam, const bn::sprite_item &spritem, 

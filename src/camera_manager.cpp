@@ -25,8 +25,6 @@ void camera_manager::update(){
         _y_ease.set_target(_player.y() - _fixed_target->y());
     }else{
 
-    
-
         _x_ease.set_target(50 * (_player.facing_right() ? 1 : -1));
 
 
@@ -60,12 +58,13 @@ void camera_manager::update(){
     if(new_y > (_level.height() - 80)) new_y = _level.height() - 80;
 
     if(_shake_timer != 0){
-        ++_shake_timer;
+        BN_LOG("shake timer: ", _shake_timer);
         if(_shake_timer == 2){
             new_y += 1;
             _shake_timer = 1;
         }else{
-            new_y -= 1;
+            // new_y -= 1;
+            ++_shake_timer;
         }
     }
 
@@ -79,6 +78,14 @@ bool camera_manager::on_screen(bn::fixed_rect &hitbox){
 
 void camera_manager::set_fixed_target(const bn::fixed_point &target){
     _fixed_target = target;
+}
+
+void camera_manager::set_screen_shake(const bool &enabled){
+    if(_shake_timer == 0 && enabled){
+        _shake_timer = 1;
+    }else if(!enabled){
+        _shake_timer = 0;
+    }
 }
 
 }

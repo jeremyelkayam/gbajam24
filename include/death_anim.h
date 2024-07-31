@@ -1,6 +1,8 @@
 #pragma once
 #include "player.h"
 #include <bn_blending_actions.h>
+#include <bn_sprites_mosaic_actions.h>
+#include <bn_sprite_actions.h>
 #define NUM_EXPLOSIONS 16
 
 namespace aru{
@@ -42,24 +44,28 @@ class death_anim{
         {
             bn::fixed_point(-10, 10),
             bn::fixed_point(10, -10),
-            bn::fixed_point(10, 10),
-            bn::fixed_point(-10, -10),
-            bn::fixed_point(-10, 10),
-            bn::fixed_point(10, -10),
-            bn::fixed_point(10, 10),
-            bn::fixed_point(-10, -10),
-            bn::fixed_point(-10, 10),
-            bn::fixed_point(10, -10),
-            bn::fixed_point(10, 10),
-            bn::fixed_point(-10, -10),
+            bn::fixed_point(15, 10),
+            bn::fixed_point(-10, -5),
+            bn::fixed_point(0, 15),
+            bn::fixed_point(10, 0),
+            bn::fixed_point(15, 15),
+            bn::fixed_point(-15, -10),
+            bn::fixed_point(-15, 15),
+            bn::fixed_point(10, -5),
+            bn::fixed_point(5, 10),
+            bn::fixed_point(-5, -10),
             bn::fixed_point(-10, 10),
             bn::fixed_point(10, -10),
             bn::fixed_point(10, 10),
             bn::fixed_point(-10, -10)
         };
 
-        bn::forward_list<animated_sprite, 3> _explosions;
+        bn::forward_list<animated_sprite, 4> _explosions;
         bn::optional<bn::blending_fade_alpha_to_action> _fade_action;
+        bn::optional<bn::blending_transparency_alpha_to_action> _trans_alpha_action;
+        bn::optional<bn::sprite_horizontal_scale_to_action> _hscale_action;
+        bn::optional<bn::sprite_vertical_scale_to_action> _vscale_action;
+        bn::optional<bn::sprites_mosaic_stretch_to_action> _mosaic_action;
         bn::deque<bn::fixed_point, NUM_EXPLOSIONS> _explosion_coords;
 
         static bool anim_spr_done(const animated_sprite &as) { return as.done();}

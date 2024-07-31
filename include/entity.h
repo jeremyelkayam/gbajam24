@@ -29,7 +29,7 @@ public:
     virtual void set_mosaic_enabled(bool enabled)
         { _sprite.set_mosaic_enabled(enabled); }
 
-    void set_palette(const bn::sprite_palette_item &pal)
+    void set_palette(const bn::sprite_palette_ptr &pal)
         { _sprite.set_palette(pal); }
 
     bn::sprite_ptr &sprite(){return _sprite;}
