@@ -31,8 +31,13 @@ void combat_entity::update(){
         --_iframes;
     }
 
-    if(_explosion_anim && !_explosion_anim->done()) _explosion_anim->update();
-
+    if(_explosion_anim){
+        if(_explosion_anim->done()){
+            _explosion_anim.reset();
+        }else{
+            _explosion_anim->update();
+        }
+    }
     for(rising_text &r : _rising_text){
         r.update();
     }
@@ -41,9 +46,14 @@ void combat_entity::update(){
 
 }
 
+bool combat_entity::just_exploded() const 
+{
+    return _explosion_anim && _explosion_anim->done();
+}
+
 
 void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
-    if(!_iframes && !_explosion_anim){
+    if(!_iframes && !_explosion_anim && _hp > 0){
 
         if(_hp > damage){
             _hp -= damage;
@@ -75,6 +85,17 @@ void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
     }
 
     //TODO ALSO: maybe add a bit of punchiness to the attack like freeze frames or shake.
+}
+
+void combat_entity::heal(const uint8_t &amount)
+{
+    uint8_t healed_amount = bn::min((uint8_t)(_max_hp - _hp), amount);
+    _hp += healed_amount;
+    if(healed_amount > 0){
+        _rising_text.emplace_front(*_sprite.camera().get(), _rising_text_generator, 
+            healed_amount, x(), y());        
+    }
+
 }
 
 void combat_entity::die(){

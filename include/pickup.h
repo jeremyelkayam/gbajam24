@@ -11,10 +11,12 @@ public:
         const bn::fixed &max_up_speed, const bn::fixed &max_down_speed, 
         level &level, const bn::sprite_item &spritem, const uint16_t &value);
 
-    uint16_t get_value() const {return _value;}
+    uint16_t collect() {_collected = true; return _value;}
+    bool collected() const {return _collected;}
 
 protected:
-    uint16_t _value;
+    const uint16_t _value;
+    bool _collected;
 
 };
 

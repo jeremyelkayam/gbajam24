@@ -80,11 +80,24 @@ bn::optional<scene_type> level_scene::update_scene_components()
                 }
             }
             e->update();
+            if(e->just_exploded()){
+                _health_pickups.emplace_front(_cam, e->x(), e->y(), _level, 5);
+                BN_LOG("adding health pickup");
+            }
         }
+
         _enemies.remove_if(enemy_deletable);
 
+        for(health_pickup &p : _health_pickups)
+        {
+            p.update();
+            if(p.hitbox().intersects(_player.hitbox())){
+                _player.heal(p.collect());
+            }
+        }
+        _health_pickups.remove_if(pickup_deletable);
+        
         result = play_scene::update_scene_components();
-
 
         if(_player.hp() == 0){
             _dying.emplace(_player, _cam);

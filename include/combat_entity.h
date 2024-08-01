@@ -21,6 +21,7 @@ public:
     virtual void update();
 
     void hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push);
+    void heal(const uint8_t &amount);
     uint8_t contact_damage() const {return _contact_damage;}
     uint8_t hp() const {return _hp;}
     uint8_t max_hp() const {return _max_hp;}
@@ -32,6 +33,7 @@ public:
     virtual void set_mosaic_enabled(bool enabled);
     virtual void set_visible(const bool &visible);
     void clear_rising_text() {_rising_text.clear();} 
+    bool just_exploded() const;
 
 protected:
     bn::optional<bn::sprite_animate_action<7>> _explosion_anim;

@@ -29,9 +29,9 @@ constexpr int8_t small_numbers_sprite_font_character_widths[] = {
     4,  // 40 (
     4,  // 41 )
     6,  // 42 *
-    3,  // 43 +
+    4,  // 43 +
     3,  // 44 ,
-    3,  // 45 -
+    4,  // 45 -
     3,  // 46 .
     8,  // 47 /
     4,  // 48 0

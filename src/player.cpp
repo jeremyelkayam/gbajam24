@@ -73,7 +73,6 @@ void player::update(){
         case PSTATE::STAND:
             if(bn::keypad::b_held() || _shoot_timer){
                 _shoot.update();
-                BN_LOG(_shoot.current_index());
             }else{
                 _idle.update();
             }

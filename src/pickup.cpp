@@ -11,9 +11,10 @@ pickup::pickup(const bn::camera_ptr &cam, const bn::fixed &x,
         const uint16_t &value): 
     physics_entity(cam, x, y, width, height, 0, 
         max_up_speed, max_down_speed, level, spritem),
-    _value(value)
+    _value(value),
+    _collected(false)
 {
-
+    _yspeed = max_up_speed;
 }
 
 health_pickup::health_pickup(const bn::camera_ptr &cam, const bn::fixed &x, 

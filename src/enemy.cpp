@@ -14,7 +14,7 @@ enemy::enemy(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level,
 }
 
 void enemy::update(){
-    if(!_explosion_anim){
+    if(!_explosion_anim && _hp > 0){
         _idle.update();
         if(_jump_again_timer > 240){
             jump();
