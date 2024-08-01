@@ -78,7 +78,6 @@ bn::optional<scene_type> level_scene::update_scene_components()
                 if(_player.check_bullet_collision(*e.get())){
                     _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
                 }
-
             }
             e->update();
         }
