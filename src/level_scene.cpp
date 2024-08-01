@@ -81,21 +81,33 @@ bn::optional<scene_type> level_scene::update_scene_components()
             }
             e->update();
             if(e->just_exploded()){
-                _health_pickups.emplace_front(_cam, e->x(), e->y(), _level, 5);
-                BN_LOG("adding health pickup");
+                // _health_pickups.emplace_front(_cam, e->x(), e->y(), _level, 5);
+                _crcy_pickups.emplace_front(new currency_pickup(_cam, e->x(), e->y(), _level, 10));
             }
         }
 
         _enemies.remove_if(enemy_deletable);
 
-        for(health_pickup &p : _health_pickups)
+        for(bn::unique_ptr<pickup> &p : _health_pickups)
         {
-            p.update();
-            if(p.hitbox().intersects(_player.hitbox())){
-                _player.heal(p.collect());
+            p->update();
+            if(p->hitbox().intersects(_player.hitbox())){
+                _player.heal(p->collect());
             }
         }
         _health_pickups.remove_if(pickup_deletable);
+
+        for(bn::unique_ptr<pickup> &p : _crcy_pickups)
+        {
+            p->update();
+            if(p->hitbox().intersects(_player.hitbox())){
+                uint16_t value = p->collect();
+                _cstuff.savefile.ultramatter += value;
+                _hud.update_currency(_cstuff.savefile.ultramatter);
+                _player.pick_up_currency(value);
+            }
+        }
+        _crcy_pickups.remove_if(pickup_deletable);
         
         result = play_scene::update_scene_components();
 

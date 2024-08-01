@@ -333,4 +333,11 @@ void player::set_mosaic_enabled(bool enabled)
     _sprintcloud.set_mosaic_enabled(enabled);
 }
 
+void player::pick_up_currency(const uint16_t &value)
+{
+    _rising_text.emplace_front(*_sprite.camera().get(), _rising_text_generator, 
+        value, x(), y());
+
+}
+
 }

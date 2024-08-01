@@ -45,6 +45,7 @@ public:
     void set_effects_visible(const bool &visible);
     virtual void set_mosaic_enabled(bool enabled);
     virtual void set_visible(const bool &visible);
+    void pick_up_currency(const uint16_t &value);
 
 private:
     effect _jumpcloud, _sprintcloud;

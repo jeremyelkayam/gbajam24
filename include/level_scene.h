@@ -12,12 +12,13 @@ private:
     //enemies must store their ID as an array index ... 
     // or also we could just make a map as well and index them based on that idk
     bn::forward_list<bn::unique_ptr<combat_entity>, 6> _enemies;
-    bn::forward_list<health_pickup, 6> _health_pickups;
+    bn::forward_list<bn::unique_ptr<pickup>, 6> _health_pickups;
+    bn::forward_list<bn::unique_ptr<pickup>, 6> _crcy_pickups;
     bn::unordered_map<uint8_t, enemy_data, 32> _enemy_data; 
     bn::optional<death_anim> _dying;
 
     static bool enemy_deletable(bn::unique_ptr<combat_entity> &e) {return e->delete_me();}
-    static bool pickup_deletable(health_pickup &p) {return p.collected();}
+    static bool pickup_deletable(bn::unique_ptr<pickup> &p) {return p->collected();}
  
 public:
     level_scene(common_stuff &cstuff);

@@ -19,7 +19,15 @@ pickup::pickup(const bn::camera_ptr &cam, const bn::fixed &x,
 
 health_pickup::health_pickup(const bn::camera_ptr &cam, const bn::fixed &x, 
     const bn::fixed &y, level &level, const uint16_t &value) : 
-    pickup(cam, x, y, 8, 8, PLAYER_JUMP_YSPEED, PLAYER_FALL_YSPEED, level, 
+    pickup(cam, x, y, 6, 6, PLAYER_JUMP_YSPEED, PLAYER_FALL_YSPEED, level, 
+        bn::sprite_items::pink_thing, value)
+{
+
+}
+
+currency_pickup::currency_pickup(const bn::camera_ptr &cam, const bn::fixed &x, 
+    const bn::fixed &y, level &level, const uint16_t &value) : 
+    pickup(cam, x, y, 6, 6, PLAYER_JUMP_YSPEED, PLAYER_FALL_YSPEED, level, 
         bn::sprite_items::pink_thing, value)
 {
 

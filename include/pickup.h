@@ -27,4 +27,11 @@ public:
         level &level, const uint16_t &value);
 };
 
+class currency_pickup : public pickup
+{
+public:
+    currency_pickup(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, 
+        level &level, const uint16_t &value);
+};
+
 }
