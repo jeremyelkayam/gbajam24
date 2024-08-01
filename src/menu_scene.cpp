@@ -2,6 +2,7 @@
 #include <bn_sprite_text_generator.h>
 #include "common_variable_8x16_sprite_font.h"
 #include "external_tool_file.h"
+#include "bn_regular_bg_items_honeycomb.h"
 #include <bn_keypad.h>
 #include <bn_string.h>
 #include "common_stuff.h"
@@ -11,7 +12,9 @@ namespace aru {
 
 menu_scene::menu_scene() : 
     _selector(bn::sprite_items::common_variable_8x16_font.create_sprite(-45,25,29)),
-    _index(0)
+    _index(0),
+    _bg(bn::regular_bg_items::honeycomb.create_bg(0,0)),
+    _bg_move(_bg, -1, 0)
 {
     bn::sprite_text_generator gen(variable_8x16_sprite_font);
     gen.set_center_alignment();
@@ -30,6 +33,8 @@ menu_scene::menu_scene() :
 
     _selector.set_blending_enabled(true);
     _selector.set_mosaic_enabled(true);
+    _bg.set_blending_enabled(true);
+    _bg.set_mosaic_enabled(true);
 }
 
 void menu_scene::set_transition_effects_enabled(bool enabled){
@@ -41,6 +46,8 @@ void menu_scene::set_transition_effects_enabled(bool enabled){
 
 bn::optional<scene_type> menu_scene::update(){
     bn::optional<scene_type> result;
+
+    _bg_move.update();
 
     if(bn::keypad::down_pressed()){
         _index = common_stuff::bounded_addition(_index, 1, 1);

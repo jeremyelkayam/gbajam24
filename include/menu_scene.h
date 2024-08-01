@@ -1,6 +1,7 @@
 #pragma once
 #include <bn_sprite_ptr.h>
 #include <bn_vector.h>
+#include <bn_regular_bg_actions.h>
 #include "scene.h"
 
 namespace aru{
@@ -10,6 +11,8 @@ private:
     bn::vector<bn::sprite_ptr, 64> _text_sprites;
     bn::sprite_ptr _selector;
     uint8_t _index;
+    bn::regular_bg_ptr _bg;
+    bn::regular_bg_move_by_action _bg_move;
 
 
 public:
