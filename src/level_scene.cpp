@@ -64,19 +64,21 @@ bn::optional<scene_type> level_scene::update_scene_components()
         
         for(bn::unique_ptr<combat_entity> &e : _enemies){
             uint8_t old_hp = e->hp();
+            if(old_hp != 0){
+                //todo: refactor this to be less terrible and have less repeated code!
+                if(!_player.in_iframes() && _player.hitbox().intersects(e->hitbox())){
+                    bn::fixed hori_kb = 6 * (_player.facing_right() ? 1 : -1); 
+                    e->hit(_player.contact_damage(),hori_kb,-3);
+                    _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
+                }
+                if(e->hitbox().intersects(_player.hitbox())){
+                    bn::fixed hori_kb = 6 * (_player.facing_right() ? -1 : 1); 
+                    _player.hit(e->contact_damage(),hori_kb,-3);
+                }
+                if(_player.check_bullet_collision(*e.get())){
+                    _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
+                }
 
-            //todo: refactor this to be less terrible and have less repeated code!
-            if(!_player.in_iframes() && _player.hitbox().intersects(e->hitbox())){
-                bn::fixed hori_kb = 6 * (_player.facing_right() ? 1 : -1); 
-                e->hit(_player.contact_damage(),hori_kb,-3);
-                _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
-            }
-            if(e->hitbox().intersects(_player.hitbox())){
-                bn::fixed hori_kb = 6 * (_player.facing_right() ? -1 : 1); 
-                _player.hit(e->contact_damage(),hori_kb,-3);
-            }
-            if(_player.check_bullet_collision(*e.get())){
-                _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
             }
             e->update();
         }
