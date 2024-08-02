@@ -16,10 +16,10 @@ hud::hud(common_stuff &cstuff) :
     _displayed_enemy_hp(10),
     _target_enemy_hp(10),
     _max_enemy_hp(10),
-    _currency_meter(cstuff.savefile.ultramatter, _text_generator),
+    _currency_meter(cstuff.current_save().ultramatter, _text_generator),
     _player_hp_meter(PLAYER_HP, _text_generator, 
         bn::sprite_items::bar_5px, bn::fixed_point(-110,-28)),
-    _hover_meter(PLAYER_HOVER_TIME[cstuff.savefile.hover_upgrade_lvl], _text_generator),
+    _hover_meter(PLAYER_HOVER_TIME[cstuff.current_save().hover_upgrade_lvl], _text_generator),
     _cstuff(cstuff)
 {
     _enemy_hp.set_visible(false);
@@ -87,8 +87,8 @@ void hud::update_hover_time(const uint8_t &hover_time){
 }
 
 void hud::update_hover_level(){
-    _hover_meter.set_max(PLAYER_HOVER_TIME[_cstuff.savefile.hover_upgrade_lvl]);
-    _hover_meter.set_palette(PLAYER_PALETTE[_cstuff.savefile.hover_upgrade_lvl]);
+    _hover_meter.set_max(PLAYER_HOVER_TIME[_cstuff.current_save().hover_upgrade_lvl]);
+    _hover_meter.set_palette(PLAYER_PALETTE[_cstuff.current_save().hover_upgrade_lvl]);
 }
 
 void hud::hide(){

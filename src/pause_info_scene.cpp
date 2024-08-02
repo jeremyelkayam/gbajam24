@@ -10,7 +10,7 @@ namespace aru {
 
 pause_info_scene::pause_info_scene(
     bn::sprite_text_generator &generator, 
-    const common_stuff::saved_data &savefile) : 
+    const common_stuff::save_file &savefile) : 
     _bg(bn::regular_bg_items::pause_info_bg.create_bg(0,0)) 
 {
     _bg.set_priority(0);

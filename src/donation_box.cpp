@@ -13,8 +13,8 @@ donation_box::donation_box(common_stuff &cstuff) :
     _hold_timer(0),
     _blink_timer(0),
     _donation_amount(0),
-    _ultramatter(cstuff.savefile.ultramatter),
-    _total_donated(cstuff.savefile.total_donated) {
+    _ultramatter(cstuff.current_save().ultramatter),
+    _total_donated(cstuff.current_save().total_donated) {
 
 }
 

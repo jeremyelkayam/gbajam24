@@ -8,7 +8,8 @@ namespace aru {
 
 common_stuff::common_stuff() : 
     text_generator(cute_prop_sprite_font),
-    rising_text_generator(small_numbers_sprite_font) { 
+    rising_text_generator(small_numbers_sprite_font),
+    _current_save_index(0) { 
 
     //DEFAULT format tag
     bn::array<char, 8> default_format_tag;
@@ -16,17 +17,28 @@ common_stuff::common_stuff() :
     bn::ostringstream default_format_tag_stream(default_format_tag_istring);
     default_format_tag_stream.append("ARUSAV0");
 
-    bn::sram::read(savefile);
+    bn::sram::read(userdata);
     //if the format tag is invalid, then we have to set up our default save file.
-    if(savefile.format_tag != default_format_tag){
-        savefile.format_tag = default_format_tag;
-        savefile.ultramatter = 10000;
-        savefile.total_donated = 0;
-        savefile.hover_upgrade_lvl = 0;
-        savefile.shoot_upgrade_lvl = 0;
-        savefile.sword_upgrade_lvl = 0;
-        savefile.current_level = 0;
+    if(userdata.format_tag != default_format_tag){
+        userdata.format_tag = default_format_tag;
+
+        for(save_file &savefile : userdata.saves){
+            savefile.ultramatter = 0;
+            savefile.total_donated = 0;
+            savefile.hover_upgrade_lvl = 0;
+            savefile.shoot_upgrade_lvl = 0;
+            savefile.sword_upgrade_lvl = 0;
+            savefile.current_level = 0;
+            savefile.playtime = 0;
+        }
+
     }
+}
+
+common_stuff::save_file &common_stuff::current_save()
+{
+    BN_ASSERT(_current_save_index < userdata.saves.size());
+    return userdata.saves[_current_save_index];
 }
 
 void common_stuff::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible) {

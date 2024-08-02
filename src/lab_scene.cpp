@@ -50,7 +50,7 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
         set_transition_effects_enabled(false);
     }
     bn::optional<scene_type> result;
-    uint16_t old_currency = _cstuff.savefile.ultramatter;
+    uint16_t old_currency = _cstuff.current_save().ultramatter;
     bool text_box_frame = false;
 
     if(!_text_boxes.empty()){
@@ -137,8 +137,8 @@ bn::optional<scene_type> lab_scene::update_scene_components(){
 
     if(!result && !(can_interact && bn::keypad::b_pressed())) result = play_scene::update_scene_components();
 
-    if(old_currency != _cstuff.savefile.ultramatter){
-        _hud.update_currency(_cstuff.savefile.ultramatter);
+    if(old_currency != _cstuff.current_save().ultramatter){
+        _hud.update_currency(_cstuff.current_save().ultramatter);
     }
 
 

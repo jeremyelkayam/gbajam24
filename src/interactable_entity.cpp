@@ -64,7 +64,7 @@ bn::deque<bn::unique_ptr<box>, 16> slung::interact_boxes(){
     bn::string<256> text;
     bn::ostringstream stream(text);
     stream << "Hello, ARU-133n. The machine is currently at ";
-    stream << _cstuff.savefile.total_donated;
+    stream << _cstuff.current_save().total_donated;
     stream << " power. Anything you can give helps.\nWhile you're here, I can also record the progress we've made thus far.";
     result.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
         text.c_str(), bn::sprite_items::slung_portrait_neutral, true, true, 1)));         
@@ -94,15 +94,15 @@ hover_upgrader::hover_upgrader(const bn::camera_ptr &cam,
 
 bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
-    if(_cstuff.savefile.hover_upgrade_lvl == 2){
+    if(_cstuff.current_save().hover_upgrade_lvl == 2){
         result.push_back(bn::unique_ptr<text_box>(
                 new text_box(_cstuff.text_generator,
                 "No more hover upgrades are available at this time. Have a nice day!", 
                 true)));
     }else{
         result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
-                _cstuff.text_generator, _cstuff.savefile.hover_upgrade_lvl,
-                _cstuff.savefile.ultramatter, 1000, "HOVER")));
+                _cstuff.text_generator, _cstuff.current_save().hover_upgrade_lvl,
+                _cstuff.current_save().ultramatter, 1000, "HOVER")));
 
     }
     return result;
@@ -119,8 +119,8 @@ shoot_upgrader::shoot_upgrader(const bn::camera_ptr &cam,
 bn::deque<bn::unique_ptr<box>, 16> shoot_upgrader::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
     result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
-            _cstuff.text_generator, _cstuff.savefile.shoot_upgrade_lvl,
-            _cstuff.savefile.ultramatter, 1000, "SHOOT")));
+            _cstuff.text_generator, _cstuff.current_save().shoot_upgrade_lvl,
+            _cstuff.current_save().ultramatter, 1000, "SHOOT")));
     return result;
 }
 
@@ -136,8 +136,8 @@ slash_upgrader::slash_upgrader(const bn::camera_ptr &cam,
 bn::deque<bn::unique_ptr<box>, 16> slash_upgrader::interact_boxes(){
     bn::deque<bn::unique_ptr<box>, 16> result;
     result.push_back(bn::unique_ptr<upgrade_selection_box>(new upgrade_selection_box(
-            _cstuff.text_generator, _cstuff.savefile.shoot_upgrade_lvl,
-            _cstuff.savefile.ultramatter, 1000, "SLASH")));
+            _cstuff.text_generator, _cstuff.current_save().shoot_upgrade_lvl,
+            _cstuff.current_save().ultramatter, 1000, "SLASH")));
     return result;
 }
 

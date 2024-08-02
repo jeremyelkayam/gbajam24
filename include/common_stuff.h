@@ -14,18 +14,28 @@ namespace aru {
 
     class common_stuff { 
         public:
-            struct saved_data {
-                bn::array<char, 8> format_tag;
+
+
+            struct save_file {
                 uint16_t ultramatter, total_donated;
                 uint8_t hover_upgrade_lvl, shoot_upgrade_lvl, sword_upgrade_lvl, current_level;
+                uint32_t playtime;
             }; 
+
+            struct user_data 
+            {
+                bn::array<char, 8> format_tag;
+                bn::array<save_file, 4> saves;
+            };
                    
             bn::sprite_text_generator text_generator;
             bn::sprite_text_generator rising_text_generator;
             bn::random rand;
 
-            saved_data savefile;
-            void save() {bn::sram::write(savefile);}
+            user_data userdata;
+            void save() {bn::sram::write(userdata);}
+
+            save_file &current_save();
 
             common_stuff();
             static void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, 
@@ -52,6 +62,6 @@ namespace aru {
             static bn::bg_palette_ptr monochrome_bg_palette(const bn::color &color);
 
         private:
-
+            uint8_t _current_save_index;
     };
 }

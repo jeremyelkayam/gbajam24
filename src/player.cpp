@@ -10,7 +10,7 @@
 namespace aru {
 
 player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, 
-    const common_stuff::saved_data &savefile, 
+    const common_stuff::save_file &savefile, 
     bn::sprite_text_generator &rising_text_generator) : 
         combat_entity(cam, x,y,PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_MAX_XSPEED, 
             PLAYER_JUMP_YSPEED, PLAYER_FALL_YSPEED,

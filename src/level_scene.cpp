@@ -102,8 +102,8 @@ bn::optional<scene_type> level_scene::update_scene_components()
             p->update();
             if(p->hitbox().intersects(_player.hitbox())){
                 uint16_t value = p->collect();
-                _cstuff.savefile.ultramatter += value;
-                _hud.update_currency(_cstuff.savefile.ultramatter);
+                _cstuff.current_save().ultramatter += value;
+                _hud.update_currency(_cstuff.current_save().ultramatter);
                 _player.pick_up_currency(value);
             }
         }

@@ -26,7 +26,7 @@ class player : public combat_entity
 public: 
     //todo: prob do not need to put spawnpoint in the constructor if it takes a level reference
     player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level, 
-        const common_stuff::saved_data &savefile, 
+        const common_stuff::save_file &savefile, 
         bn::sprite_text_generator &rising_text_generator);
     virtual void update() override;
     virtual void jump() override;
@@ -49,7 +49,7 @@ public:
 
 private:
     effect _jumpcloud, _sprintcloud;
-    const common_stuff::saved_data &_savefile;
+    const common_stuff::save_file &_savefile;
     PSTATE _current_state;
     bn::sprite_animate_action<20> _idle;
     bn::sprite_animate_action<2> _jump;
