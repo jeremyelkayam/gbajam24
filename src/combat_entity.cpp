@@ -48,7 +48,8 @@ void combat_entity::update(){
 
 bool combat_entity::just_exploded() const 
 {
-    return _explosion_anim && _explosion_anim->done();
+    return _explosion_anim && _explosion_anim->current_index() == 3 &&
+        _explosion_anim->next_change_updates() == 0;
 }
 
 
