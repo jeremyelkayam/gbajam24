@@ -188,7 +188,6 @@ void player::update(){
         }
 
         if(bn::keypad::b_held() && (_shoot_timer == 0) && !_target_xcor){
-            BN_LOG("attempting to shoot");
             if(_current_state == PSTATE::STAND && 
                 (_shoot.current_index() == 1 || _shoot.current_index() == 5)){
                 shoot();

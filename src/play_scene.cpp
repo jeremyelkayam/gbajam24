@@ -20,6 +20,8 @@ play_scene::play_scene(common_stuff &cstuff, const level_data &ld) :
 
     _warping.emplace(_player, warp_effect::direction::IN);
     _warping->update();
+
+    ld.music.play(0.8);
 }
 
 void play_scene::set_transition_effects_enabled(bool enabled){

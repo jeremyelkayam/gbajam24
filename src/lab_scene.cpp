@@ -32,7 +32,6 @@ lab_scene::lab_scene(common_stuff &cstuff) :
         _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
             line.text, line.portrait, true, false, line.anim_index)));
     }
-    bn::music_items::test_song.play(1.0);
 }
 
 

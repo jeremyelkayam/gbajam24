@@ -1,5 +1,6 @@
 #pragma once
 #include <bn_fixed_point.h>
+#include <bn_music_items.h>
 #include "bn_regular_bg_items_testmap.h"
 #include "bn_regular_bg_items_testbg.h"
 #include "bn_regular_bg_items_lab.h"
@@ -14,6 +15,7 @@ namespace aru
     struct level_data {
         bn::fixed_point spawnpoint;
         bn::regular_bg_item map, backdrop;
+        bn::music_item music;
         enemy_data enemies[32];
     };
 
@@ -21,6 +23,7 @@ namespace aru
         bn::fixed_point(256,208),
         bn::regular_bg_items::lab, 
         bn::regular_bg_items::testbg,
+        bn::music_items::test_song,
         {}
     };
 
@@ -28,6 +31,7 @@ namespace aru
         bn::fixed_point(256,80),
         bn::regular_bg_items::testmap, 
         bn::regular_bg_items::testbg,
+        bn::music_items::stage3opt,
         {{1, bn::fixed_point(512, 80)},
          {1, bn::fixed_point(768, 80)}}
     };
