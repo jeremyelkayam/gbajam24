@@ -71,7 +71,7 @@ void player::update(){
             _fall.update();
             break;
         case PSTATE::STAND:
-            if(bn::keypad::b_held() || _shoot_timer){
+            if(!_target_xcor && (bn::keypad::b_held() || _shoot_timer)){
                 _shoot.update();
             }else{
                 _idle.update();
@@ -158,6 +158,7 @@ void player::update(){
             }
             if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
                 set_state(PSTATE::HOVER);
+                _sprite.set_rotation_angle(0);
                 start_anim(_hover);
             }
 
@@ -186,7 +187,8 @@ void player::update(){
             _shoot.reset();
         }
 
-        if(bn::keypad::b_held() && (_shoot_timer == 0)){
+        if(bn::keypad::b_held() && (_shoot_timer == 0) && !_target_xcor){
+            BN_LOG("attempting to shoot");
             if(_current_state == PSTATE::STAND && 
                 (_shoot.current_index() == 1 || _shoot.current_index() == 5)){
                 shoot();
