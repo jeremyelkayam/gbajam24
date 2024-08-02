@@ -8,7 +8,7 @@ namespace aru
 {
 rising_text::rising_text(const bn::camera_ptr &cam, 
     bn::sprite_text_generator &text_generator, const int8_t &num, 
-    const bn::fixed &x, const bn::fixed &y) : 
+    const bn::fixed &x, const bn::fixed &y, const bool &hp) : 
         _xcor(x),
         _timer(TOTAL_TIME_VISIBLE),
         _string_width(0)
@@ -19,7 +19,7 @@ rising_text::rising_text(const bn::camera_ptr &cam,
 
     bn::string<4> text;
     bn::ostringstream stream(text);
-    if(num > 0){
+    if(hp && num > 0){
         stream << '+';
     }
     stream << num;

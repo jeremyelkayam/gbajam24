@@ -47,12 +47,37 @@ pause_info_scene::pause_info_scene(
             common_stuff::append("DONATED TO VACCINE: ", 
             savefile.total_donated), 
         _text_sprites);
+
+    uint32_t hours, minutes, seconds;
+    seconds = savefile.playtime / 60 % 60;
+    minutes = savefile.playtime / (60 * 60) % 60;
+    hours = savefile.playtime / (60 * 60 * 60); 
+
+    bn::string<256> playtime_text;
+    bn::ostringstream stream(playtime_text);
+    stream << "PLAY TIME :  ";
+    stream << hours << ":";
+    if(minutes < 10){
+        stream << "0";
+    }
+    stream << minutes;
+
+    generator.generate(0, 55, 
+        playtime_text,
+        _text_sprites);
     for(bn::sprite_ptr &sprite : _text_sprites){
         sprite.set_bg_priority(0);
+        sprite.set_blending_enabled(true);
     }
+    bn::blending::set_transparency_alpha(0);
+    _trans_alpha_action.emplace(5, 1);
+    set_transition_effects_enabled(true);
+
 }
 
 void pause_info_scene::set_transition_effects_enabled(bool enabled){
+    _bg.set_blending_enabled(enabled);
+    _bg.set_mosaic_enabled(enabled);
     for(bn::sprite_ptr &sprite : _text_sprites){
         sprite.set_blending_enabled(enabled);
         sprite.set_mosaic_enabled(enabled);
@@ -60,9 +85,25 @@ void pause_info_scene::set_transition_effects_enabled(bool enabled){
 }
 
 bn::optional<scene_type> pause_info_scene::update(){
+
+    if(_trans_alpha_action){
+        if(_trans_alpha_action->done())
+        {
+            _trans_alpha_action.reset();
+        }else{
+            _trans_alpha_action->update();
+        }
+    }
+
     bn::optional<scene_type> result;
 
     if(bn::keypad::start_pressed() || bn::keypad::b_pressed()){
+        _trans_alpha_action.emplace(5, 0);
+    }
+
+    if(_trans_alpha_action && _trans_alpha_action->done() 
+        && bn::blending::transparency_alpha() == 0)
+    {
         result = scene_type::LEVEL;
     }
     

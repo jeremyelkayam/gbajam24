@@ -69,6 +69,8 @@ bn::optional<scene_type> play_scene::update_scene_components(){
 bn::optional<scene_type> play_scene::update()
 {
 
+    ++_cstuff.current_save().playtime;
+
     if(_pause_info){
         if(_pause_info->update()){
             hide_pause_info();
@@ -92,7 +94,11 @@ bn::optional<scene_type> play_scene::update()
 void play_scene::show_pause_info(){
     BN_ASSERT(!_pause_info);
     BN_ASSERT(!_pause_menu);
-    _pause_info.emplace(_cstuff.text_generator, _cstuff.current_save());
+    if(!_warping){
+        BN_LOG("NO PAUSING DURING WARP ANIMATION");
+        _player.set_blending_enabled(false);
+        _pause_info.emplace(_cstuff.text_generator, _cstuff.current_save());
+    }
 }
 
 void play_scene::hide_pause_info(){

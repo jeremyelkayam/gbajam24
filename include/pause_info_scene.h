@@ -2,6 +2,7 @@
 #include "common_stuff.h"
 #include "scene.h"
 #include <bn_regular_bg_ptr.h>
+#include <bn_blending_actions.h>
 
 namespace aru{
 
@@ -9,6 +10,7 @@ class pause_info_scene : public scene{
 protected:
 
     bn::vector<bn::sprite_ptr, 64> _text_sprites;
+    bn::optional<bn::blending_transparency_alpha_to_action> _trans_alpha_action;
     bn::regular_bg_ptr _bg;
  
 public:

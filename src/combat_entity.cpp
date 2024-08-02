@@ -79,7 +79,7 @@ void combat_entity::hit(uint8_t damage, bn::fixed x_push, bn::fixed y_push){
             _rising_text.pop_back();
         }
         _rising_text.emplace_front(*_sprite.camera().get(), _rising_text_generator, 
-            -damage, x(), y());        
+            -damage, x(), y(), true);        
 
         _iframes = _HIT_IFRAMES;
     }
@@ -93,7 +93,7 @@ void combat_entity::heal(const uint8_t &amount)
     _hp += healed_amount;
     if(healed_amount > 0){
         _rising_text.emplace_front(*_sprite.camera().get(), _rising_text_generator, 
-            healed_amount, x(), y());        
+            healed_amount, x(), y(), true);        
     }
 
 }
