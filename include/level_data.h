@@ -23,7 +23,7 @@ namespace aru
         bn::fixed_point(256,208),
         bn::regular_bg_items::lab, 
         bn::regular_bg_items::testbg,
-        bn::music_items::test_song,
+        bn::music_items::hub,
         {}
     };
 
@@ -31,7 +31,7 @@ namespace aru
         bn::fixed_point(256,80),
         bn::regular_bg_items::testmap, 
         bn::regular_bg_items::testbg,
-        bn::music_items::stage3opt,
+        bn::music_items::stage1,
         {{1, bn::fixed_point(512, 80)},
          {1, bn::fixed_point(768, 80)}}
     };

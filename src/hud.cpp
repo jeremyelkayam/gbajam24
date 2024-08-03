@@ -227,10 +227,17 @@ meter_hud_element::meter_hud_element(const uint16_t &tracked_value,
 }
 
 void meter_hud_element::update(){
+
+    if(_displayed < _target)
+    {
+        //we are healing
+    }
+
     hud_element::update();
     bn::fixed scale_factor = bn::fixed(_displayed) / bn::fixed(_max);
     bn::fixed half_height = _bar.dimensions().height() * bn::fixed(0.5);
 
+    
 
     //GBA refuses to do anything with a scale factor of 0, so let's just make the bar
     // invisible in this edge case

@@ -80,9 +80,23 @@ bn::optional<scene_type> level_scene::update_scene_components()
                 }
             }
             e->update();
-            if(e->just_exploded()){
-                // _health_pickups.emplace_front(_cam, e->x(), e->y(), _level, 5);
-                _crcy_pickups.emplace_front(new currency_pickup(_cam, e->x(), e->y(), _level, 10));
+            if(e->just_exploded())
+            {
+                bn::fixed health_pct = bn::fixed(_player.hp()) / 
+                    bn::fixed(_player.max_hp());
+
+                bn::fixed health_drop_chance = 0.3 * (1 - health_pct);
+
+                if(_cstuff.rand.get_fixed(1) < health_drop_chance)
+                {
+                    _health_pickups.emplace_front(new health_pickup(
+                        _cam, e->x(), e->y(), _level, 5));
+                }else{
+                    _crcy_pickups.emplace_front(new currency_pickup(
+                        _cam, e->x(), e->y(), _level, 10));
+
+                }
+
             }
         }
 
