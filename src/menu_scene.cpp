@@ -14,7 +14,7 @@ menu_scene::menu_scene() :
     _selector(bn::sprite_items::common_variable_8x16_font.create_sprite(-45,25,29)),
     _index(0),
     _bg(bn::regular_bg_items::honeycomb.create_bg(0,5)),
-    _bg_move(_bg, -0.5, 0)
+    _bg_move(_bg, -0.5, 0.5)
 {
     bn::sprite_text_generator gen(variable_8x16_sprite_font);
     gen.set_center_alignment();

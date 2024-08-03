@@ -3,6 +3,8 @@
 #include <bn_log.h>
 #include <bn_size.h>
 #include "small_numbers_sprite_font.h"
+#include "bn_sprite_palette_items_small_numbers_green_palette.h"
+#include "bn_sprite_palette_items_small_numbers_red_palette.h"
 
 namespace aru 
 {
@@ -21,6 +23,14 @@ rising_text::rising_text(const bn::camera_ptr &cam,
     bn::ostringstream stream(text);
     if(hp && num > 0){
         stream << '+';
+        text_generator.set_palette_item(
+            bn::sprite_palette_items::small_numbers_green_palette);
+    }else if(hp && num < 0){
+        text_generator.set_palette_item(
+            bn::sprite_palette_items::small_numbers_red_palette);
+    }else{
+        text_generator.set_palette_item(
+            bn::sprite_items::small_numbers_font.palette_item());
     }
     stream << num;
     stream << "|";
