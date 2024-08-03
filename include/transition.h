@@ -7,6 +7,7 @@
 #include <bn_blending_actions.h>
 #include <bn_optional.h>
 #include <bn_sprites_mosaic_actions.h>
+#include <bn_music_actions.h>
 
 namespace aru
 {
@@ -162,6 +163,7 @@ private:
     bn::optional<bn::blending_intensity_alpha_to_action> intensityAction_;
     bn::optional<bn::sprites_mosaic_stretch_to_action> spriteMosaicAction_;
     bn::optional<bn::bgs_mosaic_stretch_to_action> bgMosaicAction_;
+    bn::optional<bn::music_volume_to_action> musicVolAction_;
 };
 
 [[nodiscard]] constexpr Transition::Types operator|(Transition::Types t1, Transition::Types t2)

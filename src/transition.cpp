@@ -67,6 +67,12 @@ void Transition::Init()
         bn::bgs_mosaic::set_stretch((direction_ == Direction::IN) ? 1 : 0);
         bgMosaicAction_ = bn::bgs_mosaic_stretch_to_action(updateCountDown_, (direction_ == Direction::IN) ? 0 : 1);
     }
+    if(bn::music::playing() && direction_ == Direction::OUT)
+    {
+        musicVolAction_ = bn::music_volume_to_action(updateCountDown_, 0);
+    }
+
+
     state_ = State::ONGOING;
 }
 
@@ -95,6 +101,9 @@ void Transition::Update()
     if (bgMosaicAction_)
         bgMosaicAction_->update();
 
+    if(musicVolAction_)
+        musicVolAction_->update();
+
     if (--updateCountDown_ <= 0)
     {
         state_ = State::DONE;
@@ -109,6 +118,7 @@ void Transition::Destroy()
     intensityAction_.reset();
     spriteMosaicAction_.reset();
     bgMosaicAction_.reset();
+    musicVolAction_.reset();
 }
 
 void Transition::Set(Types types, Direction direction, int updateCount)
