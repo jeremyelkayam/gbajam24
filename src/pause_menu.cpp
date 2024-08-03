@@ -29,8 +29,9 @@ pause_menu::pause_menu(bn::sprite_text_generator& text_generator) :
 
 bn::optional<scene_type> pause_menu::update()
 {
+    bn::optional<scene_type> result;
     if(bn::keypad::b_pressed() || bn::keypad::start_pressed() || bn::keypad::select_pressed()){
-        return scene_type::BACK;
+        result = scene_type::BACK;
     }
     if(bn::keypad::up_pressed()){
         _selected = common_stuff::loop_addition(_selected, -1, 0, _option_text_sprites.size());
@@ -51,11 +52,14 @@ bn::optional<scene_type> pause_menu::update()
             common_stuff::set_sprite_arr_effects_enabled(sprites, true);
         }
 
-        bn::blending::set_fade_alpha(0);
-        return _options[_selected].next_scene;
+        result = _options[_selected].next_scene;
     }
 
-    return bn::optional<scene_type>();
+    if(result){
+        bn::blending::set_fade_alpha(0);
+    }
+
+    return result;
 }
 
 void pause_menu::update_colors(){

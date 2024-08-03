@@ -105,6 +105,7 @@ bn::optional<scene_type> pause_info_scene::update(){
         && bn::blending::transparency_alpha() == 0)
     {
         result = scene_type::LEVEL;
+        bn::blending::set_transparency_alpha(1);
     }
     
     return result;
