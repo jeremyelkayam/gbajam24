@@ -102,7 +102,8 @@ void combat_entity::heal(const uint8_t &amount)
 void combat_entity::die(){
     _sprite.set_item(bn::sprite_items::explosion);
     _sprite.set_scale(2);
-    _explosion_anim.emplace(bn::create_sprite_animate_action_once(_sprite, 4, bn::sprite_items::explosion.tiles_item(), 0, 1, 2, 3, 4, 5, 6));
+    _explosion_anim.emplace(bn::create_sprite_animate_action_once(
+        _sprite, 4, bn::sprite_items::explosion.tiles_item(), 0, 1, 2, 3, 4, 5, 6));
 }
 
 void combat_entity::set_blending_enabled(bool enabled)

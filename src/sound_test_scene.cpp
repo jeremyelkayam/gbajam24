@@ -4,7 +4,7 @@
 #include "bn_regular_bg_items_honeycomb.h"
 #include <bn_keypad.h>
 #include <bn_string.h>
-#include <bn_music_items.h>
+#include <bn_music_items_info.h>
 #include "common_stuff.h"
 
 namespace aru {
@@ -45,7 +45,7 @@ bn::optional<scene_type> sound_test_scene::update(){
     _bg_move.update();
     if(bn::keypad::up_pressed() || bn::keypad::down_pressed()){
         if(bn::keypad::down_pressed()){
-            _index = common_stuff::bounded_addition(_index, 1, 4);
+            _index = common_stuff::bounded_addition(_index, 1, bn::music_items_info::span.size() - 1);
         }else if(bn::keypad::up_pressed()){
             _index = common_stuff::bounded_subtraction(_index, 1, 0);
         }
@@ -66,8 +66,14 @@ bn::optional<scene_type> sound_test_scene::update(){
 
 void sound_test_scene::update_track_number()
 {
+    _gen.set_left_alignment();
     _track_number_text_sprites.clear();
-    _gen.generate(0, 0, common_stuff::append("", _index), _track_number_text_sprites);
+    bn::string<256> text;
+    bn::ostringstream stream(text);
+    stream << _index;
+    stream << ". ";
+    stream << bn::music_items_info::span.at(_index).second;
+    _gen.generate(-15, 0, text, _track_number_text_sprites);
 
 }
  

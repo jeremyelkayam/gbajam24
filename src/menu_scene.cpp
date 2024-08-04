@@ -1,6 +1,7 @@
 #include "menu_scene.h"
 #include <bn_sprite_text_generator.h>
 #include "common_variable_8x16_sprite_font.h"
+#include "bn_sprite_items_cursor.h"
 #include "external_tool_file.h"
 #include "bn_regular_bg_items_honeycomb.h"
 #include <bn_keypad.h>
@@ -11,7 +12,9 @@ namespace aru {
 
 
 menu_scene::menu_scene() : 
-    _selector(bn::sprite_items::common_variable_8x16_font.create_sprite(-45,25,29)),
+    _selector(bn::sprite_items::cursor.create_sprite(-47,25)),
+    _selector_anim(bn::create_sprite_animate_action_forever(
+        _selector, 4, bn::sprite_items::cursor.tiles_item(), 0, 1, 2, 3, 4, 5)),
     _index(0),
     _bg(bn::regular_bg_items::honeycomb.create_bg(0,5)),
     _bg_move(_bg, -0.5, 0.5)
@@ -49,6 +52,7 @@ bn::optional<scene_type> menu_scene::update(){
     bn::optional<scene_type> result;
 
     _bg_move.update();
+    _selector_anim.update();
 
     if(bn::keypad::down_pressed()){
         _index = common_stuff::bounded_addition(_index, 1, 2);

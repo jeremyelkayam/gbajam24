@@ -1,10 +1,12 @@
 #pragma once
 #include "box.h"
+#include <bn_sprite_animate_actions.h>
 
 namespace aru { 
     class selection_box : public box {
         protected:
             bn::optional<bn::sprite_ptr> _selector;
+            bn::optional<bn::sprite_animate_action<6>> _selector_anim;
             bn::vector<bn::sprite_ptr, 4> _option_sprites;
             bn::vector<bn::string<8>, 4> _options;
             bn::string<64> _text;

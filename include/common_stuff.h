@@ -56,6 +56,11 @@ namespace aru {
 
             static bn::string<256> append(const char *str, 
                 const uint16_t &num);
+
+            static bn::string<256> append(const uint16_t &num, 
+                const char *str);
+
+            static bn::string<256> int_str(const uint16_t &num);
             
             static bn::sprite_palette_ptr monochrome_sprite_palette(const bn::color &color);
 

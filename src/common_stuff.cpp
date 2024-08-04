@@ -108,6 +108,24 @@ bn::string<256> common_stuff::append(const char *str,
     return text;
 }
 
+bn::string<256> common_stuff::append(const uint16_t &num, 
+    const char *str)
+{
+    bn::string<256> text;
+    bn::ostringstream stream(text);
+    stream << num;
+    stream << str;
+    return text;
+}
+
+bn::string<256> common_stuff::int_str(const uint16_t &num)
+{
+    bn::string<256> text;
+    bn::ostringstream stream(text);
+    stream << num;
+    return text;
+}
+
 bn::sprite_palette_ptr common_stuff::monochrome_sprite_palette(const bn::color &color){
 
     bn::color colors[16];
