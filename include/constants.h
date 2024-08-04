@@ -79,7 +79,7 @@ namespace aru
         {"Right, well, anyways... How did everything go?", 1, bn::sprite_items::slung_portrait_neutral},
         {"Ah, that's it! That's the part!!! Wonderful, wonderful! I knew I could trust you. Now let me just...", 1, bn::sprite_items::slung_portrait_neutral},
         {"...", 1, bn::sprite_items::slung_portrait_neutral},
-        {"...No dice. Well, it was only the first of many. Thank you, ARU-l33n. You did well, very well." "I'm already picking up a signal from the next piece, and I'm updating the teleporter coordinates now. So when you're ready...", 1, bn::sprite_items::slung_portrait_neutral},
+        {"...No dice. Well, it was only the first of many. Thank you, ARU-l33n. You did well, very well. I'm already picking up a signal from the next piece, and I'm updating the teleporter coordinates now. So when you're ready...", 1, bn::sprite_items::slung_portrait_neutral},
         {"Ah- wait! I almost forgot to mention. During your adventure you likely picked up clusters of Ultra-Matter. We can put those to use.", 1, bn::sprite_items::slung_portrait_neutral},        
         {"Since you're the one putting yourself in harm's way, I'll let you choose what to modify and when. For simplicity's sake I will categorize them: SHOOT, SLASH and HOVER.", 1, bn::sprite_items::slung_portrait_neutral},
         {"Hehe... Quite like a video game, actually", 1, bn::sprite_items::slung_portrait_neutral},

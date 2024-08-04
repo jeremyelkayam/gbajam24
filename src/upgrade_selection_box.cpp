@@ -40,8 +40,8 @@ upgrade_selection_box::upgrade_selection_box(bn::sprite_text_generator &text_gen
 void upgrade_selection_box::update(){
     selection_box::update();
     if(bn::keypad::a_pressed() && _selected_option == 1){
+        _done = true;
         if(_ultramatter >= _price){
-            _done = true;
             _upgraded = true;
             ++_upgrade_lvl;
             _ultramatter -= _price;
@@ -55,19 +55,25 @@ void upgrade_selection_box::update(){
 
 bn::unique_ptr<box> upgrade_selection_box::next_box(){
     BN_ASSERT(_done);
+    bn::string<256> result;
+    bn::ostringstream stream(result);
     if(_upgraded) {
-        bn::string<64> result;
-        bn::ostringstream stream(result);
         stream << _upgrade_type;
         stream << " ability was upgraded to level ";
         stream << _upgrade_lvl + 1;
         stream << ".";
-
-        return bn::unique_ptr<box>(new text_box(_text_generator, result.c_str(), true));
     }else if(_not_enough_money){
-        return bn::unique_ptr<box>(new text_box(_text_generator, "Not enough money.",
-            true));
+        stream << "ERROR: Insufficient ultramatter stored (current: ";
+        stream << _ultramatter;
+        stream << "). Upgrade could not be performed.";
     }
+
+    if (result.length() > 0)
+    {
+        return bn::unique_ptr<box>(new text_box(_text_generator, result.c_str(), true));
+    }
+    
+
     return bn::unique_ptr<box>();
     
 }

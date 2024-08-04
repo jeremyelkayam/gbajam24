@@ -20,7 +20,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
     _interacting_with = new slung(_cam, 350, 208, _cstuff);
     _interactables.emplace_front(bn::unique_ptr<slung>((slung*)_interacting_with));
     _interactables.emplace_front(new vax_mchn(_cam, 450, 190, _cstuff));
-    _interactables.emplace_front(new hover_upgrader(_cam, 400, 112, _cstuff));
+    _interactables.emplace_front(new hover_upgrader(_cam, 400, 116, _cstuff));
     _interactables.emplace_front(new shoot_upgrader(_cam, 80, 204, _cstuff));
     _interactables.emplace_front(new slash_upgrader(_cam, 110, 116, _cstuff));
     _interactables.emplace_front(new warp_point(_cam, 256, 192, _cstuff));
@@ -30,7 +30,7 @@ lab_scene::lab_scene(common_stuff &cstuff) :
 
     for(const line_info &line : LV1_CUTSCENE_DIALOGUE) {
         _text_boxes.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
-            line.text, line.portrait, true, false, line.anim_index)));
+            line.text, line.portrait, true, true, line.anim_index)));
     }
 }
 

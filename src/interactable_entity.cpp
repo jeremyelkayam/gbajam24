@@ -63,7 +63,7 @@ bn::deque<bn::unique_ptr<box>, 16> slung::interact_boxes(){
 
     bn::string<256> text;
     bn::ostringstream stream(text);
-    stream << "Hello, ARU-133n. The machine is currently at ";
+    stream << "Hello, ARU-l33n. The machine is currently at ";
     stream << _cstuff.current_save().total_donated;
     stream << " power. Anything you can give helps.\nWhile you're here, I can also record the progress we've made thus far.";
     result.push_back(bn::unique_ptr<text_box>(new text_box(_cstuff.text_generator, 
@@ -87,9 +87,10 @@ bn::deque<bn::unique_ptr<box>, 16> vax_mchn::interact_boxes(){
 
 hover_upgrader::hover_upgrader(const bn::camera_ptr &cam, 
     const bn::fixed &x, const bn::fixed &y, common_stuff &cstuff): 
-        interactable_entity(cam, x, y, 50,40,bn::sprite_items::hover_upgrade, cstuff)
+        interactable_entity(cam, x, y, 50,40,bn::sprite_items::upgrades, cstuff)
 {
-
+    _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 9, 
+        bn::sprite_items::upgrades.tiles_item(), 6, 7, 8, 7));
 }
 
 bn::deque<bn::unique_ptr<box>, 16> hover_upgrader::interact_boxes(){
@@ -113,7 +114,7 @@ shoot_upgrader::shoot_upgrader(const bn::camera_ptr &cam,
         interactable_entity(cam, x, y, 30,40,bn::sprite_items::upgrades, cstuff)
 {
     _anims.emplace_back(bn::create_sprite_animate_action_forever(_sprite, 9, 
-        bn::sprite_items::upgrades.tiles_item(), 3, 4, 5, 3));
+        bn::sprite_items::upgrades.tiles_item(), 3, 4, 5, 4));
     _sprite.set_horizontal_flip(true);}
 
 bn::deque<bn::unique_ptr<box>, 16> shoot_upgrader::interact_boxes(){

@@ -57,7 +57,7 @@ bn::optional<scene_type> menu_scene::update(){
     if(bn::keypad::down_pressed()){
         _index = common_stuff::bounded_addition(_index, 1, 2);
     }else if(bn::keypad::up_pressed()){
-        _index = common_stuff::bounded_subtraction(_index, -1, 0);
+        _index = common_stuff::bounded_subtraction(_index, 1, 0);
     }
     _selector.set_y(25 + 10 * _index);
 

@@ -17,11 +17,12 @@ pause_menu::pause_menu(bn::sprite_text_generator& text_generator) :
     text_generator.set_bg_priority(0);
     text_generator.set_center_alignment();
     text_generator.set_one_sprite_per_character(false);
-    text_generator.generate(0, -30, "- PAUSED -", _text_sprites);
+    text_generator.generate(0, -30, "PAUSED", _text_sprites);
 
     for(uint8_t z = 0; z < 3; ++z){
+        text_generator.set_left_alignment();
         bn::vector<bn::sprite_ptr, 4> vec;
-        text_generator.generate(0, -10 + 15*z, _options[z].text, vec);
+        text_generator.generate(-70, -11 + 16*z, _options[z].text, vec);
         _option_text_sprites.emplace_back(vec);
     }
     update_colors();
