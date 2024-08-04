@@ -14,6 +14,7 @@
 #include "logos_scene.h"
 #include "menu_scene.h"
 #include "level_scene.h"
+#include "sound_test_scene.h"
 #include "common_stuff.h"
 #include "cute_prop_sprite_font.h"
 #include "transition.h"
@@ -78,6 +79,10 @@ int main()
                         }
                         case aru::scene_type::LOGOS: { 
                             scene.reset(new aru::logos_scene());
+                            break;
+                        }
+                        case aru::scene_type::SOUND_TEST: { 
+                            scene.reset(new aru::sound_test_scene());
                             break;
                         }
                         default: { 

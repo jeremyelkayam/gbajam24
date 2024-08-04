@@ -12,7 +12,8 @@ enum class scene_type
     LEVEL,
     LAB,
     MENU,
-    BACK
+    BACK,
+    SOUND_TEST
 };
 
 class scene {
