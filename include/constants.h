@@ -70,6 +70,17 @@ namespace aru
         const bn::sprite_item &portrait;
     };
 
+    constexpr const line_info TUTORIAL_CUTSCENE_DIALOGUE[3] = {
+        {"Did... did it work? ARU-l33n, my creation, are you truly functioning?", 2, bn::sprite_items::slung_portrait_neutral},
+        {"Well, there's a lot to catch you up on... as you can see, the rest of the team could not be present for your inaugural boot sequence. But first, let's confirm all your basic functions are operational.", 2, bn::sprite_items::slung_portrait_neutral},
+        {"You can walk left and right by using the CONTROL PAD. It's that squishy plus sign on your Game Boy Advance.", 2, bn::sprite_items::slung_portrait_neutral},
+        {"Very good! Now let's check your vertical capabilities. The A button allows you to jump. Additionally, holding down the button activates your tarsal booster rockets, which should help you to reach higher areas.", 2, bn::sprite_items::slung_portrait_neutral},
+        {"Hmm, could use a little bit more power, but it'll do. Regrettably, the outside world has become quite dangerous since you were initially programmed, so I've also had to implement some defensive technologies into your design. The B button lets you SHOOT energy blasts, while the R button activates a SLASH.", 2, bn::sprite_items::slung_portrait_neutral},
+        {"Looks like both are working... well enough, I guess. By the way, if you'd rather have those controls work the other way around, you can press L to swap them. Could you try that out for me?", 2, bn::sprite_items::slung_portrait_neutral},
+        {"Perfect!! Well, far from it, actually. It seems most systems are only operating in quite a basic state. While you're out there, I'll see if I can tune those up a bit. My automated retrieval unit... Get retrieving! "}
+    }
+
+
     constexpr const line_info LV1_CUTSCENE_DIALOGUE[18] = {
         {"...", 2, bn::sprite_items::slung_portrait_neutral},
         {"Diagnostics seem fine... Maybe a new module is needed?", 2, bn::sprite_items::slung_portrait_neutral},
