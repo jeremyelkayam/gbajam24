@@ -58,7 +58,7 @@ void camera_manager::update(){
     if(new_y > (_level.height() - 80)) new_y = _level.height() - 80;
 
     if(_shake_timer != 0){
-        if(_shake_timer % 2 == 0)
+        if(_shake_timer % 4 == 0)
         {
             new_y += _shake_magnitude * bn::fixed(0.5);
         }

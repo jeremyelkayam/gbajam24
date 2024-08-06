@@ -75,9 +75,12 @@ bn::optional<scene_type> level_scene::update_scene_components()
                 if(e->hitbox().intersects(_player.hitbox())){
                     bn::fixed hori_kb = 6 * (_player.facing_right() ? -1 : 1); 
                     _player.hit(e->contact_damage(),hori_kb,-3);
+                    _cam_mgr.start_screen_shake(1, 5);
                 }
                 if(_player.check_enemy_collision(*e.get())){
                     _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
+                    uint8_t dmg = old_hp - e->hp();
+                    _cam_mgr.start_screen_shake(dmg / 2, 10);
                 }
             }
             e->update();
