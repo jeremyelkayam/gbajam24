@@ -56,7 +56,7 @@ bn::optional<scene_type> level_scene::update_scene_components()
             _bg.set_blending_enabled(false);
             _cam_mgr.start_screen_shake(1, 255);
         }
-    }else{
+    }else if(!_cam_mgr.screen_shaking()){
         if(_bg.blending_enabled()){
             set_transition_effects_enabled(false);
         }
@@ -75,12 +75,12 @@ bn::optional<scene_type> level_scene::update_scene_components()
                 if(e->hitbox().intersects(_player.hitbox())){
                     bn::fixed hori_kb = 6 * (_player.facing_right() ? -1 : 1); 
                     _player.hit(e->contact_damage(),hori_kb,-3);
-                    _cam_mgr.start_screen_shake(1, 5);
+                    _cam_mgr.start_screen_shake(1, 1);
                 }
                 if(_player.check_enemy_collision(*e.get())){
                     _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
                     uint8_t dmg = old_hp - e->hp();
-                    _cam_mgr.start_screen_shake(dmg / 2, 10);
+                    _cam_mgr.start_screen_shake(dmg / 2, 5);
                 }
             }
             e->update();
@@ -142,6 +142,8 @@ bn::optional<scene_type> level_scene::update_scene_components()
             show_pause_menu();
         }
 
+    }else{
+        _cam_mgr.update();
     }
 
     return result;

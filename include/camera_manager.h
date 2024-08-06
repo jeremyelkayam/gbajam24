@@ -28,6 +28,8 @@ public:
     void set_fixed_target(const bn::fixed_point &target);
     void start_screen_shake(const bn::fixed &magnitude, 
         const uint8_t &length);
+    bool screen_shaking()
+        {return _shake_timer;}
 
 };
 
