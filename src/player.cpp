@@ -153,16 +153,14 @@ void player::update(){
                 start_anim(_jumpsquat);
             }
         }else{
-            if(bn::keypad::a_pressed()){
-                if(_coyote_timer){
-                    set_state(PSTATE::JUMPSQUAT);
-                    start_anim(_jumpsquat);
-                }
-            }
-            if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
+            if(bn::keypad::a_pressed() && _coyote_timer){
+                set_state(PSTATE::JUMPSQUAT);
+                start_anim(_jumpsquat);
+            }else if(bn::keypad::a_held() && _current_state == PSTATE::FALL && _hover_timer){
                 set_state(PSTATE::HOVER);
                 _sprite.set_rotation_angle(0);
                 start_anim(_hover);
+                _jbuf_timer = 10;
             }
 
             if(_current_state == PSTATE::HOVER){
