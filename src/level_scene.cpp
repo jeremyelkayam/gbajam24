@@ -80,7 +80,14 @@ bn::optional<scene_type> level_scene::update_scene_components()
                 if(_player.check_enemy_collision(*e.get())){
                     _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
                     uint8_t dmg = old_hp - e->hp();
-                    _cam_mgr.start_screen_shake(dmg / 2, 5);
+                    bn::fixed mag = dmg / 2;
+                    uint8_t time = 5;
+                    if(e->hp() == 0 && dmg != 0)
+                    {
+                        mag *= 2;
+                        time *= 2;
+                    }
+                    _cam_mgr.start_screen_shake(mag, time);
                 }
             }
             e->update();
