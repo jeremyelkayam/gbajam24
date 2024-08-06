@@ -66,6 +66,7 @@ bn::optional<scene_type> level_scene::update_scene_components()
             uint8_t old_hp = e->hp();
             if(old_hp != 0){
                 //todo: refactor this to be less terrible and have less repeated code!
+                //this can be part of the check enemy collision function tbh
                 if(!_player.in_iframes() && _player.hitbox().intersects(e->hitbox())){
                     bn::fixed hori_kb = 6 * (_player.facing_right() ? 1 : -1); 
                     e->hit(_player.contact_damage(),hori_kb,-3);
@@ -75,7 +76,7 @@ bn::optional<scene_type> level_scene::update_scene_components()
                     bn::fixed hori_kb = 6 * (_player.facing_right() ? -1 : 1); 
                     _player.hit(e->contact_damage(),hori_kb,-3);
                 }
-                if(_player.check_bullet_collision(*e.get())){
+                if(_player.check_enemy_collision(*e.get())){
                     _hud.update_enemy_hp("GLOBLIN", old_hp, e->hp(), e->max_hp());
                 }
             }

@@ -11,7 +11,9 @@ namespace aru
 class entity
 {
 public:
-    entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, const bn::fixed &width, const bn::fixed &height, const bn::sprite_item &spritem);
+    entity(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y, 
+        const bn::fixed &width, const bn::fixed &height, 
+        const bn::sprite_item &spritem);
     virtual ~entity() {return;}
     virtual void update()=0;
     bn::fixed_point pos() const {return _hitbox.position();}

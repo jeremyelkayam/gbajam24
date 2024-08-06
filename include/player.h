@@ -21,6 +21,22 @@ namespace aru
         // SLASH
     };
 
+
+class slash : public entity
+{
+public:
+    slash(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y);
+    void set_pos(const bn::fixed &x, const bn::fixed &y)
+        {_hitbox.set_position(x, y); _sprite.set_position(x, y);}
+    void set_horizontal_flip(const bool &flip)
+        {_sprite.set_horizontal_flip(flip);}
+    void update();
+    bool done() const {return _slash_anim.done();}
+
+private:
+    bn::sprite_animate_action<4> _slash_anim;
+};
+
 class player : public combat_entity
 {
 public: 
@@ -30,7 +46,7 @@ public:
         bn::sprite_text_generator &rising_text_generator);
     virtual void update() override;
     virtual void jump() override;
-    bool check_bullet_collision(combat_entity &enemy);
+    bool check_enemy_collision(combat_entity &enemy);
     void move_to(const bn::fixed &xcor, const bool &face_right);
     void clear_target();
     uint8_t hover_time() const {return _hover_timer;}
@@ -61,6 +77,7 @@ private:
     bn::sprite_animate_action<9> _shoot_run;
     bn::forward_list<bullet, 8> _bullets;
     bn::optional<bn::fixed> _target_xcor;
+    bn::optional<slash> _slash;
     bool _face_right_after_moving;
 
     static bool bullet_deletable(bullet &b) {return b.should_be_deleted();}
@@ -79,5 +96,6 @@ private:
     virtual void die();
  
 };
+
 
 }

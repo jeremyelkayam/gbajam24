@@ -6,6 +6,7 @@
 #include "player.h"
 #include "bn_sprite_items_jumpcloud.h"
 #include "bn_sprite_items_sprintcloud.h"
+#include "bn_sprite_items_swoosh_buch.h"
 
 namespace aru {
 
@@ -52,8 +53,10 @@ player::player(bn::camera_ptr &cam, bn::fixed x, bn::fixed y, level &level,
 void player::update(){
     ++_state_change_timer;
 
-    if(_current_state == PSTATE::JUMPSQUAT){
-        if(_jumpsquat.done()){
+    if(_current_state == PSTATE::JUMPSQUAT)
+    {
+        if(_jumpsquat.done())
+        {
             jump();
         }
     }
@@ -187,6 +190,11 @@ void player::update(){
             _shoot.reset();
         }
 
+        if(bn::keypad::r_pressed() && !_slash)
+        {
+            _slash.emplace(*_sprite.camera().get(), x(), y());
+        }
+
         if(bn::keypad::b_held() && (_shoot_timer == 0) && !_target_xcor){
             if(_current_state == PSTATE::STAND && 
                 (_shoot.current_index() == 1 || _shoot.current_index() == 5)){
@@ -220,6 +228,26 @@ void player::update(){
         bullet.update();
     }
     _bullets.remove_if(bullet_deletable);
+
+    if(_slash)
+    {
+        bn::fixed xoffset;
+        if(facing_right())
+        {
+            xoffset = 24;
+        }
+        else
+        {
+            xoffset = -24;
+        }
+        _slash->set_horizontal_flip(!facing_right());
+        _slash->set_pos(x() + xoffset, y());
+        _slash->update();
+        if(_slash->done())
+        {
+            _slash.reset();
+        }
+    }    
 
     combat_entity::update();
 }
@@ -263,7 +291,7 @@ void player::shoot(){
         _level, facing_right(), _rising_text_generator);
 }
 
-bool player::check_bullet_collision(combat_entity &enemy){
+bool player::check_enemy_collision(combat_entity &enemy){
     bool result = false;
     for(bullet &bullet : _bullets){
         if(enemy.hitbox().intersects(bullet.hitbox())){
@@ -273,6 +301,17 @@ bool player::check_bullet_collision(combat_entity &enemy){
             result = true;
         }
     }
+
+    if(_slash && enemy.hitbox().intersects(_slash->hitbox()))
+    {
+        bn::fixed hori_kb = 12 * (facing_right() ? 1 : -1); 
+        //SWORD DAMAGE IS 10 .... TODO: MAKE THIS A VARIABLE
+        enemy.hit(30,hori_kb,-6);
+
+        result = true;
+    }
+
+
     return result;
 }
 
@@ -339,6 +378,19 @@ void player::pick_up_currency(const uint16_t &value)
     _rising_text.emplace_front(*_sprite.camera().get(), _rising_text_generator, 
         value, x(), y(), false);
 
+}
+
+slash::slash(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y) :
+    entity(cam, x, y, 24, 32, bn::sprite_items::swoosh_buch),
+    _slash_anim(bn::create_sprite_animate_action_once(_sprite, 4, 
+            bn::sprite_items::swoosh_buch.tiles_item(), 0, 1, 2, 3))
+{
+    
+}
+
+void slash::update()
+{
+    _slash_anim.update();
 }
 
 }
