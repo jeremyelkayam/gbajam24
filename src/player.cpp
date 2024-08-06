@@ -153,6 +153,11 @@ void player::update(){
                 start_anim(_jumpsquat);
             }
         }else{
+
+            if(bn::keypad::a_pressed() && _current_state == PSTATE::FALL){
+                _jbuf_timer = 10;
+            }
+            
             if(bn::keypad::a_pressed() && _coyote_timer){
                 set_state(PSTATE::JUMPSQUAT);
                 start_anim(_jumpsquat);
@@ -160,8 +165,9 @@ void player::update(){
                 set_state(PSTATE::HOVER);
                 _sprite.set_rotation_angle(0);
                 start_anim(_hover);
-                _jbuf_timer = 10;
             }
+
+
 
             if(_current_state == PSTATE::HOVER){
                 --_hover_timer;

@@ -58,14 +58,17 @@ void camera_manager::update(){
     if(new_y > (_level.height() - 80)) new_y = _level.height() - 80;
 
     if(_shake_timer != 0){
-        BN_LOG("shake timer: ", _shake_timer);
-        if(_shake_timer == 2){
-            new_y += 1;
-            _shake_timer = 1;
-        }else{
-            // new_y -= 1;
-            ++_shake_timer;
+        if(_shake_timer % 2 == 0)
+        {
+            new_y += _shake_magnitude * bn::fixed(0.5);
         }
+        else
+        {
+            new_y -= _shake_magnitude * bn::fixed(0.5);
+        }
+        --_shake_timer;
+        BN_LOG("shake timer: ", _shake_timer);
+
     }
 
     _cam.set_position(new_x, new_y);
@@ -80,12 +83,11 @@ void camera_manager::set_fixed_target(const bn::fixed_point &target){
     _fixed_target = target;
 }
 
-void camera_manager::set_screen_shake(const bool &enabled){
-    if(_shake_timer == 0 && enabled){
-        _shake_timer = 1;
-    }else if(!enabled){
-        _shake_timer = 0;
-    }
+void camera_manager::start_screen_shake (const bn::fixed &magnitude, 
+    const uint8_t &length)
+{
+    _shake_magnitude = magnitude;
+    _shake_timer = length;
 }
 
 }

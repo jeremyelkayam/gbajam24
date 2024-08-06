@@ -9,22 +9,25 @@ namespace aru {
 class camera_manager {
 
 private:
-        bn::camera_ptr _cam;
-        bn::fixed_rect _view;
-        const level &_level;
-        const player &_player;
-        uint8_t _shake_timer;
+    bn::camera_ptr _cam;
+    bn::fixed_rect _view;
+    const level &_level;
+    const player &_player;
+    uint8_t _shake_timer;
+    bn::fixed _shake_magnitude;
 
-        easer _x_ease, _y_ease;
+    easer _x_ease, _y_ease;
 
-        bn::optional<bn::fixed_point> _fixed_target;
-
+    bn::optional<bn::fixed_point> _fixed_target;
+    
 public:
-    camera_manager(bn::camera_ptr cam, const level &lv, const player &pl);
+    camera_manager(bn::camera_ptr cam, const level &lv, 
+        const player &pl);
     bool on_screen(bn::fixed_rect &hitbox);
     void update();    
     void set_fixed_target(const bn::fixed_point &target);
-    void set_screen_shake(const bool &enabled);
+    void start_screen_shake(const bn::fixed &magnitude, 
+        const uint8_t &length);
 
 };
 

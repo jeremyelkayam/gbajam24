@@ -47,14 +47,14 @@ bn::optional<scene_type> level_scene::update_scene_components()
             result = scene_type::LEVEL;
         }
         _dying->update();
-        if(_dying->initial_fade_done()){
+        if(_dying->initial_fade_done() && _bg.blending_enabled()){
             set_visible(false);
             _player.set_visible(true);
             _player.set_effects_visible(false);
             _bg.set_visible(true);
             _bg.set_palette(common_stuff::monochrome_bg_palette(bn::color(0,0,0)));
             _bg.set_blending_enabled(false);
-            _cam_mgr.set_screen_shake(true);
+            _cam_mgr.start_screen_shake(1, 255);
         }
     }else{
         if(_bg.blending_enabled()){
