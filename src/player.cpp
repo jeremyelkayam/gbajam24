@@ -289,7 +289,6 @@ bool player::apply_gravity() const{
 void player::shoot(){
     BN_ASSERT(_shoot_timer == 0, "player can only shoot once shoot timer has fully cooled down");
     _shoot_timer = 20;
-    BN_LOG("current index: ", _shoot.current_index());
     bn::fixed xoffset = facing_right() ? 12 : -12;
     _bullets.emplace_front(*_sprite.camera().get(), x() + xoffset, y() - 3, 
         _level, facing_right(), _rising_text_generator);

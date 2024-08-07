@@ -62,6 +62,13 @@ bn::optional<scene_type> play_scene::update_scene_components(){
         _hud.update();
         _hud.update_hover_time(_player.hover_time());
         _hud.update_player_hp(_player.hp());
+
+        bn::fixed bg_leftbound = -128;
+        bn::fixed bg_width = 256;
+
+        bn::fixed pct_traveled = (_cam.x() - 120) / (_level.width() - 240);
+
+        _bg.set_x(bg_leftbound - pct_traveled*(bg_width - 240));
     }
     
 

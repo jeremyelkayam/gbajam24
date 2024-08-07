@@ -1,10 +1,10 @@
 #include "hud.h"
-#include "common_fixed_8x8_sprite_font.h"
 #include "bn_sprite_items_bar_3px.h"
 #include "bn_sprite_items_bar_5px.h"
 #include "bn_sprite_items_bar_32x3.h"
 #include <bn_log.h>
 #include <bn_size.h>
+#include "bn_sprite_items_small_numbers_font.h"
 #include "common_stuff.h"
 #include "constants.h"
 
@@ -24,6 +24,8 @@ hud::hud(common_stuff &cstuff) :
 {
     _enemy_hp.set_visible(false);
     _text_generator.set_center_alignment();
+    _text_generator.set_palette_item(
+        bn::sprite_items::small_numbers_font.palette_item());
     _text_generator.generate(-110, -72, "HP", _player_hp_label_text_sprites);  
     update_hover_level();
 }
@@ -74,7 +76,9 @@ void hud::update_enemy_hp(bn::string<16> enemy_name, const uint8_t &prev_hp, con
     _target_enemy_hp = current_hp;
     _max_enemy_hp = max_hp;
 
-    _text_generator.set_center_alignment();
+    _text_generator.set_right_alignment();
+    _text_generator.set_palette_item(
+        bn::sprite_items::small_numbers_font.palette_item());
     _text_generator.generate(90, 64, enemy_name, _enemy_hp_label_text_sprites);
 }
 
