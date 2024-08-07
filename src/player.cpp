@@ -74,14 +74,14 @@ void player::update(){
             _fall.update();
             break;
         case PSTATE::STAND:
-            if(!_target_xcor && (bn::keypad::b_held() || _shoot_timer)){
+            if(!_target_xcor && (shooting())){
                 _shoot.update();
             }else{
                 _idle.update();
             }
             break;
         case PSTATE::RUN:
-            if(bn::keypad::b_held() || _shoot_timer){
+            if(shooting()){
                 _shoot_run.update();
             }else{
                 _run.update();
@@ -189,27 +189,32 @@ void player::update(){
 
         }
 
-        if(bn::keypad::b_pressed()){
+        if((!_savefile.slash_on_b && bn::keypad::b_pressed()) ||
+            (_savefile.slash_on_b && bn::keypad::r_pressed())){
             _shoot_run.reset();
             _shoot.reset();
         }
 
-        if(bn::keypad::r_pressed() && !_slash)
+        if(bn::keypad::r_held())
         {
-            _slash.emplace(*_sprite.camera().get(), x(), y());
+            if(_savefile.slash_on_b)
+            {
+                attempt_to_shoot();
+            }
+            else
+            {
+                attempt_to_slash();
+            }
         }
 
-        if(bn::keypad::b_held() && (_shoot_timer == 0) && !_target_xcor){
-            if(_current_state == PSTATE::STAND && 
-                (_shoot.current_index() == 1 || _shoot.current_index() == 5)){
-                shoot();
-            }else if(_current_state == PSTATE::RUN && 
-                (_shoot_run.current_index() == 1 || _shoot_run.current_index() == 5)){
-                shoot();
-            }else if(_current_state == PSTATE::JUMP || _current_state == PSTATE::FALL || 
-                    _current_state == PSTATE::HOVER){
-                //TODO: maybe make animations for this!
-                shoot();
+        if(bn::keypad::b_held()){
+            if(_savefile.slash_on_b)
+            {
+                attempt_to_slash();
+            }
+            else
+            {
+                attempt_to_shoot();
             }
         }
     }
@@ -254,6 +259,33 @@ void player::update(){
     }    
 
     combat_entity::update();
+}
+
+void player::attempt_to_shoot()
+{
+    if((_shoot_timer == 0) && !_target_xcor)
+    {
+        if(_current_state == PSTATE::STAND && 
+            (_shoot.current_index() == 1 || _shoot.current_index() == 5)){
+            shoot();
+        }else if(_current_state == PSTATE::RUN && 
+            (_shoot_run.current_index() == 1 || _shoot_run.current_index() == 5)){
+            shoot();
+        }else if(_current_state == PSTATE::JUMP || _current_state == PSTATE::FALL || 
+                _current_state == PSTATE::HOVER){
+            //TODO: maybe make animations for this!
+            shoot();
+        }
+
+    }
+}
+
+void player::attempt_to_slash()
+{
+    if(!_slash && (bn::keypad::r_pressed() || bn::keypad::b_pressed()))
+    {
+        _slash.emplace(*_sprite.camera().get(), x(), y());
+    }
 }
 
 void player::jump(){
@@ -394,6 +426,13 @@ slash::slash(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y) 
 void slash::update()
 {
     _slash_anim.update();
+}
+
+bool player::shooting()
+{
+    return (_savefile.slash_on_b && bn::keypad::r_held()) || 
+        (!_savefile.slash_on_b && bn::keypad::b_held()) || 
+        _shoot_timer;
 }
 
 }

@@ -30,8 +30,8 @@ common_stuff::common_stuff() :
             savefile.sword_upgrade_lvl = 0;
             savefile.current_level = 0;
             savefile.playtime = 0;
+            savefile.slash_on_b = false;
         }
-
     }
 }
 

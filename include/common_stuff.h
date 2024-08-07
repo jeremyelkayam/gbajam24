@@ -20,6 +20,7 @@ namespace aru {
                 uint16_t ultramatter, total_donated;
                 uint8_t hover_upgrade_lvl, shoot_upgrade_lvl, sword_upgrade_lvl, current_level;
                 uint32_t playtime;
+                bool slash_on_b;
             }; 
 
             struct user_data 

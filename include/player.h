@@ -82,6 +82,8 @@ private:
 
     static bool bullet_deletable(bullet &b) {return b.should_be_deleted();}
 
+    bool shooting();
+
     const bn::fixed _DUSTCLOUD_OFFSET;
 
     uint8_t _jbuf_timer, _coyote_timer, _shoot_timer, _hover_timer;
@@ -94,6 +96,9 @@ private:
     void start_anim(bn::isprite_animate_action &anim);
     void set_state(const PSTATE &state);
     virtual void die();
+
+    void attempt_to_shoot();
+    void attempt_to_slash();
  
 };
 

@@ -27,6 +27,8 @@ protected:
     bn::optional<pause_info_scene> _pause_info;
     bn::optional<pause_menu> _pause_menu;
     bn::optional<warp_effect> _warping;
+
+    void update_bg_pos();
  
 public:
     play_scene(common_stuff &cstuff, const level_data &ld);

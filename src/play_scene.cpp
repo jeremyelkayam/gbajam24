@@ -21,6 +21,8 @@ play_scene::play_scene(common_stuff &cstuff, const level_data &ld) :
     _warping.emplace(_player, warp_effect::direction::IN);
     _warping->update();
 
+    update_bg_pos();    
+
     ld.music.play(0.8);
 }
 
@@ -46,6 +48,7 @@ void play_scene::set_visible(bool visible){
 
 bn::optional<scene_type> play_scene::update_scene_components(){
     bn::optional<scene_type> result;
+    update_bg_pos();
 
 
     if(_warping){
@@ -62,17 +65,36 @@ bn::optional<scene_type> play_scene::update_scene_components(){
         _hud.update();
         _hud.update_hover_time(_player.hover_time());
         _hud.update_player_hp(_player.hp());
-
-        bn::fixed bg_leftbound = -128;
-        bn::fixed bg_width = 256;
-
-        bn::fixed pct_traveled = (_cam.x() - 120) / (_level.width() - 240);
-
-        _bg.set_x(bg_leftbound - pct_traveled*(bg_width - 240));
     }
-    
+
+
+    if(bn::keypad::l_pressed())
+    {
+        bool &slash_on_b = _cstuff.current_save().slash_on_b;
+        if(_cstuff.current_save().slash_on_b)
+        {
+            slash_on_b = false;
+        }
+        else
+        {
+            slash_on_b = true;
+        }
+        
+        BN_LOG("swapping. slash on b: ", slash_on_b);
+    }
+
 
     return result;
+}
+
+void play_scene::update_bg_pos()
+{
+    bn::fixed bg_leftbound = -128;
+    bn::fixed bg_width = 256;
+
+    bn::fixed pct_traveled = (_cam.x() - 120) / (_level.width() - 240);
+
+    _bg.set_x(bg_leftbound - pct_traveled*(bg_width - 240));
 }
 
 bn::optional<scene_type> play_scene::update()
