@@ -2,6 +2,7 @@
 #include "constants.h"
 #include <bn_log.h>
 #include <bn_keypad.h>
+#include <bn_sound_items.h>
 #include "bn_regular_bg_items_textbox.h"
 #include "bn_sprite_items_downarrow.h"
 
@@ -49,9 +50,14 @@ void text_box::update(){
         advance();
     }
     
-    for(bn::sprite_ptr &sprite : _text_sprites){
+    for(uint8_t i = 0; i < _text_sprites.size(); ++i){
+        bn::sprite_ptr &sprite = _text_sprites.at(i);
         if(!sprite.visible()){
             sprite.set_visible(true);
+            if(i % 5 == 0)
+            {   //only play every few frames
+                bn::sound_items::text_appear.play(1);
+            }
             return;
         }
     }

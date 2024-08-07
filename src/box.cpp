@@ -15,7 +15,7 @@ box::box(bn::sprite_text_generator &text_generator, uint8_t anim_index) :
 
 bn::vector<bn::string<64>, 24> box::split_into_lines(const char *text){
     
-    const uint8_t max_line_width = 218;
+    const uint8_t max_line_width = 214;
     bn::vector<bn::string<64>, 24>result;
     
     uint8_t line_width = 0;

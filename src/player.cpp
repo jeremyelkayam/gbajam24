@@ -1,6 +1,7 @@
 #include <bn_keypad.h>
 #include <bn_log.h>
 #include <bn_math.h>
+#include <bn_sound_items.h>
 
 
 #include "player.h"
@@ -320,6 +321,7 @@ bool player::apply_gravity() const{
 
 void player::shoot(){
     BN_ASSERT(_shoot_timer == 0, "player can only shoot once shoot timer has fully cooled down");
+    bn::sound_items::basic_blast.play(1);
     _shoot_timer = 20;
     bn::fixed xoffset = facing_right() ? 12 : -12;
     _bullets.emplace_front(*_sprite.camera().get(), x() + xoffset, y() - 3, 
@@ -420,7 +422,7 @@ slash::slash(const bn::camera_ptr &cam, const bn::fixed &x, const bn::fixed &y) 
     _slash_anim(bn::create_sprite_animate_action_once(_sprite, 4, 
             bn::sprite_items::swoosh_buch.tiles_item(), 0, 1, 2, 3))
 {
-    
+    bn::sound_items::swish.play(1);
 }
 
 void slash::update()
